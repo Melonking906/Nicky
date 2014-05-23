@@ -1,8 +1,11 @@
 package me.nonit.nicky;
 
+import me.nonit.nicky.commands.NickCommand;
+import me.nonit.nicky.commands.UnNickCommand;
 import me.nonit.nicky.databases.MySQL;
 import me.nonit.nicky.databases.SQL;
 import me.nonit.nicky.databases.SQLite;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -11,6 +14,8 @@ import java.util.Set;
 
 public class Nicky extends JavaPlugin
 {
+    private static final String PREFIX = ChatColor.GRAY + "[" + ChatColor.YELLOW + "Nicky" + ChatColor.GRAY + "]" + ChatColor.GREEN + " ";
+
     private final Set<SQL> databases;
     private SQL database;
 
@@ -29,6 +34,9 @@ public class Nicky extends JavaPlugin
 
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents( new PlayerListener(), this );
+
+        getCommand( "nick" ).setExecutor( new NickCommand( this ) );
+        getCommand( "unnick" ).setExecutor( new UnNickCommand( this ) );
     }
 
     public SQL getNickDatabase()
@@ -65,4 +73,6 @@ public class Nicky extends JavaPlugin
     public void log( String message ) {
         getLogger().info( "[Nicky] " + message );
     }
+
+    public static String getPrefix() { return PREFIX; }
 }
