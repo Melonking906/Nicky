@@ -19,12 +19,7 @@ public class Nick
         this.uuid = player.getUniqueId().toString();
     }
 
-    private String getNick()
-    {
-        return database.downloadNick( uuid );
-    }
-
-    public boolean setNick()
+    public boolean loadNick()
     {
         String nick = getNick();
 
@@ -37,10 +32,28 @@ public class Nick
         return false;
     }
 
-    public void unsetNick()
+    public void unLoadNick()
     {
         player.setDisplayName( player.getName() );
+    }
 
+    public void setNick( String nick )
+    {
+        if( getNick() != null )
+        {
+            unSetNick();
+        }
+
+        database.uploadNick( uuid, nick );
+    }
+
+    private String getNick()
+    {
+        return database.downloadNick( uuid );
+    }
+
+    private void unSetNick()
+    {
         database.deleteNick( uuid );
     }
 }
