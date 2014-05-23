@@ -33,7 +33,7 @@ public class Nicky extends JavaPlugin
         this.saveDefaultConfig(); // Makes a config is one does not exist.
 
         PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents( new PlayerListener(), this );
+        pm.registerEvents( new PlayerListener( this ), this );
 
         getCommand( "nick" ).setExecutor( new NickCommand( this ) );
         getCommand( "unnick" ).setExecutor( new UnNickCommand( this ) );

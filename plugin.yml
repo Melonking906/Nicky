@@ -1,0 +1,21 @@
+name: Nicky
+main: me.nonit.nicky.Nicky
+version: 0.1
+description: Simple SQL nickname plugin.
+author: Melonking
+
+commands:
+   nick:
+      description: Set a nickname
+      usage: /<command>
+   unnick:
+      description: Unset a nickname
+      usage: /<command>
+
+permissions:
+    nicky.set:
+        default: op
+    nicky.unset:
+        default: op
+    nicky.color:
+        default: op
