@@ -6,15 +6,17 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class PlayerListener implements Listener
 {
-    Nicks nicks = new Nicks();
+    Nicky plugin;
+
+    public PlayerListener( Nicky plugin )
+    {
+        this.plugin = plugin;
+    }
 
     public void onJoin( PlayerJoinEvent event )
     {
-        Player player = event.getPlayer();
+        Nick nick = new Nick( plugin, event.getPlayer() );
 
-        if( nicks.hasNick( player ) )
-        {
-            nicks.setNick( player, nicks.getNick( player ) );
-        }
+        nick.loadNick();
     }
 }

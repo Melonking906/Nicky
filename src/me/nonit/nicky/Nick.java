@@ -5,16 +5,14 @@ import org.bukkit.entity.Player;
 
 public class Nick
 {
-    private Nicky plugin;
     private Player player;
     private SQL database;
     private String uuid;
 
-    public Nick(Nicky plugin, Player player, SQL database)
+    public Nick(Nicky plugin, Player player)
     {
-        this.plugin = plugin;
         this.player = player;
-        this.database = database;
+        database = plugin.getNickDatabase();
 
         this.uuid = player.getUniqueId().toString();
     }
