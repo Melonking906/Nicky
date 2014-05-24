@@ -2,14 +2,16 @@ Nicky
 =====
 Simple SQL Nickname Plugin for Bukkit.
 
-Commands:
+Commands
+
     /nick <nick>
     /nick <name> <nick>
 
     /delnick <nick>
     /delnick <name> <nick>
 
-Permissions:
+Permissions
+
     Set a nick name.
     nicky.set
     nicky.set.other
