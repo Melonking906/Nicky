@@ -32,13 +32,13 @@ public class Nicky extends JavaPlugin
 
         this.saveDefaultConfig(); // Makes a config is one does not exist.
 
+        setupDatabase();
+
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents( new PlayerListener( this ), this );
 
         getCommand( "nick" ).setExecutor( new NickCommand( this ) );
         getCommand( "delnick" ).setExecutor( new DelNickCommand( this ) );
-
-        setupDatabase();
     }
 
     public SQL getNickDatabase()

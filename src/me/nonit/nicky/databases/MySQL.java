@@ -10,7 +10,7 @@ public class MySQL extends SQL
 {
     public MySQL( Nicky plugin )
     {
-        super(plugin, true);
+        super(plugin);
     }
 
     protected Connection getNewConnection()

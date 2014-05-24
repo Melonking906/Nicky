@@ -12,7 +12,7 @@ public class SQLite extends SQL
 
     public SQLite( Nicky plugin )
     {
-        super(plugin, false);
+        super(plugin);
 
         this.plugin = plugin;
     }

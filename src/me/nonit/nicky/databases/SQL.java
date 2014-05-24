@@ -10,15 +10,12 @@ import java.sql.SQLException;
 
 public abstract class SQL
 {
-    private final boolean supportsModification;
     private Connection connection;
     private Nicky plugin;
 
-    public SQL( Nicky plugin, boolean supportsModification )
+    public SQL( Nicky plugin )
     {
         this.plugin = plugin;
-
-        this.supportsModification = supportsModification;
 
         plugin.getServer().getScheduler().runTaskTimerAsynchronously( plugin, new Runnable()
         {
@@ -72,18 +69,7 @@ public abstract class SQL
                     return false;
                 }
 
-                query( "CREATE TABLE IF NOT EXISTS nicky (uuid varchar(36), nick varchar(64) NOT NULL)" );
-
-                if( supportsModification )
-                {
-                    query( "ALTER TABLE nicky MODIFY nick varchar(64) NOT NULL" );
-                }
-
-                try
-                {
-                    query( "ALTER TABLE nicky MODIFY uuid varchar(36) NOT NULL" );
-                }
-                catch( Exception e ) {}
+                query( "CREATE TABLE IF NOT EXISTS nicky ( uuid varchar(36) NOT NULL, nick varchar(64) )" );
             }
         }
         catch( SQLException e )
@@ -104,7 +90,7 @@ public abstract class SQL
         PreparedStatement statement;
         try
         {
-            statement = connection.prepareStatement( "SELECT nick FROM nicky WHERE uuid == " + uuid );
+            statement = connection.prepareStatement( "SELECT nick FROM nicky WHERE uuid = " + uuid );
 
             ResultSet set = statement.executeQuery();
 
@@ -150,7 +136,7 @@ public abstract class SQL
         PreparedStatement statement;
         try
         {
-            statement = connection.prepareStatement( "DELETE FROM nicky WHERE uuid == " + uuid );
+            statement = connection.prepareStatement( "DELETE FROM nicky WHERE uuid = " + uuid );
 
             statement.execute();
         }
