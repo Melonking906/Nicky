@@ -69,7 +69,7 @@ public abstract class SQL
                     return false;
                 }
 
-                query( "CREATE TABLE IF NOT EXISTS nicky ( uuid varchar(64) NOT NULL, nick varchar(64) )" );
+                query( "CREATE TABLE IF NOT EXISTS nicky (uuid varchar(36) NOT NULL, nick varchar(64) NOT NULL, PRIMARY KEY (uuid))" );
             }
         }
         catch( SQLException e )
@@ -90,7 +90,7 @@ public abstract class SQL
         PreparedStatement statement;
         try
         {
-            statement = connection.prepareStatement( "SELECT nick FROM nicky WHERE uuid = " + uuid );
+            statement = connection.prepareStatement( "SELECT nick FROM nicky WHERE uuid = '" + uuid + "';" );
 
             ResultSet set = statement.executeQuery();
 
@@ -119,7 +119,7 @@ public abstract class SQL
         PreparedStatement statement;
         try
         {
-            statement = connection.prepareStatement( "INSERT INTO nicky (uuid, nick) VALUES (" + uuid + "," + nick + ");" );
+            statement = connection.prepareStatement( "INSERT INTO nicky (uuid, nick) VALUES ('" + uuid + "','" + nick + "');" );
 
             statement.execute();
         }
@@ -136,7 +136,7 @@ public abstract class SQL
         PreparedStatement statement;
         try
         {
-            statement = connection.prepareStatement( "DELETE FROM nicky WHERE uuid = " + uuid );
+            statement = connection.prepareStatement( "DELETE FROM nicky WHERE uuid = '" + uuid + "';" );
 
             statement.execute();
         }
