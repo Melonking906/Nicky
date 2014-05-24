@@ -15,7 +15,11 @@ commands:
 permissions:
     nicky.set:
         default: op
+    nicky.set.other:
+        default: op
     nicky.del:
+        default: op
+    nicky.del.other:
         default: op
     nicky.color:
         default: op

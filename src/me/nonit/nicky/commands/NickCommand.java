@@ -42,6 +42,12 @@ public class NickCommand implements CommandExecutor
         {
             Player receiver = plugin.getServer().getPlayer( args[0] );
 
+            if( receiver == null )
+            {
+                plugin.log( "Could not find '" + args[0] + "', are you sure they are online?");
+                return;
+            }
+
             String nickname = ChatColor.translateAlternateColorCodes( '&', args[1] );
 
             Nick nick = new Nick( plugin, receiver );
@@ -62,6 +68,12 @@ public class NickCommand implements CommandExecutor
     private void runAsAdmin( CommandSender sender, String[] args )
     {
         Player receiver = plugin.getServer().getPlayer( args[0] );
+
+        if( receiver == null )
+        {
+            sender.sendMessage( Nicky.getPrefix() + "Could not find " + ChatColor.YELLOW + args[0] + ChatColor.GREEN + ", are you sure they are online?");
+            return;
+        }
 
         String nickname = args[1];
 

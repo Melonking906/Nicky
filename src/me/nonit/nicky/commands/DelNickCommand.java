@@ -42,6 +42,12 @@ public class DelNickCommand implements CommandExecutor
         {
             Player receiver = plugin.getServer().getPlayer( args[0] );
 
+            if( receiver == null )
+            {
+                plugin.log( "Could not find '" + args[0] + "', are you sure they are online?");
+                return;
+            }
+
             Nick nick = new Nick( plugin, receiver );
 
             nick.unLoadNick();
@@ -59,6 +65,12 @@ public class DelNickCommand implements CommandExecutor
     private void runAsAdmin( CommandSender sender, String[] args )
     {
         Player receiver = plugin.getServer().getPlayer( args[0] );
+
+        if( receiver == null )
+        {
+            sender.sendMessage( Nicky.getPrefix() + "Could not find " + ChatColor.YELLOW + args[0] + ChatColor.GREEN + ", are you sure they are online?");
+            return;
+        }
 
         if( sender.hasPermission( "nicky.del.other" ) )
         {
