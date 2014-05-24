@@ -84,7 +84,11 @@ public abstract class SQL
 
     public String downloadNick( String uuid )
     {
-        checkConnection();
+        if( ! checkConnection() )
+        {
+            plugin.log( "Error with database" );
+            return null;
+        }
 
         String nick = null;
         PreparedStatement statement;
@@ -109,7 +113,11 @@ public abstract class SQL
 
     public void uploadNick( String uuid, String nick )
     {
-        checkConnection();
+        if( ! checkConnection() )
+        {
+            plugin.log( "Error with database" );
+            return;
+        }
 
         if( downloadNick( uuid ) != null )
         {
@@ -131,7 +139,11 @@ public abstract class SQL
 
     public void deleteNick( String uuid )
     {
-        checkConnection();
+        if( ! checkConnection() )
+        {
+            plugin.log( "Error with database" );
+            return;
+        }
 
         PreparedStatement statement;
         try

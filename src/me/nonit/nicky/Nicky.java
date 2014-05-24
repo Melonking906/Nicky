@@ -39,6 +39,12 @@ public class Nicky extends JavaPlugin
 
         getCommand( "nick" ).setExecutor( new NickCommand( this ) );
         getCommand( "delnick" ).setExecutor( new DelNickCommand( this ) );
+
+        if( ! database.checkConnection() )
+        {
+            log( "Error with database" );
+            pm.disablePlugin( this );
+        }
     }
 
     public SQL getNickDatabase()
