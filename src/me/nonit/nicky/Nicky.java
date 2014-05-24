@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class Nicky extends JavaPlugin
 {
-    private static final String PREFIX = ChatColor.GRAY + "[" + ChatColor.YELLOW + "Nicky" + ChatColor.GRAY + "]" + ChatColor.GREEN + " ";
+    private static final String PREFIX = ChatColor.YELLOW + "[Nicky]" + ChatColor.GREEN + " ";
 
     private final Set<SQL> databases;
     private SQL database;

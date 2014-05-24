@@ -19,11 +19,4 @@ public class PlayerListener implements Listener
 
         nick.loadNick();
     }
-
-    public void onChat( AsyncPlayerChatEvent event )
-    {
-        Nick nick = new Nick( plugin, event.getPlayer() );
-
-        nick.loadNick();
-    }
 }

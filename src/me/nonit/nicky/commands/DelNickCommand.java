@@ -19,21 +19,75 @@ public class DelNickCommand implements CommandExecutor
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
     {
-        Player player = (Player) sender;
-
-        if( sender.hasPermission( "nicky.del" ) )
+        if( ! (sender instanceof Player) )
         {
-            Nick nick = new Nick( plugin, player );
-
-            nick.unLoadNick();
-
-            player.sendMessage( Nicky.getPrefix() + "Your nickname has been deleted." );
+            runAsConsole( args );
+        }
+        else if( args.length >= 1 )
+        {
+            runAsAdmin( sender, args );
         }
         else
         {
-            player.sendMessage( Nicky.getPrefix() + ChatColor.RED + "Sorry, you don't have permission to delete a nick." );
+            runAsPlayer( sender );
         }
 
         return true;
+    }
+
+    @SuppressWarnings("deprecation")
+    private void runAsConsole( String[] args )
+    {
+        if( args.length >= 1 )
+        {
+            Player receiver = plugin.getServer().getPlayer( args[0] );
+
+            Nick nick = new Nick( plugin, receiver );
+
+            nick.unLoadNick();
+
+            receiver.sendMessage( Nicky.getPrefix() + "Your nickname has been deleted by console." );
+            plugin.log( receiver.getName() + "'s nickname has been deleted!" );
+        }
+        else
+        {
+            plugin.log( "Usage: /delnick <name>" );
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void runAsAdmin( CommandSender sender, String[] args )
+    {
+        Player receiver = plugin.getServer().getPlayer( args[0] );
+
+        if( sender.hasPermission( "nicky.del.other" ) )
+        {
+            Nick nick = new Nick( plugin, receiver );
+
+            nick.unLoadNick();
+
+            receiver.sendMessage( Nicky.getPrefix() + "Your nickname has been deleted by " + ChatColor.YELLOW + sender.getName() );
+            sender.sendMessage( Nicky.getPrefix() + ChatColor.YELLOW + receiver.getName() + ChatColor.GREEN + "'s nickname has been deleted!" );
+        }
+        else
+        {
+            sender.sendMessage( Nicky.getPrefix() + ChatColor.RED + "Sorry, you don't have permission to delete other players nicks." );
+        }
+    }
+
+    private void runAsPlayer( CommandSender sender )
+    {
+        if( sender.hasPermission( "nicky.del" ) )
+        {
+            Nick nick = new Nick( plugin, (Player) sender );
+
+            nick.unLoadNick();
+
+            sender.sendMessage( Nicky.getPrefix() + "Your nickname has been deleted." );
+        }
+        else
+        {
+            sender.sendMessage( Nicky.getPrefix() + ChatColor.RED + "Sorry, you don't have permission to delete a nick." );
+        }
     }
 }
