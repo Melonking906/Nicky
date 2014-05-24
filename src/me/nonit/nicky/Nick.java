@@ -19,11 +19,11 @@ public class Nick
 
     public boolean loadNick()
     {
-        String nick = getNick();
+        String nickname = getNick();
 
-        if( nick != null )
+        if( nickname != null )
         {
-            player.setDisplayName( nick );
+            player.setDisplayName( nickname );
             return true;
         }
 

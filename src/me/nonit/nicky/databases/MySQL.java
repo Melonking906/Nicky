@@ -1,6 +1,7 @@
 package me.nonit.nicky.databases;
 
 import me.nonit.nicky.Nicky;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.sql.Connection;
@@ -15,7 +16,7 @@ public class MySQL extends SQL
 
     protected Connection getNewConnection()
     {
-        ConfigurationSection config = getConfigSection();
+        Configuration config = plugin.getConfig();
 
         try
         {

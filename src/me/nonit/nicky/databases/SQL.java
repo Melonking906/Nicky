@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public abstract class SQL
 {
     private Connection connection;
-    private Nicky plugin;
+    protected Nicky plugin;
 
     public SQL( Nicky plugin )
     {
@@ -39,12 +39,12 @@ public abstract class SQL
 
     protected abstract Connection getNewConnection();
 
+    protected abstract String getName();
+
     public boolean query( String sql ) throws SQLException
     {
         return connection.createStatement().execute( sql );
     }
-
-    protected abstract String getName();
 
     public String getConfigName()
     {
@@ -69,7 +69,7 @@ public abstract class SQL
                     return false;
                 }
 
-                query( "CREATE TABLE IF NOT EXISTS nicky ( uuid varchar(36) NOT NULL, nick varchar(64) )" );
+                query( "CREATE TABLE IF NOT EXISTS nicky ( uuid varchar(64) NOT NULL, nick varchar(64) )" );
             }
         }
         catch( SQLException e )
