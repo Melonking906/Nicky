@@ -32,6 +32,7 @@ public class Nick
 
     public void unLoadNick()
     {
+        unSetNick();
         player.setDisplayName( player.getName() );
     }
 

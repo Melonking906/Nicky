@@ -1,7 +1,7 @@
 package me.nonit.nicky;
 
+import me.nonit.nicky.commands.DelNickCommand;
 import me.nonit.nicky.commands.NickCommand;
-import me.nonit.nicky.commands.UnNickCommand;
 import me.nonit.nicky.databases.MySQL;
 import me.nonit.nicky.databases.SQL;
 import me.nonit.nicky.databases.SQLite;
@@ -27,8 +27,8 @@ public class Nicky extends JavaPlugin
     @Override
     public void onEnable()
     {
-        databases.add(new MySQL(this));
-        databases.add(new SQLite(this));
+        databases.add( new MySQL( this ) );
+        databases.add( new SQLite( this ) );
 
         this.saveDefaultConfig(); // Makes a config is one does not exist.
 
@@ -36,7 +36,9 @@ public class Nicky extends JavaPlugin
         pm.registerEvents( new PlayerListener( this ), this );
 
         getCommand( "nick" ).setExecutor( new NickCommand( this ) );
-        getCommand( "unnick" ).setExecutor( new UnNickCommand( this ) );
+        getCommand( "delnick" ).setExecutor( new DelNickCommand( this ) );
+
+        setupDatabase();
     }
 
     public SQL getNickDatabase()
@@ -56,6 +58,8 @@ public class Nicky extends JavaPlugin
             {
                 this.database = database;
 
+                log( "Database set to " + database.getConfigName() );
+
                 break;
             }
         }
@@ -71,7 +75,7 @@ public class Nicky extends JavaPlugin
     }
 
     public void log( String message ) {
-        getLogger().info( "[Nicky] " + message );
+        getLogger().info( message );
     }
 
     public static String getPrefix() { return PREFIX; }

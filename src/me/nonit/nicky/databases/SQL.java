@@ -27,7 +27,7 @@ public abstract class SQL
             {
                 try
                 {
-                    if( connection != null && !connection.isClosed() )
+                    if( connection != null && ! connection.isClosed() )
                     {
                         connection.createStatement().execute( "/* ping */ SELECT 1" );
                     }
@@ -72,16 +72,16 @@ public abstract class SQL
                     return false;
                 }
 
-                query( "CREATE TABLE IF NOT EXISTS okinick_nicknames (uuid varchar(36), nick varchar(64) NOT NULL)" );
+                query( "CREATE TABLE IF NOT EXISTS nicky (uuid varchar(36), nick varchar(64) NOT NULL)" );
 
                 if( supportsModification )
                 {
-                    query( "ALTER TABLE okinick_nicknames MODIFY nick varchar(64) NOT NULL" );
+                    query( "ALTER TABLE nicky MODIFY nick varchar(64) NOT NULL" );
                 }
 
                 try
                 {
-                    query( "ALTER TABLE okinick_nicknames MODIFY uuid varchar(36) NOT NULL" );
+                    query( "ALTER TABLE nicky MODIFY uuid varchar(36) NOT NULL" );
                 }
                 catch( Exception e ) {}
             }
@@ -104,7 +104,7 @@ public abstract class SQL
         PreparedStatement statement;
         try
         {
-            statement = connection.prepareStatement( "SELECT nick FROM okinick_nicknames WHERE uuid == " + uuid );
+            statement = connection.prepareStatement( "SELECT nick FROM nicky WHERE uuid == " + uuid );
 
             ResultSet set = statement.executeQuery();
 
@@ -133,7 +133,7 @@ public abstract class SQL
         PreparedStatement statement;
         try
         {
-            statement = connection.prepareStatement( "INSERT INTO okinick_nicknames (uuid, nick) VALUES (" + uuid + "," + nick + ");" );
+            statement = connection.prepareStatement( "INSERT INTO nicky (uuid, nick) VALUES (" + uuid + "," + nick + ");" );
 
             statement.execute();
         }
@@ -150,7 +150,7 @@ public abstract class SQL
         PreparedStatement statement;
         try
         {
-            statement = connection.prepareStatement( "DELETE FROM okinick_nicknames WHERE uuid == " + uuid );
+            statement = connection.prepareStatement( "DELETE FROM nicky WHERE uuid == " + uuid );
 
             statement.execute();
         }

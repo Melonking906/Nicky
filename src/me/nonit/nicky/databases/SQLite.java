@@ -10,7 +10,7 @@ public class SQLite extends SQL
 {
     private final Nicky plugin;
 
-    public SQLite(Nicky plugin)
+    public SQLite( Nicky plugin )
     {
         super(plugin, false);
 
@@ -23,7 +23,7 @@ public class SQLite extends SQL
         {
             Class.forName("org.sqlite.JDBC");
 
-            return DriverManager.getConnection( "jdbc:sqlite:" + new File( plugin.getDataFolder(), "database.db" ).getAbsolutePath() );
+            return DriverManager.getConnection( "jdbc:sqlite:" + new File( plugin.getDataFolder(), "nicknames.db" ).getAbsolutePath() );
         }
         catch (Exception e)
         {

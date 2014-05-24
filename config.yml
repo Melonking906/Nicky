@@ -1,0 +1,10 @@
+# Nicky config - www.okicore.com
+
+# Storage type "sqlite" or "mysql"
+type: 'sqlite'
+
+# MySQL connection settings.
+host: 'localhost'
+user: 'root'
+password: 'password'
+database: 'nicky'

@@ -8,14 +8,14 @@ commands:
    nick:
       description: Set a nickname
       usage: /<command>
-   unnick:
+   delnick:
       description: Unset a nickname
       usage: /<command>
 
 permissions:
     nicky.set:
         default: op
-    nicky.unset:
+    nicky.del:
         default: op
     nicky.color:
         default: op

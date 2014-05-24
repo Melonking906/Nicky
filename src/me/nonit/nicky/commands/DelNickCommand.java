@@ -8,11 +8,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class UnNickCommand implements CommandExecutor
+public class DelNickCommand implements CommandExecutor
 {
     Nicky plugin;
 
-    public UnNickCommand( Nicky plugin )
+    public DelNickCommand( Nicky plugin )
     {
         this.plugin = plugin;
     }
@@ -21,7 +21,7 @@ public class UnNickCommand implements CommandExecutor
     {
         Player player = (Player) sender;
 
-        if( sender.hasPermission( "nicky.unset" ) )
+        if( sender.hasPermission( "nicky.del" ) )
         {
             Nick nick = new Nick( plugin, player );
 
@@ -31,7 +31,7 @@ public class UnNickCommand implements CommandExecutor
         }
         else
         {
-            player.sendMessage( Nicky.getPrefix() + ChatColor.RED + "Sorry, you don't have permission to unset a nick." );
+            player.sendMessage( Nicky.getPrefix() + ChatColor.RED + "Sorry, you don't have permission to delete a nick." );
         }
 
         return true;
