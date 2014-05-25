@@ -1,5 +1,6 @@
 package me.nonit.nicky;
 
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -12,6 +13,7 @@ public class PlayerListener implements Listener
         this.plugin = plugin;
     }
 
+    @EventHandler
     public void onJoin( PlayerJoinEvent event )
     {
         Nick nick = new Nick( plugin, event.getPlayer() );
