@@ -122,7 +122,7 @@ public class NickCommand implements CommandExecutor
             }
             else
             {
-                player.sendMessage( "To set a nick do " + ChatColor.YELLOW + "/nick <nickname>" );
+                player.sendMessage( Nicky.getPrefix() + "To set a nick do " + ChatColor.YELLOW + "/nick <nickname>" );
             }
         }
         else
