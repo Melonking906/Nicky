@@ -57,7 +57,7 @@ public class Nick
         loadNick();
     }
 
-    private String getNick()
+    public String getNick()
     {
         return database.downloadNick( uuid );
     }

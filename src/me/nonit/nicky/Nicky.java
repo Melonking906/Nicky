@@ -39,6 +39,12 @@ public class Nicky extends JavaPlugin
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents( new PlayerListener( this ), this );
 
+        if( pm.isPluginEnabled( "TagAPI" ) && getConfig().get( "tagapi" ).equals( "true" ) )
+        {
+            pm.registerEvents( new TagAPIListener( this ), this );
+            log( "TagAPI support enabled." );
+        }
+
         getCommand( "nick" ).setExecutor( new NickCommand( this ) );
         getCommand( "delnick" ).setExecutor( new DelNickCommand( this ) );
 

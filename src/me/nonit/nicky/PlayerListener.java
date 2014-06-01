@@ -7,7 +7,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerListener implements Listener
 {
-    Nicky plugin;
+    private Nicky plugin;
 
     public PlayerListener( Nicky plugin )
     {

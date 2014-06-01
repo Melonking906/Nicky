@@ -9,3 +9,6 @@ port: '3306'
 user: 'root'
 password: 'password'
 database: 'nicky'
+
+# Change name tags if TagAPI is installed?
+tagapi: 'true'
