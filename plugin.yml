@@ -3,6 +3,7 @@ main: me.nonit.nicky.Nicky
 version: 0.3
 description: Simple SQL nickname plugin.
 author: Melonking
+softdepend: [TagAPI]
 
 commands:
    nick:
