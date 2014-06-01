@@ -85,6 +85,23 @@ public abstract class SQL
         return true;
     }
 
+    public void disconnect()
+    {
+        cache.clear();
+
+        try
+        {
+            if (connection != null)
+            {
+                connection.close();
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     public String downloadNick( String uuid )
     {
         String nick = null;

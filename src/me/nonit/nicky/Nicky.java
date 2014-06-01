@@ -5,7 +5,9 @@ import me.nonit.nicky.commands.NickCommand;
 import me.nonit.nicky.databases.MySQL;
 import me.nonit.nicky.databases.SQL;
 import me.nonit.nicky.databases.SQLite;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -45,6 +47,19 @@ public class Nicky extends JavaPlugin
             log( "Error with database" );
             pm.disablePlugin( this );
         }
+
+        for( Player player : Bukkit.getServer().getOnlinePlayers() )
+        {
+            Nick nick = new Nick( this, player );
+
+            nick.loadNick();
+        }
+    }
+
+    @Override
+    public void onDisable()
+    {
+        database.disconnect();
     }
 
     public SQL getNickDatabase()
