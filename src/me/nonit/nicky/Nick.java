@@ -32,7 +32,7 @@ public class Nick
 
     public void unLoadNick()
     {
-        unSetNick();
+        database.removeFromCache( uuid );
         player.setDisplayName( player.getName() );
     }
 
@@ -46,13 +46,19 @@ public class Nick
         database.uploadNick( uuid, nick );
     }
 
+    public void unSetNick()
+    {
+        database.deleteNick( uuid );
+    }
+
+    public void refreshNick()
+    {
+        unLoadNick();
+        loadNick();
+    }
+
     private String getNick()
     {
         return database.downloadNick( uuid );
-    }
-
-    private void unSetNick()
-    {
-        database.deleteNick( uuid );
     }
 }
