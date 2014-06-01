@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,6 +21,7 @@ public class Nicky extends JavaPlugin
 
     private final Set<SQL> databases;
     private SQL database;
+    private boolean usesTagAPI = false;
 
     public Nicky()
     {
@@ -43,6 +45,7 @@ public class Nicky extends JavaPlugin
         {
             pm.registerEvents( new TagAPIListener( this ), this );
             log( "TagAPI support enabled." );
+            usesTagAPI = true;
         }
 
         getCommand( "nick" ).setExecutor( new NickCommand( this ) );
@@ -60,6 +63,8 @@ public class Nicky extends JavaPlugin
 
             nick.loadNick();
         }
+
+        loadMetrics();
     }
 
     @Override
@@ -71,6 +76,48 @@ public class Nicky extends JavaPlugin
     public SQL getNickDatabase()
     {
         return database;
+    }
+
+    private void loadMetrics()
+    {
+        try
+        {
+            Metrics metrics = new Metrics(this);
+
+            Metrics.Graph graphDatabaseType = metrics.createGraph( "Database Type" );
+
+            graphDatabaseType.addPlotter( new Metrics.Plotter( database.getConfigName() )
+            {
+                @Override
+                public int getValue()
+                {
+                    return 1;
+                }
+            } );
+
+            Metrics.Graph graphTagAPI = metrics.createGraph( "TagAPI" );
+
+            String graphTagAPIValue = "No";
+            if( usesTagAPI )
+            {
+                graphTagAPIValue = "Yes";
+            }
+
+            graphTagAPI.addPlotter( new Metrics.Plotter( graphTagAPIValue )
+            {
+                @Override
+                public int getValue()
+                {
+                    return 1;
+                }
+            } );
+
+            metrics.start();
+        }
+        catch (IOException e)
+        {
+            // Failed to submit the stats :-(
+        }
     }
 
     private boolean setupDatabase()
@@ -85,7 +132,7 @@ public class Nicky extends JavaPlugin
             {
                 this.database = database;
 
-                log( "Database set to " + database.getConfigName() );
+                log( "Database set to " + database.getConfigName() + "." );
 
                 break;
             }
