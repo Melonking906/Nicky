@@ -48,7 +48,7 @@ public class NickCommand implements CommandExecutor
                 return;
             }
 
-            String nickname = ChatColor.translateAlternateColorCodes( '&', args[1] );
+            String nickname = ChatColor.translateAlternateColorCodes( '&', args[1] ) + ChatColor.RESET;
 
             Nick nick = new Nick( plugin, receiver );
 
@@ -75,7 +75,7 @@ public class NickCommand implements CommandExecutor
             return;
         }
 
-        String nickname = args[1];
+        String nickname = args[1] + ChatColor.RESET;
 
         if( sender.hasPermission( "nicky.set.other" ) )
         {
@@ -106,7 +106,7 @@ public class NickCommand implements CommandExecutor
         {
             if( args.length >= 1 )
             {
-                String nickname = args[0];
+                String nickname = args[0] + ChatColor.RESET;
 
                 if( sender.hasPermission( "nicky.color" ) )
                 {
