@@ -1,5 +1,7 @@
 package me.nonit.nicky;
 
+import me.nonit.nicky.Metrics.Graph;
+import me.nonit.nicky.Metrics.Plotter;
 import me.nonit.nicky.commands.DelNickCommand;
 import me.nonit.nicky.commands.NickCommand;
 import me.nonit.nicky.databases.MySQL;
@@ -84,9 +86,9 @@ public class Nicky extends JavaPlugin
         {
             Metrics metrics = new Metrics(this);
 
-            Metrics.Graph graphDatabaseType = metrics.createGraph( "Database Type" );
+            Graph graphDatabaseType = metrics.createGraph( "Database Type" );
 
-            graphDatabaseType.addPlotter( new Metrics.Plotter( database.getConfigName() )
+            graphDatabaseType.addPlotter( new Plotter( database.getConfigName() )
             {
                 @Override
                 public int getValue()
@@ -95,7 +97,7 @@ public class Nicky extends JavaPlugin
                 }
             } );
 
-            Metrics.Graph graphTagAPI = metrics.createGraph( "TagAPI" );
+            Graph graphTagAPI = metrics.createGraph( "TagAPI" );
 
             String graphTagAPIValue = "No";
             if( usesTagAPI )
@@ -103,7 +105,7 @@ public class Nicky extends JavaPlugin
                 graphTagAPIValue = "Yes";
             }
 
-            graphTagAPI.addPlotter( new Metrics.Plotter( graphTagAPIValue )
+            graphTagAPI.addPlotter( new Plotter( graphTagAPIValue )
             {
                 @Override
                 public int getValue()
