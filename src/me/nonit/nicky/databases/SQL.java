@@ -108,33 +108,32 @@ public abstract class SQL
 
         if( cache.containsKey( uuid ) )
         {
-            nick = cache.get( uuid );
+            return cache.get( uuid );
         }
-        else
+
+        if( !checkConnection() )
         {
-            if( !checkConnection() )
-            {
-                plugin.log( "Error with database" );
-                return null;
-            }
-            PreparedStatement statement;
-            try
-            {
-                statement = connection.prepareStatement( "SELECT nick FROM nicky WHERE uuid = '" + uuid + "';" );
+            plugin.log( "Error with database" );
+            return null;
+        }
 
-                ResultSet set = statement.executeQuery();
+        PreparedStatement statement;
+        try
+        {
+            statement = connection.prepareStatement( "SELECT nick FROM nicky WHERE uuid = '" + uuid + "';" );
 
-                while( set.next() )
-                {
-                    nick = set.getString( "nick" );
+            ResultSet set = statement.executeQuery();
 
-                    cache.put( uuid, nick );
-                }
-            }
-            catch( SQLException e )
+            while( set.next() )
             {
-                e.printStackTrace();
+                nick = set.getString( "nick" );
+
+                cache.put( uuid, nick );
             }
+        }
+        catch( SQLException e )
+        {
+            e.printStackTrace();
         }
 
         return nick;
