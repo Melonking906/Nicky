@@ -50,8 +50,7 @@ public class DelNickCommand implements CommandExecutor
 
             Nick nick = new Nick( plugin, receiver );
 
-            nick.unLoadNick();
-            nick.unSetNick();
+            nick.unSet();
 
             receiver.sendMessage( Nicky.getPrefix() + "Your nickname has been deleted by console." );
             plugin.log( receiver.getName() + "'s nickname has been deleted!" );
@@ -77,8 +76,7 @@ public class DelNickCommand implements CommandExecutor
         {
             Nick nick = new Nick( plugin, receiver );
 
-            nick.unLoadNick();
-            nick.unSetNick();
+            nick.unSet();
 
             receiver.sendMessage( Nicky.getPrefix() + "Your nickname has been deleted by " + ChatColor.YELLOW + sender.getName() );
             sender.sendMessage( Nicky.getPrefix() + ChatColor.YELLOW + receiver.getName() + ChatColor.GREEN + "'s nickname has been deleted!" );
@@ -95,8 +93,7 @@ public class DelNickCommand implements CommandExecutor
         {
             Nick nick = new Nick( plugin, (Player) sender );
 
-            nick.unLoadNick();
-            nick.unSetNick();
+            nick.unSet();
 
             sender.sendMessage( Nicky.getPrefix() + "Your nickname has been deleted." );
         }

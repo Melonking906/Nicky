@@ -19,7 +19,7 @@ public class PlayerListener implements Listener
     {
         Nick nick = new Nick( plugin, event.getPlayer() );
 
-        nick.loadNick();
+        nick.load();
     }
 
     @EventHandler
@@ -27,6 +27,6 @@ public class PlayerListener implements Listener
     {
         Nick nick = new Nick( plugin, event.getPlayer() );
 
-        nick.unLoadNick();
+        nick.unLoad();
     }
 }

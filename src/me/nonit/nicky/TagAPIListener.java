@@ -18,9 +18,9 @@ public class TagAPIListener implements Listener
     {
         Nick nick = new Nick( plugin, event.getNamedPlayer() );
 
-        if( nick.getNick() != null )
+        if( nick.get() != null )
         {
-            event.setTag( nick.getNick() );
+            event.setTag( nick.get() );
         }
     }
 }

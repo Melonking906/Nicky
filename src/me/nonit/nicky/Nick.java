@@ -20,15 +20,13 @@ public class Nick
         this.uuid = player.getUniqueId().toString();
     }
 
-    public boolean loadNick()
+    public boolean load()
     {
-        String nickname = getNick();
+        String nickname = get();
 
         if( nickname != null )
         {
             player.setDisplayName( nickname );
-
-            refreshTagIfEnabled();
 
             return true;
         }
@@ -36,42 +34,39 @@ public class Nick
         return false;
     }
 
-    public void unLoadNick()
+    public void unLoad()
     {
         database.removeFromCache( uuid );
         player.setDisplayName( player.getName() );
-
-        refreshTagIfEnabled();
     }
 
-    public String getNick()
+    public String get()
     {
         return database.downloadNick( uuid );
     }
 
-    public void setNick( String nick )
+    public void set( String nick )
     {
-        if( getNick() != null )
+        if( get() != null )
         {
-            unSetNick();
+            unSet();
         }
 
         database.uploadNick( uuid, nick );
+        refresh();
     }
 
-    public void unSetNick()
+    public void unSet()
     {
         database.deleteNick( uuid );
+        refresh();
     }
 
-    public void refreshNick()
+    private void refresh()
     {
-        unLoadNick();
-        loadNick();
-    }
+        unLoad();
+        load();
 
-    private void refreshTagIfEnabled()
-    {
         if( plugin.isTagAPIUsed() )
         {
             TagAPI.refreshPlayer( player );

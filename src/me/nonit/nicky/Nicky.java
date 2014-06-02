@@ -61,7 +61,7 @@ public class Nicky extends JavaPlugin
         {
             Nick nick = new Nick( this, player );
 
-            nick.loadNick();
+            nick.load();
         }
 
         loadMetrics();
