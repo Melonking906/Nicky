@@ -86,11 +86,9 @@ public class Nicky extends JavaPlugin
 
             Metrics.Graph graphDatabaseType = metrics.createGraph( "Database Type" );
 
-            graphDatabaseType.addPlotter( new Metrics.Plotter( database.getConfigName() )
-            {
+            graphDatabaseType.addPlotter( new Metrics.Plotter( database.getConfigName() ) {
                 @Override
-                public int getValue()
-                {
+                public int getValue() {
                     return 1;
                 }
             } );
@@ -103,11 +101,9 @@ public class Nicky extends JavaPlugin
                 graphTagAPIValue = "Yes";
             }
 
-            graphTagAPI.addPlotter( new Metrics.Plotter( graphTagAPIValue )
-            {
+            graphTagAPI.addPlotter( new Metrics.Plotter( graphTagAPIValue ) {
                 @Override
-                public int getValue()
-                {
+                public int getValue() {
                     return 1;
                 }
             } );
@@ -153,4 +149,9 @@ public class Nicky extends JavaPlugin
     }
 
     public static String getPrefix() { return PREFIX; }
+
+    public boolean isTagAPIUsed()
+    {
+        return usesTagAPI;
+    }
 }

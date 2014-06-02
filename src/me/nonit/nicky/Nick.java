@@ -2,15 +2,18 @@ package me.nonit.nicky;
 
 import me.nonit.nicky.databases.SQL;
 import org.bukkit.entity.Player;
+import org.kitteh.tag.TagAPI;
 
 public class Nick
 {
+    private Nicky plugin;
     private Player player;
     private SQL database;
     private String uuid;
 
     public Nick(Nicky plugin, Player player)
     {
+        this.plugin = plugin;
         this.player = player;
         database = plugin.getNickDatabase();
 
@@ -24,6 +27,9 @@ public class Nick
         if( nickname != null )
         {
             player.setDisplayName( nickname );
+
+            refreshTagIfEnabled();
+
             return true;
         }
 
@@ -34,6 +40,13 @@ public class Nick
     {
         database.removeFromCache( uuid );
         player.setDisplayName( player.getName() );
+
+        refreshTagIfEnabled();
+    }
+
+    public String getNick()
+    {
+        return database.downloadNick( uuid );
     }
 
     public void setNick( String nick )
@@ -57,8 +70,11 @@ public class Nick
         loadNick();
     }
 
-    public String getNick()
+    private void refreshTagIfEnabled()
     {
-        return database.downloadNick( uuid );
+        if( plugin.isTagAPIUsed() )
+        {
+            TagAPI.refreshPlayer( player );
+        }
     }
 }
