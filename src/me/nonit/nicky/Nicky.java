@@ -21,7 +21,10 @@ public class Nicky extends JavaPlugin
 
     private final Set<SQL> databases;
     private SQL database;
+
     private boolean usesTagAPI = false;
+    private boolean updateTab = true;
+    private boolean uniqueNicks = true;
 
     public Nicky()
     {
@@ -46,6 +49,15 @@ public class Nicky extends JavaPlugin
             pm.registerEvents( new TagAPIListener( this ), this );
             log( "TagAPI support enabled." );
             usesTagAPI = true;
+        }
+
+        if( getConfig().get( "tab" ).equals( "false" ) )
+        {
+            this.updateTab = false;
+        }
+        if( getConfig().get( "unique" ).equals( "false" ) )
+        {
+            this.uniqueNicks = false;
         }
 
         getCommand( "nick" ).setExecutor( new NickCommand( this ) );
@@ -154,4 +166,8 @@ public class Nicky extends JavaPlugin
     {
         return usesTagAPI;
     }
+
+    public boolean isUpdateTab() { return updateTab; }
+
+    public boolean isUniqueNicks() { return uniqueNicks; }
 }

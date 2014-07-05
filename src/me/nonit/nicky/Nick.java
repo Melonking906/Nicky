@@ -28,6 +28,11 @@ public class Nick
         {
             player.setDisplayName( nickname );
 
+            if( plugin.isUpdateTab() )
+            {
+                player.setPlayerListName( nickname );
+            }
+
             return true;
         }
 
@@ -60,6 +65,15 @@ public class Nick
     {
         database.deleteNick( uuid );
         refresh();
+    }
+
+    public boolean isUsed( String nick )
+    {
+        if( plugin.isUniqueNicks() )
+        {
+            return database.isUsed( nick );
+        }
+        return false;
     }
 
     private void refresh()

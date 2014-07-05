@@ -52,6 +52,12 @@ public class NickCommand implements CommandExecutor
 
             Nick nick = new Nick( plugin, receiver );
 
+            if( nick.isUsed( nickname ) )
+            {
+                plugin.log( "Sorry the nick " + nickname + "  is already in use :(" );
+                return;
+            }
+
             nick.set( nickname );
 
             receiver.sendMessage( Nicky.getPrefix() + "Your nickname has been set to " + ChatColor.YELLOW + nickname + ChatColor.GREEN + " by console!" );
@@ -85,6 +91,12 @@ public class NickCommand implements CommandExecutor
 
             Nick nick = new Nick( plugin, receiver );
 
+            if( nick.isUsed( nickname ) )
+            {
+                sender.sendMessage( Nicky.getPrefix() + "Sorry the nick " + ChatColor.YELLOW + nickname + ChatColor.GREEN + "  is already in use :(" );
+                return;
+            }
+
             nick.set( nickname );
 
             receiver.sendMessage( Nicky.getPrefix() + "Your nickname has been set to " + ChatColor.YELLOW + nickname + ChatColor.GREEN + " by " + ChatColor.YELLOW + sender.getName() + ChatColor.GREEN + "!" );
@@ -112,6 +124,12 @@ public class NickCommand implements CommandExecutor
                 }
 
                 Nick nick = new Nick( plugin, player );
+
+                if( nick.isUsed( nickname ) )
+                {
+                    player.sendMessage( Nicky.getPrefix() + "Sorry the nick " + ChatColor.YELLOW + nickname + ChatColor.GREEN + "  is already in use :(" );
+                    return;
+                }
 
                 nick.set( nickname );
 

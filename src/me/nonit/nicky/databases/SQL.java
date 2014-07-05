@@ -139,6 +139,40 @@ public abstract class SQL
         return nick;
     }
 
+    public boolean isUsed( String nick )
+    {
+        String result = null;
+
+        if( !checkConnection() )
+        {
+            plugin.log( "Error with database" );
+            return false;
+        }
+
+        PreparedStatement statement;
+        try
+        {
+            statement = connection.prepareStatement( "SELECT nick FROM nicky WHERE nick = '" + nick + "';" );
+
+            ResultSet set = statement.executeQuery();
+
+            while( set.next() )
+            {
+                result = set.getString( "nick" );
+            }
+        }
+        catch( SQLException e )
+        {
+            e.printStackTrace();
+        }
+
+        if( result != null )
+        {
+            return true;
+        }
+        return false;
+    }
+
     public void removeFromCache( String uuid )
     {
         if( cache.containsKey( uuid ) )
