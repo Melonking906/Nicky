@@ -12,3 +12,9 @@ database: 'nicky'
 
 # Change name tags if TagAPI is installed?
 tagapi: 'true'
+
+# Should names in the tablist be updated?
+tab: 'true'
+
+# Should all nicknames be unique?
+unique: 'true'
