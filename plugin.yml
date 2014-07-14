@@ -12,6 +12,9 @@ commands:
    delnick:
       description: Unset a nickname
       usage: /<command>
+   realname:
+      description: See the owner of a nickname
+      usage: /<command>
 
 permissions:
     nicky.set:

@@ -44,6 +44,8 @@ public class RealNameCommand implements CommandExecutor
             return;
         }
 
+        findPlayers( args[0] );
+
         plugin.log( "Players with a nickname containing: " + args[0] );
         for( Map.Entry<String,String> entry : players.entrySet() )
         {
@@ -60,6 +62,8 @@ public class RealNameCommand implements CommandExecutor
                 sender.sendMessage( Nicky.getPrefix() + "To check a nickname do " + ChatColor.YELLOW + "/realname <search>" );
                 return;
             }
+
+            findPlayers( args[0] );
 
             sender.sendMessage( ChatColor.GREEN + "Players with a nickname containing: " + ChatColor.YELLOW + args[0] );
             for( Map.Entry<String,String> entry : players.entrySet() )

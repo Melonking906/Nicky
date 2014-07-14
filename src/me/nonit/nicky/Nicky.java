@@ -2,6 +2,7 @@ package me.nonit.nicky;
 
 import me.nonit.nicky.commands.DelNickCommand;
 import me.nonit.nicky.commands.NickCommand;
+import me.nonit.nicky.commands.RealNameCommand;
 import me.nonit.nicky.databases.MySQL;
 import me.nonit.nicky.databases.SQL;
 import me.nonit.nicky.databases.SQLite;
@@ -45,28 +46,29 @@ public class Nicky extends JavaPlugin
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents( new PlayerListener( this ), this );
 
-        if( pm.isPluginEnabled( "TagAPI" ) && getConfig().get( "tagapi" ).equals( "true" ) )
+        if( pm.isPluginEnabled( "TagAPI" ) && getConfig().getBoolean( "tagapi" ) )
         {
             pm.registerEvents( new TagAPIListener( this ), this );
             log( "TagAPI support enabled." );
             usesTagAPI = true;
         }
 
-        if( getConfig().get( "tab" ).equals( "false" ) )
+        if( getConfig().getBoolean( "tab" ) )
         {
             updateTab = false;
         }
-        if( getConfig().get( "unique" ).equals( "false" ) )
+        if( getConfig().getBoolean( "unique" ) )
         {
             uniqueNicks = false;
         }
-        if( getConfig().get( "prefix" ).equals( "true" ) )
+        if( getConfig().getBoolean( "prefix" ) )
         {
             prefixNicks = true;
         }
 
         getCommand( "nick" ).setExecutor( new NickCommand( this ) );
         getCommand( "delnick" ).setExecutor( new DelNickCommand( this ) );
+        getCommand( "realname" ).setExecutor( new RealNameCommand( this ) );
 
         if( ! database.checkConnection() )
         {
