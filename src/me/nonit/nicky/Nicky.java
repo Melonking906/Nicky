@@ -14,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Nicky extends JavaPlugin
@@ -21,12 +22,15 @@ public class Nicky extends JavaPlugin
     private static final String PREFIX = ChatColor.YELLOW + "[Nicky]" + ChatColor.GREEN + " ";
 
     private final Set<SQL> databases;
-    private static SQL database;
+    private static SQL DATABASE;
 
-    private static boolean usesTagAPI = false;
-    private static boolean updateTab = true;
-    private static boolean uniqueNicks = true;
-    private static boolean prefixNicks = false;
+    private static boolean TAGAPI = false;
+    private static boolean TABS;
+    private static boolean UNIQUE;
+    private static String NICK_PREFIX;
+    private static int LENGTH;
+    private static String CHARACTERS;
+    private static List<String> BLACKLIST;
 
     public Nicky()
     {
@@ -49,30 +53,19 @@ public class Nicky extends JavaPlugin
         if( pm.isPluginEnabled( "TagAPI" ) && getConfig().getBoolean( "tagapi" ) )
         {
             pm.registerEvents( new TagAPIListener( this ), this );
-            log( "TagAPI support enabled." );
-            usesTagAPI = true;
+            log( "TagAPI link enabled." );
+            TAGAPI = true;
         }
 
-        if( getConfig().getBoolean( "tab" ) )
-        {
-            updateTab = false;
-        }
-        if( getConfig().getBoolean( "unique" ) )
-        {
-            uniqueNicks = false;
-        }
-        if( getConfig().getBoolean( "prefix" ) )
-        {
-            prefixNicks = true;
-        }
+        reloadConfig();
 
         getCommand( "nick" ).setExecutor( new NickCommand( this ) );
         getCommand( "delnick" ).setExecutor( new DelNickCommand( this ) );
         getCommand( "realname" ).setExecutor( new RealNameCommand( this ) );
 
-        if( ! database.checkConnection() )
+        if( ! DATABASE.checkConnection() )
         {
-            log( "Error with database" );
+            log( "Error with DATABASE" );
             pm.disablePlugin( this );
         }
 
@@ -89,7 +82,26 @@ public class Nicky extends JavaPlugin
     @Override
     public void onDisable()
     {
-        database.disconnect();
+        DATABASE.disconnect();
+    }
+
+    public void reloadConfig()
+    {
+        try
+        {
+            TABS = getConfig().getBoolean( "tab" );
+            UNIQUE = getConfig().getBoolean( "unique" );
+
+            NICK_PREFIX = getConfig().get( "prefix" ).toString();
+            LENGTH = Integer.parseInt( getConfig().get( "length" ).toString() );
+            CHARACTERS = getConfig().get( "characters" ).toString();
+
+            BLACKLIST = getConfig().getStringList( "blacklist" );
+        }
+        catch( Exception e )
+        {
+            log( "Warning - You have an error in your config." );
+        }
     }
 
     private void loadMetrics()
@@ -100,7 +112,7 @@ public class Nicky extends JavaPlugin
 
             Metrics.Graph graphDatabaseType = metrics.createGraph( "Database Type" );
 
-            graphDatabaseType.addPlotter( new Metrics.Plotter( database.getConfigName() ) {
+            graphDatabaseType.addPlotter( new Metrics.Plotter( DATABASE.getConfigName() ) {
                 @Override
                 public int getValue() {
                     return 1;
@@ -110,7 +122,7 @@ public class Nicky extends JavaPlugin
             Metrics.Graph graphTagAPI = metrics.createGraph( "TagAPI" );
 
             String graphTagAPIValue = "No";
-            if( usesTagAPI )
+            if( TAGAPI )
             {
                 graphTagAPIValue = "Yes";
             }
@@ -134,13 +146,13 @@ public class Nicky extends JavaPlugin
     {
         String type = getConfig().getString("type");
 
-        database = null;
+        DATABASE = null;
 
         for ( SQL database : databases )
         {
             if ( type.equalsIgnoreCase( database.getConfigName() ) )
             {
-                this.database = database;
+                DATABASE = database;
 
                 log( "Database set to " + database.getConfigName() + "." );
 
@@ -148,7 +160,7 @@ public class Nicky extends JavaPlugin
             }
         }
 
-        if (database == null)
+        if ( DATABASE == null)
         {
             log( "Database type does not exist!" );
 
@@ -164,19 +176,25 @@ public class Nicky extends JavaPlugin
 
     public static SQL getNickDatabase()
     {
-        return database;
+        return DATABASE;
     }
 
     public static String getPrefix() { return PREFIX; }
 
     public static boolean isTagAPIUsed()
     {
-        return usesTagAPI;
+        return TAGAPI;
     }
 
-    public static boolean isUpdateTab() { return updateTab; }
+    public static boolean isTabsUsed() { return TABS; }
 
-    public static boolean isUniqueNicks() { return uniqueNicks; }
+    public static boolean isUnique() { return UNIQUE; }
 
-    public static boolean isPrefixNicks() { return prefixNicks; }
+    public static String getNickPrefix() { return NICK_PREFIX; }
+
+    public static List<String> getBlacklist() { return BLACKLIST; }
+
+    public static int getLength() { return LENGTH; }
+
+    public static String getCharacters() { return CHARACTERS; }
 }

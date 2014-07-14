@@ -3,6 +3,7 @@ package me.nonit.nicky;
 import me.nonit.nicky.databases.SQL;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 import org.kitteh.tag.TagAPI;
 
 public class Nick
@@ -27,7 +28,7 @@ public class Nick
         {
             player.setDisplayName( nickname );
 
-            if( Nicky.isUpdateTab() )
+            if( Nicky.isTabsUsed() )
             {
                 player.setPlayerListName( nickname );
             }
@@ -49,14 +50,28 @@ public class Nick
 
         if( nickname != null )
         {
+            if( ! Nicky.getCharacters().equals( "" ) )
+            {
+                nickname = nickname.replaceAll( Nicky.getCharacters(), "" );
+            }
+
+            nickname = nickname.substring( 0, Nicky.getLength() );
+
+            if( isBlacklisted( nickname ) )
+            {
+                unSet();
+                return null;
+            }
+
             if( player.hasPermission( "nicky.color" ) )
             {
                 nickname = ChatColor.translateAlternateColorCodes( '&', nickname );
             }
 
-            if( Nicky.isPrefixNicks() )
+            if( ! Nicky.getNickPrefix().equals( "" ) )
             {
-                nickname = "~" + nickname;
+                String prefix = ChatColor.translateAlternateColorCodes( '&', Nicky.getNickPrefix() );
+                nickname = prefix + nickname;
             }
 
             nickname = nickname + ChatColor.RESET;
@@ -84,9 +99,21 @@ public class Nick
 
     public boolean isUsed( String nick )
     {
-        if( Nicky.isUniqueNicks() )
+        if( Nicky.isUnique() )
         {
             return database.isUsed( nick );
+        }
+        return false;
+    }
+
+    public static boolean isBlacklisted( String nick )
+    {
+        for( String word : Nicky.getBlacklist() )
+        {
+            if( ChatColor.stripColor( nick.toLowerCase() ).contains( word.toLowerCase() ) );
+            {
+                return true;
+            }
         }
         return false;
     }

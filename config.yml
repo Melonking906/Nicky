@@ -19,5 +19,16 @@ tab: true
 # Should all nicknames be unique?
 unique: true
 
-# Add a ~ before nicknames
-prefix: false
+# Add a prefix before nicks? (Set to '' to disable)
+prefix: '&7~'
+
+# The max number of characters in a prefix, including color codes.
+length: 32
+
+# Characters allowed in a nickname, default for numbers and letters only, '' to allow any character.
+characters: '[^a-zA-Z0-9]'
+
+# Words that cannot appear in any nickname.
+blacklist:
+  - Melonking
+  - Admin

@@ -50,6 +50,12 @@ public class NickCommand implements CommandExecutor
 
             String nickname = args[1];
 
+            if( Nick.isBlacklisted( nickname ) )
+            {
+                plugin.log( "Sorry but " + nickname + " contains a blacklisted word :(" );
+                return;
+            }
+
             Nick nick = new Nick( receiver );
 
             if( nick.isUsed( nickname ) )
@@ -85,6 +91,12 @@ public class NickCommand implements CommandExecutor
 
         if( sender.hasPermission( "nicky.set.other" ) )
         {
+            if( Nick.isBlacklisted( nickname ) )
+            {
+                sender.sendMessage( Nicky.getPrefix() + "Sorry but " + ChatColor.YELLOW + ChatColor.translateAlternateColorCodes( '&', nickname ) + ChatColor.GREEN + " contains a blacklisted word :(" );
+                return;
+            }
+
             Nick nick = new Nick( receiver );
 
             if( nick.isUsed( nickname ) )
@@ -115,11 +127,17 @@ public class NickCommand implements CommandExecutor
             {
                 String nickname = args[0];
 
+                if( Nick.isBlacklisted( nickname ) )
+                {
+                    player.sendMessage( Nicky.getPrefix() + "Sorry but " + ChatColor.YELLOW + ChatColor.translateAlternateColorCodes( '&', nickname ) + ChatColor.GREEN + " contains a blacklisted word :(" );
+                    return;
+                }
+
                 Nick nick = new Nick( player );
 
                 if( nick.isUsed( nickname ) )
                 {
-                    player.sendMessage( Nicky.getPrefix() + "Sorry the nick " + ChatColor.YELLOW + nickname + ChatColor.GREEN + "  is already in use :(" );
+                    player.sendMessage( Nicky.getPrefix() + "Sorry the nick " + ChatColor.YELLOW + ChatColor.translateAlternateColorCodes( '&', nickname ) + ChatColor.GREEN + " is already in use :(" );
                     return;
                 }
 
