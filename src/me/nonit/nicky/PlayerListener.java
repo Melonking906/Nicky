@@ -17,7 +17,7 @@ public class PlayerListener implements Listener
     @EventHandler
     public void onJoin( PlayerJoinEvent event )
     {
-        Nick nick = new Nick( plugin, event.getPlayer() );
+        Nick nick = new Nick( event.getPlayer() );
 
         nick.load();
     }
@@ -25,7 +25,7 @@ public class PlayerListener implements Listener
     @EventHandler
     public void onExit( PlayerQuitEvent event )
     {
-        Nick nick = new Nick( plugin, event.getPlayer() );
+        Nick nick = new Nick( event.getPlayer() );
 
         nick.unLoad();
     }

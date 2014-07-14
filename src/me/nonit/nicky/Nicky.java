@@ -20,12 +20,12 @@ public class Nicky extends JavaPlugin
     private static final String PREFIX = ChatColor.YELLOW + "[Nicky]" + ChatColor.GREEN + " ";
 
     private final Set<SQL> databases;
-    private SQL database;
+    private static SQL database;
 
-    private boolean usesTagAPI = false;
-    private boolean updateTab = true;
-    private boolean uniqueNicks = true;
-    private boolean prefixNicks = false;
+    private static boolean usesTagAPI = false;
+    private static boolean updateTab = true;
+    private static boolean uniqueNicks = true;
+    private static boolean prefixNicks = false;
 
     public Nicky()
     {
@@ -54,15 +54,15 @@ public class Nicky extends JavaPlugin
 
         if( getConfig().get( "tab" ).equals( "false" ) )
         {
-            this.updateTab = false;
+            updateTab = false;
         }
         if( getConfig().get( "unique" ).equals( "false" ) )
         {
-            this.uniqueNicks = false;
+            uniqueNicks = false;
         }
         if( getConfig().get( "prefix" ).equals( "true" ) )
         {
-            this.prefixNicks = true;
+            prefixNicks = true;
         }
 
         getCommand( "nick" ).setExecutor( new NickCommand( this ) );
@@ -76,7 +76,7 @@ public class Nicky extends JavaPlugin
 
         for( Player player : Bukkit.getServer().getOnlinePlayers() )
         {
-            Nick nick = new Nick( this, player );
+            Nick nick = new Nick( player );
 
             nick.load();
         }
@@ -88,11 +88,6 @@ public class Nicky extends JavaPlugin
     public void onDisable()
     {
         database.disconnect();
-    }
-
-    public SQL getNickDatabase()
-    {
-        return database;
     }
 
     private void loadMetrics()
@@ -165,16 +160,21 @@ public class Nicky extends JavaPlugin
         getLogger().info( message );
     }
 
+    public static SQL getNickDatabase()
+    {
+        return database;
+    }
+
     public static String getPrefix() { return PREFIX; }
 
-    public boolean isTagAPIUsed()
+    public static boolean isTagAPIUsed()
     {
         return usesTagAPI;
     }
 
-    public boolean isUpdateTab() { return updateTab; }
+    public static boolean isUpdateTab() { return updateTab; }
 
-    public boolean isUniqueNicks() { return uniqueNicks; }
+    public static boolean isUniqueNicks() { return uniqueNicks; }
 
-    public boolean isPrefixNicks() { return prefixNicks; }
+    public static boolean isPrefixNicks() { return prefixNicks; }
 }

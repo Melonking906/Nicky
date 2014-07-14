@@ -50,7 +50,7 @@ public class NickCommand implements CommandExecutor
 
             String nickname = args[1];
 
-            Nick nick = new Nick( plugin, receiver );
+            Nick nick = new Nick( receiver );
 
             if( nick.isUsed( nickname ) )
             {
@@ -85,7 +85,7 @@ public class NickCommand implements CommandExecutor
 
         if( sender.hasPermission( "nicky.set.other" ) )
         {
-            Nick nick = new Nick( plugin, receiver );
+            Nick nick = new Nick( receiver );
 
             if( nick.isUsed( nickname ) )
             {
@@ -115,7 +115,7 @@ public class NickCommand implements CommandExecutor
             {
                 String nickname = args[0];
 
-                Nick nick = new Nick( plugin, player );
+                Nick nick = new Nick( player );
 
                 if( nick.isUsed( nickname ) )
                 {

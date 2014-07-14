@@ -7,16 +7,14 @@ import org.kitteh.tag.TagAPI;
 
 public class Nick
 {
-    private Nicky plugin;
     private Player player;
     private SQL database;
     private String uuid;
 
-    public Nick(Nicky plugin, Player player)
+    public Nick(Player player)
     {
-        this.plugin = plugin;
         this.player = player;
-        database = plugin.getNickDatabase();
+        database = Nicky.getNickDatabase();
 
         this.uuid = player.getUniqueId().toString();
     }
@@ -29,7 +27,7 @@ public class Nick
         {
             player.setDisplayName( nickname );
 
-            if( plugin.isUpdateTab() )
+            if( Nicky.isUpdateTab() )
             {
                 player.setPlayerListName( nickname );
             }
@@ -56,7 +54,7 @@ public class Nick
                 nickname = ChatColor.translateAlternateColorCodes( '&', nickname );
             }
 
-            if( plugin.isPrefixNicks() )
+            if( Nicky.isPrefixNicks() )
             {
                 nickname = "~" + nickname;
             }
@@ -86,7 +84,7 @@ public class Nick
 
     public boolean isUsed( String nick )
     {
-        if( plugin.isUniqueNicks() )
+        if( Nicky.isUniqueNicks() )
         {
             return database.isUsed( nick );
         }
@@ -98,7 +96,7 @@ public class Nick
         unLoad();
         load();
 
-        if( plugin.isTagAPIUsed() )
+        if( Nicky.isTagAPIUsed() )
         {
             TagAPI.refreshPlayer( player );
         }

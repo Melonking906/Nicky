@@ -48,7 +48,7 @@ public class DelNickCommand implements CommandExecutor
                 return;
             }
 
-            Nick nick = new Nick( plugin, receiver );
+            Nick nick = new Nick( receiver );
 
             nick.unSet();
 
@@ -74,7 +74,7 @@ public class DelNickCommand implements CommandExecutor
 
         if( sender.hasPermission( "nicky.del.other" ) )
         {
-            Nick nick = new Nick( plugin, receiver );
+            Nick nick = new Nick( receiver );
 
             nick.unSet();
 
@@ -91,7 +91,7 @@ public class DelNickCommand implements CommandExecutor
     {
         if( sender.hasPermission( "nicky.del" ) )
         {
-            Nick nick = new Nick( plugin, (Player) sender );
+            Nick nick = new Nick( (Player) sender );
 
             nick.unSet();
 

@@ -22,5 +22,7 @@ permissions:
         default: op
     nicky.del.other:
         default: op
+    nicky.realname:
+        default: op
     nicky.color:
         default: op

@@ -16,7 +16,7 @@ public class TagAPIListener implements Listener
     @EventHandler
     public void onNameTag( AsyncPlayerReceiveNameTagEvent event )
     {
-        Nick nick = new Nick( plugin, event.getNamedPlayer() );
+        Nick nick = new Nick( event.getNamedPlayer() );
 
         if( nick.get() != null )
         {
