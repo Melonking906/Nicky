@@ -48,7 +48,7 @@ public class NickCommand implements CommandExecutor
                 return;
             }
 
-            String nickname = ChatColor.translateAlternateColorCodes( '&', args[1] ) + ChatColor.RESET;
+            String nickname = args[1];
 
             Nick nick = new Nick( plugin, receiver );
 
@@ -59,6 +59,7 @@ public class NickCommand implements CommandExecutor
             }
 
             nick.set( nickname );
+            nickname = nick.get();
 
             receiver.sendMessage( Nicky.getPrefix() + "Your nickname has been set to " + ChatColor.YELLOW + nickname + ChatColor.GREEN + " by console!" );
             plugin.log( receiver.getName() + "'s nick has been set to " + nickname );
@@ -80,15 +81,10 @@ public class NickCommand implements CommandExecutor
             return;
         }
 
-        String nickname = args[1] + ChatColor.RESET;
+        String nickname = args[1];
 
         if( sender.hasPermission( "nicky.set.other" ) )
         {
-            if( sender.hasPermission( "nicky.color" ) )
-            {
-                nickname = ChatColor.translateAlternateColorCodes( '&', nickname );
-            }
-
             Nick nick = new Nick( plugin, receiver );
 
             if( nick.isUsed( nickname ) )
@@ -98,6 +94,7 @@ public class NickCommand implements CommandExecutor
             }
 
             nick.set( nickname );
+            nickname = nick.get();
 
             receiver.sendMessage( Nicky.getPrefix() + "Your nickname has been set to " + ChatColor.YELLOW + nickname + ChatColor.GREEN + " by " + ChatColor.YELLOW + sender.getName() + ChatColor.GREEN + "!" );
             sender.sendMessage( Nicky.getPrefix() + "You have set " + ChatColor.YELLOW + sender.getName() + ChatColor.GREEN + "'s nickname to " + ChatColor.YELLOW + nickname + ChatColor.GREEN + "." );
@@ -116,12 +113,7 @@ public class NickCommand implements CommandExecutor
         {
             if( args.length >= 1 )
             {
-                String nickname = args[0] + ChatColor.RESET;
-
-                if( sender.hasPermission( "nicky.color" ) )
-                {
-                    nickname = ChatColor.translateAlternateColorCodes( '&', nickname );
-                }
+                String nickname = args[0];
 
                 Nick nick = new Nick( plugin, player );
 
@@ -132,6 +124,7 @@ public class NickCommand implements CommandExecutor
                 }
 
                 nick.set( nickname );
+                nickname = nick.get();
 
                 player.sendMessage( Nicky.getPrefix() + "Your nickname has been set to " + ChatColor.YELLOW + nickname + ChatColor.GREEN + " !" );
             }

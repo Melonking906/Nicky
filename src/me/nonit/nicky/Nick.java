@@ -1,6 +1,7 @@
 package me.nonit.nicky;
 
 import me.nonit.nicky.databases.SQL;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.kitteh.tag.TagAPI;
 
@@ -35,7 +36,6 @@ public class Nick
 
             return true;
         }
-
         return false;
     }
 
@@ -47,7 +47,24 @@ public class Nick
 
     public String get()
     {
-        return database.downloadNick( uuid );
+        String nickname = database.downloadNick( uuid );
+
+        if( nickname != null )
+        {
+            if( player.hasPermission( "nicky.color" ) )
+            {
+                nickname = ChatColor.translateAlternateColorCodes( '&', nickname );
+            }
+
+            if( plugin.isPrefixNicks() )
+            {
+                nickname = "~" + nickname;
+            }
+
+            nickname = nickname + ChatColor.RESET;
+        }
+
+        return nickname;
     }
 
     public void set( String nick )

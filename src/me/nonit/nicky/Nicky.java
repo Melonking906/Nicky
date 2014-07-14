@@ -25,6 +25,7 @@ public class Nicky extends JavaPlugin
     private boolean usesTagAPI = false;
     private boolean updateTab = true;
     private boolean uniqueNicks = true;
+    private boolean prefixNicks = false;
 
     public Nicky()
     {
@@ -58,6 +59,10 @@ public class Nicky extends JavaPlugin
         if( getConfig().get( "unique" ).equals( "false" ) )
         {
             this.uniqueNicks = false;
+        }
+        if( getConfig().get( "prefix" ).equals( "true" ) )
+        {
+            this.prefixNicks = true;
         }
 
         getCommand( "nick" ).setExecutor( new NickCommand( this ) );
@@ -170,4 +175,6 @@ public class Nicky extends JavaPlugin
     public boolean isUpdateTab() { return updateTab; }
 
     public boolean isUniqueNicks() { return uniqueNicks; }
+
+    public boolean isPrefixNicks() { return prefixNicks; }
 }
