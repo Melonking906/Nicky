@@ -59,7 +59,8 @@ public class Nicky extends JavaPlugin
             TAGAPI = true;
         }
 
-        loadConfig();
+        BLACKLIST = new ArrayList<String>();
+        reloadNickyConfig();
 
         getCommand( "nick" ).setExecutor( new NickCommand( this ) );
         getCommand( "delnick" ).setExecutor( new DelNickCommand( this ) );
@@ -72,13 +73,6 @@ public class Nicky extends JavaPlugin
             pm.disablePlugin( this );
         }
 
-        for( Player player : Bukkit.getServer().getOnlinePlayers() )
-        {
-            Nick nick = new Nick( player );
-
-            nick.load();
-        }
-
         loadMetrics();
     }
 
@@ -88,8 +82,10 @@ public class Nicky extends JavaPlugin
         DATABASE.disconnect();
     }
 
-    public void loadConfig()
+    public void reloadNickyConfig()
     {
+        super.reloadConfig();
+
         try
         {
             TABS = getConfig().getBoolean( "tab" );
@@ -98,12 +94,19 @@ public class Nicky extends JavaPlugin
             LENGTH = Integer.parseInt( getConfig().get( "length" ).toString() );
             CHARACTERS = getConfig().get( "characters" ).toString();
 
-            BLACKLIST = new ArrayList<String>();
+            BLACKLIST.clear();
             BLACKLIST = getConfig().getStringList( "blacklist" );
         }
         catch( Exception e )
         {
             log( "Warning - You have an error in your config." );
+        }
+
+        for( Player player : Bukkit.getServer().getOnlinePlayers() )
+        {
+            Nick nick = new Nick( player );
+
+            nick.load();
         }
     }
 

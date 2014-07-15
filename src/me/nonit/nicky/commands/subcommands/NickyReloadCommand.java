@@ -17,7 +17,7 @@ public class NickyReloadCommand extends NickySubCommand
 
     public boolean onCommand( CommandSender sender, Command cmd, String commandLabel, String[] args )
     {
-        plugin.loadConfig();
+        plugin.reloadNickyConfig();
 
         sender.sendMessage( Nicky.getPrefix() + "Configuration reloaded!" );
         return true;

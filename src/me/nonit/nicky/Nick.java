@@ -127,7 +127,6 @@ public class Nick
         {
             if( ChatColor.stripColor( nick.toLowerCase() ).contains( word.toLowerCase() ) )
             {
-                System.out.print( "hi" );
                 return true;
             }
         }
