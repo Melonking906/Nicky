@@ -29,3 +29,6 @@ permissions:
         default: op
     nicky.color:
         default: op
+        children:
+              "nicky.color.normal": true
+              "nicky.color.extra": true

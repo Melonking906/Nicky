@@ -50,6 +50,12 @@ public class Nick
 
         if( nickname != null )
         {
+            if( isBlacklisted( nickname ) )
+            {
+                unSet();
+                return null;
+            }
+
             nickname = format( nickname );
         }
 
@@ -78,12 +84,6 @@ public class Nick
         if( nickname.length() > Nicky.getLength() )
         {
             nickname = nickname.substring( 0, Nicky.getLength() + 1 );
-        }
-
-        if( isBlacklisted( nickname ) )
-        {
-            unSet();
-            return null;
         }
 
         if( player.hasPermission( "nicky.color.normal" ) )
@@ -121,11 +121,14 @@ public class Nick
 
     public static boolean isBlacklisted( String nick )
     {
+        nick = ChatColor.translateAlternateColorCodes( '&', nick );
+
         for( String word : Nicky.getBlacklist() )
         {
-            if( ChatColor.stripColor( nick.toLowerCase() ).contains( word.toLowerCase() ) ) ;
+            if( ChatColor.stripColor( nick.toLowerCase() ).contains( word.toLowerCase() ) )
             {
-                return false;
+                System.out.print( "hi" );
+                return true;
             }
         }
         return false;
