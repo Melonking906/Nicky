@@ -58,7 +58,7 @@ public class NickCommand implements CommandExecutor
 
             Nick nick = new Nick( receiver );
 
-            if( nick.isUsed( nickname ) )
+            if( Nick.isUsed( nickname ) )
             {
                 plugin.log( "Sorry the nick " + nickname + "  is already in use :(" );
                 return;
@@ -91,17 +91,17 @@ public class NickCommand implements CommandExecutor
 
         if( sender.hasPermission( "nicky.set.other" ) )
         {
+            Nick nick = new Nick( receiver );
+
             if( Nick.isBlacklisted( nickname ) )
             {
-                sender.sendMessage( Nicky.getPrefix() + "Sorry but " + ChatColor.YELLOW + ChatColor.translateAlternateColorCodes( '&', nickname ) + ChatColor.GREEN + " contains a blacklisted word :(" );
+                sender.sendMessage( Nicky.getPrefix() + "Sorry but " + ChatColor.YELLOW + nick.format( nickname ) + ChatColor.GREEN + " contains a blacklisted word :(" );
                 return;
             }
 
-            Nick nick = new Nick( receiver );
-
-            if( nick.isUsed( nickname ) )
+            if( Nick.isUsed( nickname ) )
             {
-                sender.sendMessage( Nicky.getPrefix() + "Sorry the nick " + ChatColor.YELLOW + nickname + ChatColor.GREEN + "  is already in use :(" );
+                sender.sendMessage( Nicky.getPrefix() + "Sorry the nick " + ChatColor.YELLOW + nick.format( nickname ) + ChatColor.GREEN + "  is already in use :(" );
                 return;
             }
 
@@ -127,17 +127,17 @@ public class NickCommand implements CommandExecutor
             {
                 String nickname = args[0];
 
+                Nick nick = new Nick( player );
+
                 if( Nick.isBlacklisted( nickname ) )
                 {
-                    player.sendMessage( Nicky.getPrefix() + "Sorry but " + ChatColor.YELLOW + ChatColor.translateAlternateColorCodes( '&', nickname ) + ChatColor.GREEN + " contains a blacklisted word :(" );
+                    player.sendMessage( Nicky.getPrefix() + "Sorry but " + ChatColor.YELLOW + nick.format( nickname ) + ChatColor.GREEN + " contains a blacklisted word :(" );
                     return;
                 }
 
-                Nick nick = new Nick( player );
-
-                if( nick.isUsed( nickname ) )
+                if( Nick.isUsed( nickname ) )
                 {
-                    player.sendMessage( Nicky.getPrefix() + "Sorry the nick " + ChatColor.YELLOW + ChatColor.translateAlternateColorCodes( '&', nickname ) + ChatColor.GREEN + " is already in use :(" );
+                    player.sendMessage( Nicky.getPrefix() + "Sorry the nick " + ChatColor.YELLOW + nick.format( nickname ) + ChatColor.GREEN + " is already in use :(" );
                     return;
                 }
 

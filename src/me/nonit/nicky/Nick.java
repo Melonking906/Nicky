@@ -8,7 +8,7 @@ import org.kitteh.tag.TagAPI;
 public class Nick
 {
     private Player player;
-    private SQL database;
+    private static SQL database;
     private String uuid;
 
     public Nick( Player player )
@@ -50,39 +50,7 @@ public class Nick
 
         if( nickname != null )
         {
-            if( nickname.length() > Nicky.getLength() )
-            {
-                nickname = nickname.substring( 0, Nicky.getLength() + 1 );
-            }
-
-            if( isBlacklisted( nickname ) )
-            {
-                unSet();
-                return null;
-            }
-
-            if( player.hasPermission( "nicky.color.normal" ) )
-            {
-                nickname = Nicky.translateNormalColorCodes( nickname );
-            }
-
-            if( player.hasPermission( "nicky.color.extra" ) )
-            {
-                nickname = Nicky.translateExtraColorCodes( nickname );
-            }
-
-            if( !Nicky.getCharacters().equals( "" ) )
-            {
-                nickname = nickname.replaceAll( Nicky.getCharacters(), "" );
-            }
-
-            if( !Nicky.getNickPrefix().equals( "" ) )
-            {
-                String prefix = ChatColor.translateAlternateColorCodes( '&', Nicky.getNickPrefix() );
-                nickname = prefix + nickname;
-            }
-
-            nickname = nickname + ChatColor.RESET;
+            nickname = format( nickname );
         }
 
         return nickname;
@@ -105,7 +73,44 @@ public class Nick
         refresh();
     }
 
-    public boolean isUsed( String nick )
+    public String format( String nickname )
+    {
+        if( nickname.length() > Nicky.getLength() )
+        {
+            nickname = nickname.substring( 0, Nicky.getLength() + 1 );
+        }
+
+        if( isBlacklisted( nickname ) )
+        {
+            unSet();
+            return null;
+        }
+
+        if( player.hasPermission( "nicky.color.normal" ) )
+        {
+            nickname = Nicky.translateNormalColorCodes( nickname );
+        }
+
+        if( player.hasPermission( "nicky.color.extra" ) )
+        {
+            nickname = Nicky.translateExtraColorCodes( nickname );
+        }
+
+        if( !Nicky.getCharacters().equals( "" ) )
+        {
+            nickname = nickname.replaceAll( Nicky.getCharacters(), "" );
+        }
+
+        if( !Nicky.getNickPrefix().equals( "" ) )
+        {
+            String prefix = ChatColor.translateAlternateColorCodes( '&', Nicky.getNickPrefix() );
+            nickname = prefix + nickname;
+        }
+
+        return nickname + ChatColor.RESET;
+    }
+
+    public static boolean isUsed( String nick )
     {
         if( Nicky.isUnique() )
         {
