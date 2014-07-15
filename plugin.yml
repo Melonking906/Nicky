@@ -6,6 +6,9 @@ author: Melonking
 softdepend: [TagAPI]
 
 commands:
+   nicky:
+      description: Nicky Help
+      usage: /<command>
    nick:
       description: Set a nickname
       usage: /<command>
@@ -17,6 +20,8 @@ commands:
       usage: /<command>
 
 permissions:
+    nicky.help:
+        default: true
     nicky.set:
         default: op
     nicky.set.other:
@@ -32,3 +37,5 @@ permissions:
         children:
               "nicky.color.normal": true
               "nicky.color.extra": true
+    nicky.reload:
+        default: op

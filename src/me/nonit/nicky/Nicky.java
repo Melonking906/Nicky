@@ -2,6 +2,7 @@ package me.nonit.nicky;
 
 import me.nonit.nicky.commands.DelNickCommand;
 import me.nonit.nicky.commands.NickCommand;
+import me.nonit.nicky.commands.NickyCommand;
 import me.nonit.nicky.commands.RealNameCommand;
 import me.nonit.nicky.databases.MySQL;
 import me.nonit.nicky.databases.SQL;
@@ -63,6 +64,7 @@ public class Nicky extends JavaPlugin
         getCommand( "nick" ).setExecutor( new NickCommand( this ) );
         getCommand( "delnick" ).setExecutor( new DelNickCommand( this ) );
         getCommand( "realname" ).setExecutor( new RealNameCommand( this ) );
+        getCommand( "nicky" ).setExecutor( new NickyCommand( this ) );
 
         if( ! DATABASE.checkConnection() )
         {
@@ -171,21 +173,16 @@ public class Nicky extends JavaPlugin
         return true;
     }
 
-    public void log( String message ) {
+    public void log( String message )
+    {
         getLogger().info( message );
     }
 
-    public static SQL getNickDatabase()
-    {
-        return DATABASE;
-    }
+    public static SQL getNickDatabase() { return DATABASE; }
 
     public static String getPrefix() { return PREFIX; }
 
-    public static boolean isTagAPIUsed()
-    {
-        return TAGAPI;
-    }
+    public static boolean isTagAPIUsed() { return TAGAPI; }
 
     public static boolean isTabsUsed() { return TABS; }
 

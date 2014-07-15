@@ -1,0 +1,25 @@
+package me.nonit.nicky.commands.subcommands;
+
+import me.nonit.nicky.Nicky;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+
+public class NickyReloadCommand extends NickySubCommand
+{
+    private final Nicky plugin;
+
+    public NickyReloadCommand( Nicky plugin )
+    {
+        super( "reload", "nicky.reload" );
+
+        this.plugin = plugin;
+    }
+
+    public boolean onCommand( CommandSender sender, Command cmd, String commandLabel, String[] args )
+    {
+        plugin.loadConfig();
+
+        sender.sendMessage( Nicky.getPrefix() + "Configuration reloaded!" );
+        return true;
+    }
+}
