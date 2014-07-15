@@ -13,6 +13,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -57,7 +58,7 @@ public class Nicky extends JavaPlugin
             TAGAPI = true;
         }
 
-        reloadConfig();
+        loadConfig();
 
         getCommand( "nick" ).setExecutor( new NickCommand( this ) );
         getCommand( "delnick" ).setExecutor( new DelNickCommand( this ) );
@@ -85,17 +86,17 @@ public class Nicky extends JavaPlugin
         DATABASE.disconnect();
     }
 
-    public void reloadConfig()
+    public void loadConfig()
     {
         try
         {
             TABS = getConfig().getBoolean( "tab" );
             UNIQUE = getConfig().getBoolean( "unique" );
-
             NICK_PREFIX = getConfig().get( "prefix" ).toString();
             LENGTH = Integer.parseInt( getConfig().get( "length" ).toString() );
             CHARACTERS = getConfig().get( "characters" ).toString();
 
+            BLACKLIST = new ArrayList<String>();
             BLACKLIST = getConfig().getStringList( "blacklist" );
         }
         catch( Exception e )
@@ -197,4 +198,32 @@ public class Nicky extends JavaPlugin
     public static int getLength() { return LENGTH; }
 
     public static String getCharacters() { return CHARACTERS; }
+
+    public static String translateNormalColorCodes( String textToTranslate )
+    {
+        char[] b = textToTranslate.toCharArray();
+        for( int i = 0; i < b.length - 1; i++ )
+        {
+            if( b[i] == '&' && "0123456789AaBbCcDdEeFfRr".indexOf( b[i + 1] ) > -1 )
+            {
+                b[i] = ChatColor.COLOR_CHAR;
+                b[i + 1] = Character.toLowerCase( b[i + 1] );
+            }
+        }
+        return new String( b );
+    }
+
+    public static String translateExtraColorCodes( String textToTranslate )
+    {
+        char[] b = textToTranslate.toCharArray();
+        for( int i = 0; i < b.length - 1; i++ )
+        {
+            if( b[i] == '&' && "KkLlMmNnOoRr".indexOf( b[i + 1] ) > -1 )
+            {
+                b[i] = ChatColor.COLOR_CHAR;
+                b[i + 1] = Character.toLowerCase( b[i + 1] );
+            }
+        }
+        return new String( b );
+    }
 }

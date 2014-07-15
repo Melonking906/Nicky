@@ -46,10 +46,17 @@ public class RealNameCommand implements CommandExecutor
 
         findPlayers( args[0] );
 
-        plugin.log( "Players with a nickname containing: " + args[0] );
-        for( Map.Entry<String,String> entry : players.entrySet() )
+        if( players.isEmpty() )
         {
-            plugin.log( entry.getKey() + " -> " + entry.getValue() );
+            plugin.log( "No one has a nickname containing: " + args[0] );
+        }
+        else
+        {
+            plugin.log( "Players with a nickname containing: " + args[0] );
+            for( Map.Entry<String, String> entry : players.entrySet() )
+            {
+                plugin.log( entry.getKey() + " -> " + entry.getValue() );
+            }
         }
     }
 
@@ -65,10 +72,17 @@ public class RealNameCommand implements CommandExecutor
 
             findPlayers( args[0] );
 
-            sender.sendMessage( ChatColor.GREEN + "Players with a nickname containing: " + ChatColor.YELLOW + args[0] );
-            for( Map.Entry<String,String> entry : players.entrySet() )
+            if( players.isEmpty() )
             {
-                sender.sendMessage( ChatColor.YELLOW + entry.getKey() + ChatColor.GRAY + " -> " + ChatColor.YELLOW + entry.getValue() );
+                sender.sendMessage( ChatColor.GREEN + "No one has a nickname containing: " + ChatColor.YELLOW + args[0] );
+            }
+            else
+            {
+                sender.sendMessage( ChatColor.GREEN + "Players with a nickname containing: " + ChatColor.YELLOW + args[0] );
+                for( Map.Entry<String,String> entry : players.entrySet() )
+                {
+                    sender.sendMessage( ChatColor.YELLOW + entry.getKey() + ChatColor.GRAY + " -> " + ChatColor.YELLOW + entry.getValue() );
+                }
             }
         }
         else

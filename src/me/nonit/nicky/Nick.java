@@ -3,7 +3,6 @@ package me.nonit.nicky;
 import me.nonit.nicky.databases.SQL;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.util.StringUtil;
 import org.kitteh.tag.TagAPI;
 
 public class Nick
@@ -12,7 +11,7 @@ public class Nick
     private SQL database;
     private String uuid;
 
-    public Nick(Player player)
+    public Nick( Player player )
     {
         this.player = player;
         database = Nicky.getNickDatabase();
@@ -30,7 +29,8 @@ public class Nick
 
             if( Nicky.isTabsUsed() )
             {
-                player.setPlayerListName( nickname );
+                if( nickname.length() > 16 )
+                    player.setPlayerListName( nickname.substring( 0, 16 ) );
             }
 
             return true;
@@ -50,12 +50,10 @@ public class Nick
 
         if( nickname != null )
         {
-            if( ! Nicky.getCharacters().equals( "" ) )
+            if( nickname.length() > Nicky.getLength() )
             {
-                nickname = nickname.replaceAll( Nicky.getCharacters(), "" );
+                nickname = nickname.substring( 0, Nicky.getLength() + 1 );
             }
-
-            nickname = nickname.substring( 0, Nicky.getLength() );
 
             if( isBlacklisted( nickname ) )
             {
@@ -63,12 +61,22 @@ public class Nick
                 return null;
             }
 
-            if( player.hasPermission( "nicky.color" ) )
+            if( player.hasPermission( "nicky.color.normal" ) )
             {
-                nickname = ChatColor.translateAlternateColorCodes( '&', nickname );
+                nickname = Nicky.translateNormalColorCodes( nickname );
             }
 
-            if( ! Nicky.getNickPrefix().equals( "" ) )
+            if( player.hasPermission( "nicky.color.extra" ) )
+            {
+                nickname = Nicky.translateExtraColorCodes( nickname );
+            }
+
+            if( !Nicky.getCharacters().equals( "" ) )
+            {
+                nickname = nickname.replaceAll( Nicky.getCharacters(), "" );
+            }
+
+            if( !Nicky.getNickPrefix().equals( "" ) )
             {
                 String prefix = ChatColor.translateAlternateColorCodes( '&', Nicky.getNickPrefix() );
                 nickname = prefix + nickname;
@@ -110,9 +118,9 @@ public class Nick
     {
         for( String word : Nicky.getBlacklist() )
         {
-            if( ChatColor.stripColor( nick.toLowerCase() ).contains( word.toLowerCase() ) );
+            if( ChatColor.stripColor( nick.toLowerCase() ).contains( word.toLowerCase() ) ) ;
             {
-                return true;
+                return false;
             }
         }
         return false;
