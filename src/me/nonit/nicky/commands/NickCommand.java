@@ -50,6 +50,12 @@ public class NickCommand implements CommandExecutor
 
             String nickname = args[1];
 
+            if( nickname.equals( receiver.getName() ) )
+            {
+                new DelNickCommand( plugin ).runAsConsole( args );
+                return;
+            }
+
             if( Nick.isBlacklisted( nickname ) )
             {
                 plugin.log( "Sorry but " + nickname + " contains a blacklisted word :(" );
@@ -92,6 +98,12 @@ public class NickCommand implements CommandExecutor
         if( sender.hasPermission( "nicky.set.other" ) )
         {
             Nick nick = new Nick( receiver );
+
+            if( nickname.equals( receiver.getName() ) )
+            {
+                new DelNickCommand( plugin ).runAsAdmin( sender, args );
+                return;
+            }
 
             if( Nick.isBlacklisted( nickname ) )
             {

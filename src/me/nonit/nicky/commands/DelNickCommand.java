@@ -36,7 +36,7 @@ public class DelNickCommand implements CommandExecutor
     }
 
     @SuppressWarnings("deprecation")
-    private void runAsConsole( String[] args )
+    public void runAsConsole( String[] args )
     {
         if( args.length >= 1 )
         {
@@ -62,7 +62,7 @@ public class DelNickCommand implements CommandExecutor
     }
 
     @SuppressWarnings("deprecation")
-    private void runAsAdmin( CommandSender sender, String[] args )
+    public void runAsAdmin( CommandSender sender, String[] args )
     {
         Player receiver = plugin.getServer().getPlayer( args[0] );
 
@@ -87,7 +87,7 @@ public class DelNickCommand implements CommandExecutor
         }
     }
 
-    private void runAsPlayer( CommandSender sender )
+    public void runAsPlayer( CommandSender sender )
     {
         if( sender.hasPermission( "nicky.del" ) )
         {
