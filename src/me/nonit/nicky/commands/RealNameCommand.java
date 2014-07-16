@@ -98,11 +98,14 @@ public class RealNameCommand implements CommandExecutor
         for( Player player : Bukkit.getOnlinePlayers() )
         {
             String nickname = new Nick( player ).get();
-            String realname = player.getName();
-
-            if( ChatColor.stripColor( nickname ).contains( searchWord ) )
+            if( nickname != null )
             {
-                players.put( nickname, realname );
+                String realname = player.getName();
+
+                if( ChatColor.stripColor( nickname ).contains( searchWord ) )
+                {
+                    players.put( nickname, realname );
+                }
             }
         }
 
