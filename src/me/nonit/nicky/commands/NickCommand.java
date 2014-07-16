@@ -97,13 +97,13 @@ public class NickCommand implements CommandExecutor
 
         if( sender.hasPermission( "nicky.set.other" ) )
         {
-            Nick nick = new Nick( receiver );
-
             if( nickname.equals( receiver.getName() ) )
             {
-                new DelNickCommand( plugin ).runAsAdmin( sender, args );
+                new DelNickCommand( plugin ).runAsAdmin( receiver, args );
                 return;
             }
+
+            Nick nick = new Nick( receiver );
 
             if( Nick.isBlacklisted( nickname ) )
             {
@@ -138,6 +138,12 @@ public class NickCommand implements CommandExecutor
             if( args.length >= 1 )
             {
                 String nickname = args[0];
+
+                if( nickname.equals( sender.getName() ) )
+                {
+                    new DelNickCommand( plugin ).runAsPlayer( sender );
+                    return;
+                }
 
                 Nick nick = new Nick( player );
 
