@@ -4,60 +4,28 @@ import me.nonit.nicky.Nick;
 import me.nonit.nicky.Nicky;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class RealNameCommand implements CommandExecutor
 {
-    private Nicky plugin;
-    private HashMap<String,String> players;
+    private HashMap<String,HashMap<String,String>> foundPlayers;
 
-    public RealNameCommand( Nicky plugin )
+    public RealNameCommand()
     {
-        this.plugin = plugin;
     }
 
     public boolean onCommand( CommandSender sender, Command command, String s, String[] args )
     {
-        if( ! (sender instanceof Player) )
-        {
-            runAsConsole( args );
-        }
-        else
-        {
-            runAsPlayer( sender, args );
-        }
+        runAsPlayer( sender, args );
 
         return true;
-    }
-
-    private void runAsConsole( String[] args )
-    {
-        if( args.length < 1 )
-        {
-            plugin.log( "To check a nickname do /realname <search>" );
-            return;
-        }
-
-        findPlayers( args[0] );
-
-        if( players.isEmpty() )
-        {
-            plugin.log( "No one has a nickname containing: " + args[0] );
-        }
-        else
-        {
-            plugin.log( "Players with a nickname containing: " + args[0] );
-            for( Map.Entry<String, String> entry : players.entrySet() )
-            {
-                plugin.log( entry.getKey() + " -> " + entry.getValue() );
-            }
-        }
     }
 
     private void runAsPlayer( CommandSender sender, String[] args )
@@ -72,16 +40,23 @@ public class RealNameCommand implements CommandExecutor
 
             findPlayers( args[0] );
 
-            if( players.isEmpty() )
+            if( foundPlayers.isEmpty() )
             {
                 sender.sendMessage( ChatColor.GREEN + "No one has a nickname containing: " + ChatColor.YELLOW + args[0] );
             }
             else
             {
                 sender.sendMessage( ChatColor.GREEN + "Players with a nickname containing: " + ChatColor.YELLOW + args[0] );
-                for( Map.Entry<String,String> entry : players.entrySet() )
+                for( Map.Entry<String,HashMap<String,String>> entry : foundPlayers.entrySet() )
                 {
-                    sender.sendMessage( ChatColor.YELLOW + entry.getKey() + ChatColor.GRAY + " -> " + ChatColor.YELLOW + entry.getValue() );
+                    for( Map.Entry<String,String> player : entry.getValue().entrySet() )
+                    {
+                        if( entry.getKey().equals( "offline" ) )
+                        {
+                            sender.sendMessage( ChatColor.GRAY + "Players not on this Server:" );
+                        }
+                        sender.sendMessage( ChatColor.YELLOW + player.getKey() + ChatColor.GRAY + " -> " + ChatColor.YELLOW + player.getValue() );
+                    }
                 }
             }
         }
@@ -91,24 +66,34 @@ public class RealNameCommand implements CommandExecutor
         }
     }
 
-    private HashMap<String,String> findPlayers( String searchWord )
+    private void findPlayers( String searchWord )
     {
-        players = new HashMap<String,String>();
+        HashMap<String,String> onlinePlayers = new HashMap<String,String>();
+        HashMap<String,String> offlinePlayers = new HashMap<String,String>();
 
-        for( Player player : Bukkit.getOnlinePlayers() )
+        for( Map.Entry<String,String> player : Nick.searchGet( searchWord ).entrySet() )
         {
-            String nickname = new Nick( player ).get();
-            if( nickname != null )
+            if( ChatColor.stripColor( player.getValue() ).contains( searchWord ) )
             {
-                String realname = player.getName();
+                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer( UUID.fromString( player.getKey() ) );
 
-                if( ChatColor.stripColor( nickname ).contains( searchWord ) )
+                if( offlinePlayer.isOnline() )
                 {
-                    players.put( nickname, realname );
+                    onlinePlayers.put( player.getValue(), offlinePlayer.getName() );
+                }
+                else
+                {
+                    offlinePlayers.put( player.getValue(), offlinePlayer.getName() );
                 }
             }
         }
 
-        return players;
+        foundPlayers = new HashMap<String,HashMap<String,String>>();
+
+        if( ! onlinePlayers.isEmpty() || ! offlinePlayers.isEmpty() )
+        {
+            foundPlayers.put( "online", onlinePlayers );
+            foundPlayers.put( "offline", offlinePlayers );
+        }
     }
 }

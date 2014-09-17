@@ -5,6 +5,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.kitteh.tag.TagAPI;
 
+import java.util.HashMap;
+
 public class Nick
 {
     private Player player;
@@ -131,6 +133,11 @@ public class Nick
             }
         }
         return false;
+    }
+
+    public static HashMap<String, String> searchGet( String search )
+    {
+        return database.searchNicks( search );
     }
 
     private void refresh()

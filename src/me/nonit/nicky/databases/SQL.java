@@ -3,11 +3,11 @@ package me.nonit.nicky.databases;
 import me.nonit.nicky.Nicky;
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class SQL
 {
@@ -44,19 +44,60 @@ public abstract class SQL
 
     protected abstract String getName();
 
-    public boolean query( String sql ) throws SQLException
-    {
-        return connection.createStatement().execute( sql );
-    }
-
     public String getConfigName()
     {
         return getName().toLowerCase().replace(" ", "");
     }
 
-    public ConfigurationSection getConfigSection()
+    private ArrayList<HashMap<String,String>> query( String sql, boolean hasReturn )
     {
-        return plugin.getConfig().getConfigurationSection(getConfigName());
+        if( !checkConnection() )
+        {
+            plugin.getLogger().info( "Error with database" );
+            return null;
+        }
+
+        PreparedStatement statement;
+        try
+        {
+            statement = connection.prepareStatement( sql );
+
+            if( ! hasReturn )
+            {
+                statement.execute();
+                return null;
+            }
+
+            ResultSet set = statement.executeQuery();
+
+            ResultSetMetaData md = set.getMetaData();
+            int columns = md.getColumnCount();
+
+            ArrayList<HashMap<String,String>> list = new ArrayList<HashMap<String,String>>( 50 );
+
+            while( set.next() )
+            {
+                HashMap<String,String> row = new HashMap<String,String>( columns );
+                for( int i = 1; i <= columns; ++i )
+                {
+                    row.put( md.getColumnName( i ), set.getObject( i ).toString() );
+                }
+                list.add( row );
+            }
+
+            if( list.isEmpty() )
+            {
+                return null;
+            }
+
+            return list;
+        }
+        catch( SQLException e )
+        {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public boolean checkConnection()
@@ -72,7 +113,7 @@ public abstract class SQL
                     return false;
                 }
 
-                query( "CREATE TABLE IF NOT EXISTS nicky (uuid varchar(36) NOT NULL, nick varchar(64) NOT NULL, PRIMARY KEY (uuid))" );
+                query( "CREATE TABLE IF NOT EXISTS nicky (uuid varchar(36) NOT NULL, nick varchar(64) NOT NULL, PRIMARY KEY (uuid))", false );
             }
         }
         catch( SQLException e )
@@ -104,73 +145,56 @@ public abstract class SQL
 
     public String downloadNick( String uuid )
     {
-        String nick = null;
+        String nick;
 
         if( cache.containsKey( uuid ) )
         {
             return cache.get( uuid );
         }
 
-        if( !checkConnection() )
-        {
-            plugin.log( "Error with database" );
-            return null;
-        }
+        ArrayList<HashMap<String,String>> data = query( "SELECT nick FROM nicky WHERE uuid = '" + uuid + "';", true );
 
-        PreparedStatement statement;
-        try
-        {
-            statement = connection.prepareStatement( "SELECT nick FROM nicky WHERE uuid = '" + uuid + "';" );
+        nick = data.get( 0 ).get( uuid );
 
-            ResultSet set = statement.executeQuery();
-
-            while( set.next() )
-            {
-                nick = set.getString( "nick" );
-
-                cache.put( uuid, nick );
-            }
-        }
-        catch( SQLException e )
-        {
-            e.printStackTrace();
-        }
+        cache.put( uuid, nick );
 
         return nick;
     }
 
-    public boolean isUsed( String nick )
+    public HashMap<String,String> searchNicks( String search )
     {
-        String result = null;
+        HashMap<String,String> nicknames = null;
 
-        if( !checkConnection() )
+        String[] characters = search.split( "(?!^)" );
+        String sqlSearch = "";
+        for( String character : characters )
         {
-            plugin.log( "Error with database" );
-            return false;
+            sqlSearch = "%" + character;
         }
+        sqlSearch = sqlSearch + "%";
 
-        PreparedStatement statement;
-        try
+        ArrayList<HashMap<String,String>> data = query( "SELECT uuid, nick FROM nicky WHERE nick LIKE '" + sqlSearch + "';", true );
+
+        for( Map.Entry<String,String> player : data.get( 0 ).entrySet() )
         {
-            statement = connection.prepareStatement( "SELECT nick FROM nicky WHERE nick = '" + nick + "';" );
-
-            ResultSet set = statement.executeQuery();
-
-            while( set.next() )
+            if( player.getKey() != null && player.getValue() != null )
             {
-                result = set.getString( "nick" );
+                nicknames.put( player.getKey(), player.getValue() );
             }
         }
-        catch( SQLException e )
-        {
-            e.printStackTrace();
-        }
 
-        if( result != null )
-        {
-            return true;
-        }
-        return false;
+        return nicknames;
+    }
+
+    public boolean isUsed( String nick )
+    {
+        boolean result;
+
+        ArrayList<HashMap<String,String>> data = query( "SELECT nick FROM nicky WHERE nick = '" + nick + "';", true );
+
+        result = data.get( 0 ).isEmpty();
+
+        return result == false;
     }
 
     public void removeFromCache( String uuid )
@@ -183,48 +207,11 @@ public abstract class SQL
 
     public void uploadNick( String uuid, String nick )
     {
-        if( ! checkConnection() )
-        {
-            plugin.log( "Error with database" );
-            return;
-        }
-
-        if( downloadNick( uuid ) != null )
-        {
-            deleteNick( uuid );
-        }
-
-        PreparedStatement statement;
-        try
-        {
-            statement = connection.prepareStatement( "INSERT INTO nicky (uuid, nick) VALUES ('" + uuid + "','" + nick + "');" );
-
-            statement.execute();
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
+        query( "INSERT INTO nicky (uuid, nick) VALUES ('" + uuid + "','" + nick + "');", false );
     }
 
     public void deleteNick( String uuid )
     {
-        if( ! checkConnection() )
-        {
-            plugin.log( "Error with database" );
-            return;
-        }
-
-        PreparedStatement statement;
-        try
-        {
-            statement = connection.prepareStatement( "DELETE FROM nicky WHERE uuid = '" + uuid + "';" );
-
-            statement.execute();
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
+        query( "DELETE FROM nicky WHERE uuid = '" + uuid + "';", false );
     }
 }

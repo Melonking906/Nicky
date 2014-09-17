@@ -21,7 +21,7 @@ import java.util.Set;
 
 public class Nicky extends JavaPlugin
 {
-    private static final String PREFIX = ChatColor.YELLOW + "[Nicky]" + ChatColor.GREEN + " ";
+    private static String PREFIX = ChatColor.YELLOW + "[Nicky]" + ChatColor.GREEN + " ";
 
     private final Set<SQL> databases;
     private static SQL DATABASE;
@@ -64,7 +64,7 @@ public class Nicky extends JavaPlugin
 
         getCommand( "nick" ).setExecutor( new NickCommand( this ) );
         getCommand( "delnick" ).setExecutor( new DelNickCommand( this ) );
-        getCommand( "realname" ).setExecutor( new RealNameCommand( this ) );
+        getCommand( "realname" ).setExecutor( new RealNameCommand() );
         getCommand( "nicky" ).setExecutor( new NickyCommand( this ) );
 
         if( ! DATABASE.checkConnection() )
@@ -93,6 +93,11 @@ public class Nicky extends JavaPlugin
             NICK_PREFIX = getConfig().get( "prefix" ).toString();
             LENGTH = Integer.parseInt( getConfig().get( "length" ).toString() );
             CHARACTERS = getConfig().get( "characters" ).toString();
+
+            if( getConfig().get( "nicky_prefix" ) != null )
+            {
+                PREFIX = ChatColor.translateAlternateColorCodes( '&', getConfig().get( "nicky_prefix" ).toString() );
+            }
 
             BLACKLIST.clear();
             BLACKLIST = getConfig().getStringList( "blacklist" );
