@@ -49,12 +49,12 @@ public class RealNameCommand implements CommandExecutor
                 sender.sendMessage( ChatColor.GREEN + "Players with a nickname containing: " + ChatColor.YELLOW + args[0] );
                 for( Map.Entry<String,HashMap<String,String>> entry : foundPlayers.entrySet() )
                 {
+                    if( entry.getKey().equals( "offline" ) )
+                    {
+                        sender.sendMessage( ChatColor.GRAY + "Players not on this Server:" );
+                    }
                     for( Map.Entry<String,String> player : entry.getValue().entrySet() )
                     {
-                        if( entry.getKey().equals( "offline" ) )
-                        {
-                            sender.sendMessage( ChatColor.GRAY + "Players not on this Server:" );
-                        }
                         sender.sendMessage( ChatColor.YELLOW + player.getKey() + ChatColor.GRAY + " -> " + ChatColor.YELLOW + player.getValue() );
                     }
                 }
