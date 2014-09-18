@@ -72,7 +72,7 @@ public class Nick
             unSet();
         }
 
-        database.uploadNick( uuid, nick );
+        database.uploadNick( uuid, nick, player.getName() );
         refresh();
     }
 

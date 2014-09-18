@@ -259,9 +259,9 @@ public abstract class SQL
         }
     }
 
-    public void uploadNick( String uuid, String nick )
+    public void uploadNick( String uuid, String nick, String name )
     {
-        query( "INSERT INTO nicky (uuid, nick) VALUES ('" + uuid + "','" + nick + "');", false );
+        query( "INSERT INTO nicky (uuid, nick, name) VALUES ('" + uuid + "','" + nick + "','" + name + "');", false );
     }
 
     public void deleteNick( String uuid )
