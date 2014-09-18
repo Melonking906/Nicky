@@ -1,13 +1,9 @@
 package me.nonit.nicky.databases;
 
 import me.nonit.nicky.Nicky;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class SQL
 {
@@ -38,6 +34,8 @@ public abstract class SQL
                 }
             }
         }, 60 * 20, 60 * 20 );
+
+        updateTables();
     }
 
     protected abstract Connection getNewConnection();
@@ -112,8 +110,6 @@ public abstract class SQL
                 {
                     return false;
                 }
-
-                query( "CREATE TABLE IF NOT EXISTS nicky (uuid varchar(36) NOT NULL, nick varchar(64) NOT NULL, PRIMARY KEY (uuid))", false );
             }
         }
         catch( SQLException e )
@@ -124,6 +120,34 @@ public abstract class SQL
         }
 
         return true;
+    }
+
+    private void updateTables()
+    {
+        int version;
+
+        query( "CREATE TABLE IF NOT EXISTS nicky (uuid varchar(36) NOT NULL, nick varchar(64) NOT NULL, name varchar(32) NOT NULL, PRIMARY KEY (uuid))", false );
+        query( "CREATE TABLE IF NOT EXISTS nicky_version (version int(2) NOT NULL)", false );
+
+        ArrayList<HashMap<String,String>> results;
+        results = query( "SELECT version FROM nicky_version", true );
+        if( results == null )
+        {
+            query( "INSERT INTO nicky_version (version) VALUES (1);", false );
+            version = 1;
+        }
+        else
+        {
+            version = Integer.parseInt( results.get( 0 ).get( "version" ) );
+        }
+
+        if( version < 2 )
+        {
+            query( "ALTER TABLE nicky ADD name varchar(32) NOT NULL", false );
+            query( "DELETE FROM nicky_version", false );
+            query( "INSERT INTO nicky_version (version) VALUES (2);", false );
+            version = 2;
+        }
     }
 
     public void disconnect()
@@ -153,17 +177,21 @@ public abstract class SQL
         }
 
         ArrayList<HashMap<String,String>> data = query( "SELECT nick FROM nicky WHERE uuid = '" + uuid + "';", true );
+        if( data == null )
+        {
+            return null;
+        }
 
-        nick = data.get( 0 ).get( uuid );
+        nick = data.get( 0 ).get( "nick" );
 
         cache.put( uuid, nick );
 
         return nick;
     }
 
-    public HashMap<String,String> searchNicks( String search )
+    public List<SearchedPlayer> searchNicks( String search )
     {
-        HashMap<String,String> nicknames = null;
+        List<SearchedPlayer> results = new ArrayList<SearchedPlayer>();
 
         String[] characters = search.split( "(?!^)" );
         String sqlSearch = "";
@@ -173,28 +201,54 @@ public abstract class SQL
         }
         sqlSearch = sqlSearch + "%";
 
-        ArrayList<HashMap<String,String>> data = query( "SELECT uuid, nick FROM nicky WHERE nick LIKE '" + sqlSearch + "';", true );
-
-        for( Map.Entry<String,String> player : data.get( 0 ).entrySet() )
+        ArrayList<HashMap<String,String>> data = query( "SELECT uuid, nick, name FROM nicky WHERE nick LIKE '" + sqlSearch + "';", true );
+        if( data == null )
         {
-            if( player.getKey() != null && player.getValue() != null )
-            {
-                nicknames.put( player.getKey(), player.getValue() );
-            }
+            return null;
         }
 
-        return nicknames;
+        for( HashMap<String,String> row : data )
+        {
+            results.add( new SearchedPlayer( row.get( "uuid" ), row.get( "nick" ), row.get( "name" ) ) );
+        }
+
+        return results;
+    }
+
+    public class SearchedPlayer
+    {
+        private String uuid;
+        private String nick;
+        private String name;
+
+        public SearchedPlayer( String uuid, String nick, String name  )
+        {
+            this.uuid = uuid;
+            this.nick = nick;
+            this.name = name;
+        }
+
+        public String getUuid()
+        {
+            return uuid;
+        }
+
+        public String getNick()
+        {
+            return nick;
+        }
+
+        public String getName()
+        {
+            return name;
+        }
     }
 
     public boolean isUsed( String nick )
     {
-        boolean result;
-
         ArrayList<HashMap<String,String>> data = query( "SELECT nick FROM nicky WHERE nick = '" + nick + "';", true );
 
-        result = data.get( 0 ).isEmpty();
-
-        return result == false;
+        return data != null;
     }
 
     public void removeFromCache( String uuid )
@@ -213,5 +267,10 @@ public abstract class SQL
     public void deleteNick( String uuid )
     {
         query( "DELETE FROM nicky WHERE uuid = '" + uuid + "';", false );
+    }
+
+    public void updatePlayerName( String uuid, String name )
+    {
+        query( "UPDATE nicky SET name = '" + name + "' WHERE uuid = '" + uuid + "';", false );
     }
 }

@@ -7,11 +7,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerListener implements Listener
 {
-    private Nicky plugin;
-
-    public PlayerListener( Nicky plugin )
+    public PlayerListener()
     {
-        this.plugin = plugin;
     }
 
     @EventHandler
@@ -19,6 +16,7 @@ public class PlayerListener implements Listener
     {
         Nick nick = new Nick( event.getPlayer() );
 
+        nick.updatePlayerName();
         nick.load();
     }
 

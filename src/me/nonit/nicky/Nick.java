@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.kitteh.tag.TagAPI;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class Nick
 {
@@ -112,6 +113,11 @@ public class Nick
         return nickname + ChatColor.RESET;
     }
 
+    public void updatePlayerName()
+    {
+        database.updatePlayerName( uuid, player.getName() );
+    }
+
     public static boolean isUsed( String nick )
     {
         if( Nicky.isUnique() )
@@ -135,7 +141,7 @@ public class Nick
         return false;
     }
 
-    public static HashMap<String, String> searchGet( String search )
+    public static List<SQL.SearchedPlayer> searchGet( String search )
     {
         return database.searchNicks( search );
     }

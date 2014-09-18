@@ -1,37 +1,13 @@
-# Nicky config - www.okicore.com
-
-# Nicky prefix.
-nicky_prefix: '[Nicky]'
-
-# Storage type "sqlite" or "mysql"
-type: 'sqlite'
-
-# MySQL connection settings.
-host: 'localhost'
-port: '3306'
-user: 'root'
-password: 'password'
-database: 'nicky'
-
-# Change name tags if TagAPI is installed?
-tagapi: true
-
-# Should names in the tablist be updated?
-tab: true
-
-# Should all nicknames be unique?
-unique: true
-
-# Add a prefix before nicknames? (Set to '' to disable)
-prefix: '&e~'
-
-# The max number of characters in a nickname, including color codes.
-length: 20
-
-# RegEx for characters allowed in a nickname, set to '' for any, or leave default for only letters and numbers.
-characters: '[^a-zA-Z0-9§]'
-
-# Words that cannot appear in any nickname.
-blacklist:
-  - Melonking
-  - Admin
+# Nicky Config - www.okicore.com
+# -
+# nicky_prefix - Prefix for plugin messages.
+# type - Storage type "sqlite" or "mysql"
+# host/port/user/password/database - MySQL settings, not needed for SQLite
+# tagapi - Change name tags if TagAPI is installed?
+# tab - Should names in the tablist be updated?
+# unique - Should all nicknames be unique?
+# prefix - Add a prefix before nicknames? (Set to '' to disable)
+# length - The max number of characters in a nickname, including color codes.
+# characters - RegEx for characters allowed in a nickname, set to '' for any, or leave default for only letters and numbers.
+# blacklist - Words that cannot appear in any nickname.
+# -

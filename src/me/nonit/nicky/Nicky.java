@@ -15,10 +15,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Nicky extends JavaPlugin
 {
@@ -51,7 +48,7 @@ public class Nicky extends JavaPlugin
         setupDatabase();
 
         PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents( new PlayerListener( this ), this );
+        pm.registerEvents( new PlayerListener(), this );
 
         if( pm.isPluginEnabled( "TagAPI" ) && getConfig().getBoolean( "tagapi" ) )
         {
@@ -91,7 +88,7 @@ public class Nicky extends JavaPlugin
 
         try
         {
-            PREFIX = ChatColor.YELLOW + ChatColor.translateAlternateColorCodes( '&', config.get( "nicky_prefix" ).toString() ) + " ";
+            PREFIX = ChatColor.YELLOW + ChatColor.translateAlternateColorCodes( '&', config.get( "nicky_prefix" ).toString() ) + ChatColor.GREEN + " ";
 
             // Database info not set in this class.
 
@@ -181,7 +178,8 @@ public class Nicky extends JavaPlugin
         }
         if( ! config.isSet( "blacklist" ) )
         {
-            config.set( "blacklist", null );
+            List<String> listOfStrings = Arrays.asList( "Melonking", "Admin" );
+            config.set( "blacklist", listOfStrings );
         }
 
         saveConfig();
