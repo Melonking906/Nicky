@@ -9,6 +9,7 @@ import me.nonit.nicky.databases.SQL;
 import me.nonit.nicky.databases.SQLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,7 +22,7 @@ import java.util.Set;
 
 public class Nicky extends JavaPlugin
 {
-    private static String PREFIX = ChatColor.YELLOW + "[Nicky]" + ChatColor.GREEN + " ";
+    private static String PREFIX;
 
     private final Set<SQL> databases;
     private static SQL DATABASE;
@@ -45,7 +46,7 @@ public class Nicky extends JavaPlugin
         databases.add( new MySQL( this ) );
         databases.add( new SQLite( this ) );
 
-        this.saveDefaultConfig(); // Makes a config is one does not exist.
+        setupConfig();
 
         setupDatabase();
 
@@ -86,21 +87,22 @@ public class Nicky extends JavaPlugin
     {
         super.reloadConfig();
 
+        FileConfiguration config = getConfig();
+
         try
         {
-            TABS = getConfig().getBoolean( "tab" );
-            UNIQUE = getConfig().getBoolean( "unique" );
-            NICK_PREFIX = getConfig().get( "prefix" ).toString();
-            LENGTH = Integer.parseInt( getConfig().get( "length" ).toString() );
-            CHARACTERS = getConfig().get( "characters" ).toString();
+            PREFIX = ChatColor.YELLOW + ChatColor.translateAlternateColorCodes( '&', config.get( "nicky_prefix" ).toString() ) + " ";
 
-            if( getConfig().get( "nicky_prefix" ) != null )
-            {
-                PREFIX = ChatColor.translateAlternateColorCodes( '&', getConfig().get( "nicky_prefix" ).toString() );
-            }
+            // Database info not set in this class.
+
+            TABS = config.getBoolean( "tab" );
+            UNIQUE = config.getBoolean( "unique" );
+            NICK_PREFIX = config.get( "prefix" ).toString();
+            LENGTH = Integer.parseInt( config.get( "length" ).toString() );
+            CHARACTERS = config.get( "characters" ).toString();
 
             BLACKLIST.clear();
-            BLACKLIST = getConfig().getStringList( "blacklist" );
+            BLACKLIST = config.getStringList( "blacklist" );
         }
         catch( Exception e )
         {
@@ -113,6 +115,76 @@ public class Nicky extends JavaPlugin
 
             nick.load();
         }
+    }
+
+    private void setupConfig()
+    {
+        saveDefaultConfig();
+
+        FileConfiguration config = getConfig();
+
+        if( ! config.isSet( "nicky_prefix" ) )
+        {
+            config.set( "nicky_prefix", "[Nicky]" );
+        }
+
+        // Database config
+        if( ! config.isSet( "type" ) )
+        {
+            config.set( "type", "sqlite" );
+        }
+        if( ! config.isSet( "host" ) )
+        {
+            config.set( "host", "localhost" );
+        }
+        if( ! config.isSet( "port" ) )
+        {
+            config.set( "port", "3306" );
+        }
+        if( ! config.isSet( "user" ) )
+        {
+            config.set( "user", "root" );
+        }
+        if( ! config.isSet( "password" ) )
+        {
+            config.set( "password", "password" );
+        }
+        if( ! config.isSet( "database" ) )
+        {
+            config.set( "database", "nicky" );
+        }
+
+        // Settings
+        if( ! config.isSet( "tagapi" ) )
+        {
+            config.set( "tagapi", true );
+        }
+        if( ! config.isSet( "tab" ) )
+        {
+            config.set( "tab", true );
+        }
+        if( ! config.isSet( "unique" ) )
+        {
+            config.set( "unique", true );
+        }
+        if( ! config.isSet( "prefix" ) )
+        {
+            config.set( "prefix", "&e~" );
+        }
+        if( ! config.isSet( "length" ) )
+        {
+            config.set( "length", 20 );
+        }
+        if( ! config.isSet( "characters" ) )
+        {
+            config.set( "characters", "[^a-zA-Z0-9§]" );
+        }
+        if( ! config.isSet( "blacklist" ) )
+        {
+            config.set( "blacklist", null );
+        }
+
+        saveConfig();
     }
 
     private void loadMetrics()

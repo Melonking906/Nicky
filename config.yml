@@ -1,5 +1,8 @@
 # Nicky config - www.okicore.com
 
+# Nicky prefix.
+nicky_prefix: '[Nicky]'
+
 # Storage type "sqlite" or "mysql"
 type: 'sqlite'
 
