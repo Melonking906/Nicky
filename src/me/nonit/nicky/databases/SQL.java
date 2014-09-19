@@ -26,6 +26,7 @@ public abstract class SQL
                     if( connection != null && ! connection.isClosed() )
                     {
                         connection.createStatement().execute( "/* ping */ SELECT 1" );
+                        updateTables();
                     }
                 }
                 catch( SQLException e )
@@ -34,8 +35,6 @@ public abstract class SQL
                 }
             }
         }, 60 * 20, 60 * 20 );
-
-        updateTables();
     }
 
     protected abstract Connection getNewConnection();

@@ -56,6 +56,12 @@ public class NickCommand implements CommandExecutor
                 return;
             }
 
+            if( nickname.length() < Nicky.getMinLength() )
+            {
+                plugin.log( "Nicks must be longer than " + Nicky.getMinLength() + " characters." );
+                return;
+            }
+
             if( Nick.isBlacklisted( nickname ) )
             {
                 plugin.log( "Sorry but " + nickname + " contains a blacklisted word :(" );
@@ -103,6 +109,12 @@ public class NickCommand implements CommandExecutor
                 return;
             }
 
+            if( nickname.length() < Nicky.getMinLength() )
+            {
+                sender.sendMessage( "Nicks must be longer than " + ChatColor.YELLOW + Nicky.getMinLength() + ChatColor.GREEN + " characters!" );
+                return;
+            }
+
             Nick nick = new Nick( receiver );
 
             if( Nick.isBlacklisted( nickname ) )
@@ -142,6 +154,12 @@ public class NickCommand implements CommandExecutor
                 if( nickname.equals( sender.getName() ) )
                 {
                     new DelNickCommand( plugin ).runAsPlayer( sender );
+                    return;
+                }
+
+                if( nickname.length() < Nicky.getMinLength() )
+                {
+                    player.sendMessage( Nicky.getPrefix() + "Your nick must be longer than " + ChatColor.YELLOW + Nicky.getMinLength() + ChatColor.GREEN + " characters!" );
                     return;
                 }
 

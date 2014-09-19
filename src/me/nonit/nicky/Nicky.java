@@ -29,6 +29,7 @@ public class Nicky extends JavaPlugin
     private static boolean UNIQUE;
     private static String NICK_PREFIX;
     private static int LENGTH;
+    private static int MIN_LENGTH;
     private static String CHARACTERS;
     private static List<String> BLACKLIST;
 
@@ -96,6 +97,7 @@ public class Nicky extends JavaPlugin
             UNIQUE = config.getBoolean( "unique" );
             NICK_PREFIX = config.get( "prefix" ).toString();
             LENGTH = Integer.parseInt( config.get( "length" ).toString() );
+            MIN_LENGTH = Integer.parseInt( config.get( "min_length" ).toString() );
             CHARACTERS = config.get( "characters" ).toString();
 
             BLACKLIST.clear();
@@ -171,6 +173,10 @@ public class Nicky extends JavaPlugin
         if( ! config.isSet( "length" ) )
         {
             config.set( "length", 20 );
+        }
+        if( ! config.isSet( "min_length" ) )
+        {
+            config.set( "min_length", 3 );
         }
         if( ! config.isSet( "characters" ) )
         {
@@ -271,6 +277,8 @@ public class Nicky extends JavaPlugin
     public static List<String> getBlacklist() { return BLACKLIST; }
 
     public static int getLength() { return LENGTH; }
+
+    public static int getMinLength() { return MIN_LENGTH; }
 
     public static String getCharacters() { return CHARACTERS; }
 

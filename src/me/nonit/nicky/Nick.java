@@ -89,14 +89,14 @@ public class Nick
             nickname = nickname.substring( 0, Nicky.getLength() + 1 );
         }
 
-        if( player.hasPermission( "nicky.color.normal" ) )
-        {
-            nickname = Nicky.translateNormalColorCodes( nickname );
-        }
-
         if( player.hasPermission( "nicky.color.extra" ) )
         {
             nickname = Nicky.translateExtraColorCodes( nickname );
+        }
+
+        if( player.hasPermission( "nicky.color.normal" ) )
+        {
+            nickname = Nicky.translateNormalColorCodes( nickname );
         }
 
         if( !Nicky.getCharacters().equals( "" ) )

@@ -9,6 +9,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.*;
 
@@ -74,12 +75,13 @@ public class RealNameCommand implements CommandExecutor
 
         for( SQL.SearchedPlayer searchedPlayer : Nick.searchGet( searchWord ) )
         {
-            String playersNick = ChatColor.translateAlternateColorCodes( '&', searchedPlayer.getNick() );
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer( UUID.fromString( searchedPlayer.getUuid() ) );
+
+            Nick nick = new Nick( (Player )offlinePlayer );
+            String playersNick = nick.format( searchedPlayer.getNick() );
 
             if( ChatColor.stripColor( playersNick ).contains( searchWord ) )
             {
-                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer( UUID.fromString( searchedPlayer.getUuid() ) );
-
                 if( offlinePlayer.isOnline() )
                 {
                     onlinePlayers.put( playersNick, searchedPlayer.getName() );
