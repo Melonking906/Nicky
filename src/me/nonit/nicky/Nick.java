@@ -5,7 +5,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.kitteh.tag.TagAPI;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class Nick
