@@ -16,6 +16,8 @@ import java.util.*;
 public class RealNameCommand implements CommandExecutor
 {
     private HashMap<String, HashMap<String, String>> foundPlayers;
+    private HashMap<String, String> onlinePlayers = new HashMap<String, String>();
+    private HashMap<String, String> offlinePlayers = new HashMap<String, String>();
 
     public RealNameCommand()
     {
@@ -70,10 +72,16 @@ public class RealNameCommand implements CommandExecutor
 
     private void findPlayers( String searchWord )
     {
-        HashMap<String, String> onlinePlayers = new HashMap<String, String>();
-        HashMap<String, String> offlinePlayers = new HashMap<String, String>();
+        offlinePlayers.clear();
+        onlinePlayers.clear();
 
-        for( SQL.SearchedPlayer searchedPlayer : Nick.searchGet( searchWord ) )
+        List<SQL.SearchedPlayer> searchedPlayers = Nick.searchGet( searchWord );
+
+        if( searchedPlayers == null )
+        {
+            return;
+        }
+        for( SQL.SearchedPlayer searchedPlayer : searchedPlayers )
         {
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer( UUID.fromString( searchedPlayer.getUuid() ) );
 

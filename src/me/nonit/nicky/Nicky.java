@@ -10,6 +10,7 @@ import me.nonit.nicky.databases.SQLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.FileConfigurationOptions;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -121,6 +122,9 @@ public class Nicky extends JavaPlugin
         saveDefaultConfig();
 
         FileConfiguration config = getConfig();
+
+        // Update header.
+        config.options().copyHeader();
 
         if( ! config.isSet( "nicky_prefix" ) )
         {
