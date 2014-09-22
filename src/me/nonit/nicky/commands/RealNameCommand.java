@@ -19,6 +19,8 @@ public class RealNameCommand implements CommandExecutor
     private HashMap<String, String> onlinePlayers = new HashMap<String, String>();
     private HashMap<String, String> offlinePlayers = new HashMap<String, String>();
 
+    private static final int DEFAULT_MIN_SEARCH_LENGTH = 3;
+
     public RealNameCommand()
     {
     }
@@ -40,7 +42,20 @@ public class RealNameCommand implements CommandExecutor
                 return;
             }
 
-            findPlayers( args[0] );
+            String search = args[0];
+
+            int minSearchLength = DEFAULT_MIN_SEARCH_LENGTH;
+            if( DEFAULT_MIN_SEARCH_LENGTH < Nicky.getMinLength() )
+            {
+                minSearchLength = Nicky.getMinLength();
+            }
+            if( search.length() < minSearchLength )
+            {
+                sender.sendMessage( Nicky.getPrefix() + ChatColor.RED + "Your search must be at least " + minSearchLength + " characters!" );
+                return;
+            }
+
+            findPlayers( search );
 
             if( foundPlayers.isEmpty() )
             {

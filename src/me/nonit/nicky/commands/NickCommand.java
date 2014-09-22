@@ -111,7 +111,7 @@ public class NickCommand implements CommandExecutor
 
             if( nickname.length() < Nicky.getMinLength() )
             {
-                sender.sendMessage( "Nicks must be at least " + ChatColor.YELLOW + Nicky.getMinLength() + ChatColor.GREEN + " characters!" );
+                sender.sendMessage( Nicky.getPrefix() + ChatColor.RED + "Nicks must be at least " + ChatColor.YELLOW + Nicky.getMinLength() + ChatColor.GREEN + " characters!" );
                 return;
             }
 
@@ -159,7 +159,7 @@ public class NickCommand implements CommandExecutor
 
                 if( nickname.length() < Nicky.getMinLength() )
                 {
-                    player.sendMessage( Nicky.getPrefix() + "Your nick must be at least " + ChatColor.YELLOW + Nicky.getMinLength() + ChatColor.GREEN + " characters!" );
+                    player.sendMessage( Nicky.getPrefix() + ChatColor.RED + "Your nick must be at least " + ChatColor.YELLOW + Nicky.getMinLength() + ChatColor.GREEN + " characters!" );
                     return;
                 }
 
