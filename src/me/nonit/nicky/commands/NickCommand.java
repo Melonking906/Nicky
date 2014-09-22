@@ -56,7 +56,8 @@ public class NickCommand implements CommandExecutor
                 return;
             }
 
-            if( nickname.length() < Nicky.getMinLength() )
+            String strippedNickname = ChatColor.stripColor( ChatColor.translateAlternateColorCodes( '&', nickname ) );
+            if( strippedNickname.length() < Nicky.getMinLength() )
             {
                 plugin.log( "Nicks must be at least " + Nicky.getMinLength() + " characters." );
                 return;
@@ -109,9 +110,10 @@ public class NickCommand implements CommandExecutor
                 return;
             }
 
-            if( nickname.length() < Nicky.getMinLength() )
+            String strippedNickname = ChatColor.stripColor( ChatColor.translateAlternateColorCodes( '&', nickname ) );
+            if( strippedNickname.length() < Nicky.getMinLength() )
             {
-                sender.sendMessage( Nicky.getPrefix() + ChatColor.RED + "Nicks must be at least " + ChatColor.YELLOW + Nicky.getMinLength() + ChatColor.GREEN + " characters!" );
+                sender.sendMessage( Nicky.getPrefix() + ChatColor.RED + "Nicks must be at least " + ChatColor.YELLOW + Nicky.getMinLength() + ChatColor.RED + " characters!" );
                 return;
             }
 
@@ -157,9 +159,10 @@ public class NickCommand implements CommandExecutor
                     return;
                 }
 
-                if( nickname.length() < Nicky.getMinLength() )
+                String strippedNickname = ChatColor.stripColor( ChatColor.translateAlternateColorCodes( '&', nickname ) );
+                if( strippedNickname.length() < Nicky.getMinLength() )
                 {
-                    player.sendMessage( Nicky.getPrefix() + ChatColor.RED + "Your nick must be at least " + ChatColor.YELLOW + Nicky.getMinLength() + ChatColor.GREEN + " characters!" );
+                    player.sendMessage( Nicky.getPrefix() + ChatColor.RED + "Your nick must be at least " + ChatColor.YELLOW + Nicky.getMinLength() + ChatColor.RED + " characters!" );
                     return;
                 }
 

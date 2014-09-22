@@ -15,7 +15,7 @@ import java.util.*;
 
 public class RealNameCommand implements CommandExecutor
 {
-    private HashMap<String, HashMap<String, String>> foundPlayers;
+    private HashMap<String, HashMap<String, String>> foundPlayers = new HashMap<String,HashMap<String,String>>();
     private HashMap<String, String> onlinePlayers = new HashMap<String, String>();
     private HashMap<String, String> offlinePlayers = new HashMap<String, String>();
 
@@ -100,17 +100,21 @@ public class RealNameCommand implements CommandExecutor
         {
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer( UUID.fromString( searchedPlayer.getUuid() ) );
 
-            Nick nick = new Nick( (Player )offlinePlayer );
-            String playersNick = nick.format( searchedPlayer.getNick() );
+            String playersNick = searchedPlayer.getNick();
 
             if( ChatColor.stripColor( playersNick ).contains( searchWord ) )
             {
                 if( offlinePlayer.isOnline() )
                 {
+                    Nick nick = new Nick( offlinePlayer.getPlayer() );
+                    playersNick = nick.format( playersNick );
+
                     onlinePlayers.put( playersNick, searchedPlayer.getName() );
                 }
                 else
                 {
+                    playersNick = ChatColor.translateAlternateColorCodes( '&', playersNick );
+
                     offlinePlayers.put( playersNick, searchedPlayer.getName() ) ;
                 }
             }

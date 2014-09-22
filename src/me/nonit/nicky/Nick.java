@@ -10,14 +10,12 @@ import java.util.List;
 public class Nick
 {
     private Player player;
-    private static SQL database;
+    private static SQL database = Nicky.getNickDatabase();
     private String uuid;
 
     public Nick( Player player )
     {
         this.player = player;
-        database = Nicky.getNickDatabase();
-
         this.uuid = player.getUniqueId().toString();
     }
 
