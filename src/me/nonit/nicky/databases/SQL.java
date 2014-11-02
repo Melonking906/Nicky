@@ -48,7 +48,7 @@ public abstract class SQL
 
     private ArrayList<HashMap<String,String>> query( String sql, boolean hasReturn )
     {
-        if( !checkConnection() )
+        if( ! checkConnection() )
         {
             plugin.getLogger().info( "Error with database" );
             return null;

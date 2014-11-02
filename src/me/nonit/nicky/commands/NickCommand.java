@@ -127,7 +127,7 @@ public class NickCommand implements CommandExecutor
 
             if( Nick.isUsed( nickname ) )
             {
-                sender.sendMessage( Nicky.getPrefix() + "Sorry the nick " + ChatColor.YELLOW + nick.format( nickname ) + ChatColor.GREEN + "  is already in use :(" );
+                sender.sendMessage( Nicky.getPrefix() + "Sorry the nick " + ChatColor.YELLOW + nick.format( nickname ) + ChatColor.GREEN + " is already in use :(" );
                 return;
             }
 

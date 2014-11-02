@@ -29,8 +29,7 @@ public class Nick
 
             if( Nicky.isTabsUsed() )
             {
-                if( nickname.length() > 16 )
-                    player.setPlayerListName( nickname.substring( 0, 16 ) );
+                player.setPlayerListName( nickname.substring( 0, 16 ) );
             }
 
             return true;
