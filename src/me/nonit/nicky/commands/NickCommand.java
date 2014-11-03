@@ -48,7 +48,7 @@ public class NickCommand implements CommandExecutor
                 return;
             }
 
-            String nickname = args[1];
+            String nickname = args[1].trim();
 
             if( nickname.equals( receiver.getName() ) )
             {
