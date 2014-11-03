@@ -1,6 +1,6 @@
 name: Nicky
 main: me.nonit.nicky.Nicky
-version: 0.6.4
+version: 0.6.5
 description: Simple SQL nickname plugin.
 author: Melonking
 softdepend: [TagAPI]
