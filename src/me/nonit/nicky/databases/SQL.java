@@ -178,6 +178,9 @@ public abstract class SQL
         ArrayList<HashMap<String,String>> data = query( "SELECT nick FROM nicky WHERE uuid = '" + uuid + "';", true );
         if( data == null )
         {
+            // Store null to avoid spammy queries.
+            cache.put( uuid, null );
+
             return null;
         }
 
@@ -260,11 +263,15 @@ public abstract class SQL
 
     public void uploadNick( String uuid, String nick, String name )
     {
+        cache.put( uuid, nick );
+
         query( "INSERT INTO nicky (uuid, nick, name) VALUES ('" + uuid + "','" + nick + "','" + name + "');", false );
     }
 
     public void deleteNick( String uuid )
     {
+        cache.put( uuid, null );
+
         query( "DELETE FROM nicky WHERE uuid = '" + uuid + "';", false );
     }
 
