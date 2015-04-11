@@ -10,10 +10,10 @@ import me.nonit.nicky.databases.SQLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.FileConfigurationOptions;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.Metrics;
 
 import java.io.IOException;
 import java.util.*;
@@ -54,7 +54,7 @@ public class Nicky extends JavaPlugin
 
         if( pm.isPluginEnabled( "TagAPI" ) && getConfig().getBoolean( "tagapi" ) )
         {
-            pm.registerEvents( new TagAPIListener( this ), this );
+            pm.registerEvents( new TagAPIListener(), this );
             log( "TagAPI link enabled." );
             TAGAPI = true;
         }
