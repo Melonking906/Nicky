@@ -1,6 +1,6 @@
 name: Nicky
 main: me.nonit.nicky.Nicky
-version: 0.6.7
+version: ${project.version}
 description: Simple SQL nickname plugin.
 author: Melonking
 softdepend: [TagAPI]
@@ -18,6 +18,8 @@ commands:
    realname:
       description: See the owner of a nickname
       usage: /<command>
+      aliases:
+      - rn
 
 permissions:
     nicky.help:

@@ -1,9 +1,8 @@
-# Nicky Config - www.okicore.com
+# Nicky Config - loyloy.io
 # -
 # nicky_prefix - Prefix for plugin messages.
 # type - Storage type "sqlite" or "mysql"
 # host/port/user/password/database - MySQL settings, not needed for SQLite
-# tagapi - Change name tags if TagAPI is installed?
 # tab - Should names in the tablist be updated?
 # unique - Should all nicknames be unique?
 # prefix - Add a prefix before nicknames? (Set to '' to disable)
