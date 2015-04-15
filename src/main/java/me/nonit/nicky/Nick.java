@@ -113,7 +113,8 @@ public class Nick
             nickname = prefix + nickname;
         }
 
-        return nickname + ChatColor.RESET;
+        //return nickname + ChatColor.RESET;
+        return nickname;
     }
 
     public void updatePlayerName()
