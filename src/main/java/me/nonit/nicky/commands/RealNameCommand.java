@@ -9,9 +9,11 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class RealNameCommand implements CommandExecutor
 {
@@ -102,7 +104,7 @@ public class RealNameCommand implements CommandExecutor
 
             String playersNick = searchedPlayer.getNick();
 
-            if( ChatColor.stripColor( playersNick ).contains( searchWord ) )
+            if( ChatColor.stripColor( playersNick.toLowerCase() ).contains( searchWord.toLowerCase() ) )
             {
                 if( offlinePlayer.isOnline() )
                 {
