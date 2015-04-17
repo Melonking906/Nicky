@@ -195,7 +195,7 @@ public abstract class SQL
     {
         List<SearchedPlayer> results = new ArrayList<SearchedPlayer>();
 
-        String[] characters = search.split( "(?!^)" );
+        String[] characters = search.split( "(.)" );
         String sqlSearch = "";
         for( String character : characters )
         {
