@@ -199,11 +199,12 @@ public abstract class SQL
         String sqlSearch = "";
         for( String character : characters )
         {
-            sqlSearch = "%" + character;
+            sqlSearch = "(&[0-9aA-fFkK-oOrR]){0,5}" + character;
         }
-        sqlSearch = sqlSearch + "%";
+        sqlSearch = "(.*)?" + sqlSearch + "(.*)?";
 
-        ArrayList<HashMap<String,String>> data = query( "SELECT uuid, nick, name FROM nicky WHERE nick LIKE '" + sqlSearch + "';", true );
+        ArrayList<HashMap<String,String>> data = query( "SELECT uuid, nick, name FROM nicky WHERE nick REGEXP '" + sqlSearch +"';", true );
+
         if( data == null )
         {
             return null;
