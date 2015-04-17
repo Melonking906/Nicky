@@ -102,9 +102,9 @@ public class RealNameCommand implements CommandExecutor
         {
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer( UUID.fromString( searchedPlayer.getUuid() ) );
 
-            String playersNick = ChatColor.stripColor( searchedPlayer.getNick() );
+            String playersNick = searchedPlayer.getNick();
 
-            if( playersNick.toLowerCase().contains( searchWord.toLowerCase() ) )
+            if( ChatColor.stripColor( playersNick.toLowerCase() ).contains( searchWord.toLowerCase() ) )
             {
                 if( offlinePlayer.isOnline() )
                 {
