@@ -186,7 +186,7 @@ public abstract class SQL
 
         nick = data.get( 0 ).get( "nick" );
 
-        cache.put( uuid, nick );
+        cache.put(uuid, nick);
 
         return nick;
     }
@@ -195,14 +195,14 @@ public abstract class SQL
     {
         List<SearchedPlayer> results = new ArrayList<SearchedPlayer>();
 
-        String[] characters = search.split( "(.)" );
+        String[] characters = search.split( "(?!^)" );
         String sqlSearch = "";
         for( String character : characters )
         {
-            sqlSearch = "(&[0-9aA-fFkK-oOrR]){0,5}" + character;
+            sqlSearch = sqlSearch + "(&[0-9A-FK-OR]){0,5}" + character;
         }
         sqlSearch = "(.*)?" + sqlSearch + "(.*)?";
-
+        plugin.getLogger().info("Regex: " + sqlSearch);
         ArrayList<HashMap<String,String>> data = query( "SELECT uuid, nick, name FROM nicky WHERE nick REGEXP '" + sqlSearch +"';", true );
 
         if( data == null )
