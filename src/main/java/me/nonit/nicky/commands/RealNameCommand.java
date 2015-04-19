@@ -73,7 +73,7 @@ public class RealNameCommand implements CommandExecutor
                 }
                 if( ! foundPlayers.get( "offline" ).isEmpty() )
                 {
-                    sender.sendMessage( ChatColor.GRAY + "Players not on this Server:" );
+                    sender.sendMessage( ChatColor.GRAY + "Players not on your server or offline:" );
                     for( Map.Entry<String, String> player : foundPlayers.get( "offline" ).entrySet() )
                     {
                         sender.sendMessage( ChatColor.YELLOW + player.getKey() + ChatColor.GRAY + " -> " + ChatColor.YELLOW + player.getValue() );
