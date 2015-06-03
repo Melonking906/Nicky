@@ -9,9 +9,11 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class RealNameCommand implements CommandExecutor
 {
@@ -71,7 +73,7 @@ public class RealNameCommand implements CommandExecutor
                 }
                 if( ! foundPlayers.get( "offline" ).isEmpty() )
                 {
-                    sender.sendMessage( ChatColor.GRAY + "Players not on this Server:" );
+                    sender.sendMessage( ChatColor.GRAY + "Players not on your server or offline:" );
                     for( Map.Entry<String, String> player : foundPlayers.get( "offline" ).entrySet() )
                     {
                         sender.sendMessage( ChatColor.YELLOW + player.getKey() + ChatColor.GRAY + " -> " + ChatColor.YELLOW + player.getValue() );
@@ -98,11 +100,13 @@ public class RealNameCommand implements CommandExecutor
         }
         for( SQL.SearchedPlayer searchedPlayer : searchedPlayers )
         {
-            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer( UUID.fromString( searchedPlayer.getUuid() ) );
+
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(searchedPlayer.getUuid()));
 
             String playersNick = searchedPlayer.getNick();
+            String searchString = playersNick.replaceAll("(&[0-9aA-fFkK-oOrR])","");
 
-            if( ChatColor.stripColor( playersNick ).contains( searchWord ) )
+            if( searchString.toLowerCase().contains(searchWord.toLowerCase()) )
             {
                 if( offlinePlayer.isOnline() )
                 {
