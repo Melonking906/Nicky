@@ -1,0 +1,43 @@
+name: Nicky
+main: me.nonit.nicky.Nicky
+version: 0.6.7
+description: Simple SQL nickname plugin.
+author: Melonking
+softdepend: [TagAPI]
+
+commands:
+   nicky:
+      description: Nicky Help
+      usage: /<command>
+   nick:
+      description: Set a nickname
+      usage: /<command>
+   delnick:
+      description: Unset a nickname
+      usage: /<command>
+   realname:
+      description: See the owner of a nickname
+      usage: /<command>
+      aliases:
+      - rn
+
+permissions:
+    nicky.help:
+        default: true
+    nicky.set:
+        default: op
+    nicky.set.other:
+        default: op
+    nicky.del:
+        default: op
+    nicky.del.other:
+        default: op
+    nicky.realname:
+        default: op
+    nicky.color:
+        default: op
+        children:
+              "nicky.color.normal": true
+              "nicky.color.extra": true
+    nicky.reload:
+        default: op

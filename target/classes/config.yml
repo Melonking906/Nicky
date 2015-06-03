@@ -1,0 +1,12 @@
+# Nicky Config - loyloy.io
+# -
+# nicky_prefix - Prefix for plugin messages.
+# type - Storage type "sqlite" or "mysql"
+# host/port/user/password/database - MySQL settings, not needed for SQLite
+# tab - Should names in the tablist be updated?
+# unique - Should all nicknames be unique?
+# prefix - Add a prefix before nicknames? (Set to '' to disable)
+# length - The max and min number of characters in a nickname, including color codes.
+# characters - RegEx for characters allowed in a nickname, set to '' for any, or leave default for only letters and numbers.
+# blacklist - Words that cannot appear in any nickname.
+# -

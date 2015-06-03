@@ -92,15 +92,7 @@ public class Nick
             nickname = nickname.substring( 0, Nicky.getLength() + 1 );
         }
 
-        if( player.hasPermission( "nicky.color.extra" ) )
-        {
-            nickname = Nicky.translateExtraColorCodes( nickname );
-        }
-
-        if( player.hasPermission( "nicky.color.normal" ) )
-        {
-            nickname = Nicky.translateNormalColorCodes( nickname );
-        }
+        nickname = Nicky.translateColors( nickname, player );
 
         if( !Nicky.getCharacters().equals( "" ) )
         {

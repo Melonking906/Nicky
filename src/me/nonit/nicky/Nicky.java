@@ -286,26 +286,24 @@ public class Nicky extends JavaPlugin
 
     public static String getCharacters() { return CHARACTERS; }
 
-    public static String translateNormalColorCodes( String textToTranslate )
+    public static String translateColors( String text, Player player )
     {
-        char[] b = textToTranslate.toCharArray();
-        for( int i = 0; i < b.length - 1; i++ )
+        String colorsToTranslate = "";
+
+        for( ChatColor color : ChatColor.values() )
         {
-            if( b[i] == '&' && "0123456789AaBbCcDdEeFfRr".indexOf( b[i + 1] ) > -1 )
+            if( player.hasPermission( "nicky.colour."+color.toString() ) )
             {
-                b[i] = ChatColor.COLOR_CHAR;
-                b[i + 1] = Character.toLowerCase( b[i + 1] );
+                colorsToTranslate += color.getChar();
             }
         }
-        return new String( b );
-    }
 
-    public static String translateExtraColorCodes( String textToTranslate )
-    {
-        char[] b = textToTranslate.toCharArray();
+        text = text.replace( ChatColor.COLOR_CHAR, '&' ); // Remove player added hard codes;
+
+        char[] b = text.toCharArray();
         for( int i = 0; i < b.length - 1; i++ )
         {
-            if( b[i] == '&' && "KkLlMmNnOoRr".indexOf( b[i + 1] ) > -1 )
+            if( b[i] == '&' && colorsToTranslate.indexOf( b[i + 1] ) > -1 )
             {
                 b[i] = ChatColor.COLOR_CHAR;
                 b[i + 1] = Character.toLowerCase( b[i + 1] );
