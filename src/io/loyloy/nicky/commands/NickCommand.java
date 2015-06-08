@@ -1,4 +1,4 @@
-package me.nonit.nicky.commands;
+package io.loyloy.nicky.commands;
 
 import io.loyloy.nicky.Nick;
 import io.loyloy.nicky.Nicky;
@@ -168,7 +168,7 @@ public class NickCommand implements CommandExecutor
 
                 Nick nick = new Nick( player );
 
-                if( Nick.isBlacklisted( nickname ) && !player.hasPermission("nicky.noblacklist"))
+                if( Nick.isBlacklisted( nickname ) && !player.hasPermission( "nicky.noblacklist" ) )
                 {
                     player.sendMessage( Nicky.getPrefix() + "Sorry but " + ChatColor.YELLOW + nick.format( nickname ) + ChatColor.GREEN + " contains a blacklisted word :(" );
                     return;

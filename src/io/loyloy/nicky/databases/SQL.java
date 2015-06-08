@@ -1,9 +1,11 @@
-package me.nonit.nicky.databases;
+package io.loyloy.nicky.databases;
 
 import io.loyloy.nicky.Nicky;
 
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public abstract class SQL
 {
@@ -186,7 +188,7 @@ public abstract class SQL
 
         nick = data.get( 0 ).get( "nick" );
 
-        cache.put(uuid, nick);
+        cache.put( uuid, nick );
 
         return nick;
     }
@@ -202,8 +204,8 @@ public abstract class SQL
             sqlSearch = sqlSearch + "(&[0-9A-FK-OR]){0,5}" + character;
         }
         sqlSearch = "(.*)?" + sqlSearch + "(.*)?";
-        plugin.getLogger().info("Regex: " + sqlSearch);
-        ArrayList<HashMap<String,String>> data = query( "SELECT uuid, nick, name FROM nicky WHERE nick REGEXP '" + sqlSearch +"';", true );
+        plugin.getLogger().info( "Regex: " + sqlSearch );
+        ArrayList<HashMap<String, String>> data = query( "SELECT uuid, nick, name FROM nicky WHERE nick REGEXP '" + sqlSearch + "';", true );
 
         if( data == null )
         {

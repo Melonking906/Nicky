@@ -1,8 +1,8 @@
-package me.nonit.nicky.commands;
+package io.loyloy.nicky.commands;
 
 import io.loyloy.nicky.Nick;
 import io.loyloy.nicky.Nicky;
-import me.nonit.nicky.databases.SQL;
+import io.loyloy.nicky.databases.SQL;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -101,12 +101,12 @@ public class RealNameCommand implements CommandExecutor
         for( SQL.SearchedPlayer searchedPlayer : searchedPlayers )
         {
 
-            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(searchedPlayer.getUuid()));
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer( UUID.fromString( searchedPlayer.getUuid() ) );
 
             String playersNick = searchedPlayer.getNick();
-            String searchString = playersNick.replaceAll("(&[0-9aA-fFkK-oOrR])","");
+            String searchString = playersNick.replaceAll( "(&[0-9aA-fFkK-oOrR])", "" );
 
-            if( searchString.toLowerCase().contains(searchWord.toLowerCase()) )
+            if( searchString.toLowerCase().contains( searchWord.toLowerCase() ) )
             {
                 if( offlinePlayer.isOnline() )
                 {

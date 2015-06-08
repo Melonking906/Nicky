@@ -1,9 +1,9 @@
-package me.nonit.nicky.commands;
+package io.loyloy.nicky.commands;
 
 import io.loyloy.nicky.Nicky;
-import me.nonit.nicky.commands.subcommands.NickyHelpCommand;
-import me.nonit.nicky.commands.subcommands.NickyReloadCommand;
-import me.nonit.nicky.commands.subcommands.NickySubCommand;
+import io.loyloy.nicky.commands.subcommands.NickyHelpCommand;
+import io.loyloy.nicky.commands.subcommands.NickyReloadCommand;
+import io.loyloy.nicky.commands.subcommands.NickySubCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

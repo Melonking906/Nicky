@@ -1,4 +1,4 @@
-package me.nonit.nicky.databases;
+package io.loyloy.nicky.databases;
 
 import io.loyloy.nicky.Nicky;
 import org.bukkit.configuration.Configuration;

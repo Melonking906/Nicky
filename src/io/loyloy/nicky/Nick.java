@@ -1,6 +1,6 @@
 package io.loyloy.nicky;
 
-import me.nonit.nicky.databases.SQL;
+import io.loyloy.nicky.databases.SQL;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.kitteh.tag.TagAPI;

@@ -1,4 +1,4 @@
-package me.nonit.nicky.commands.subcommands;
+package io.loyloy.nicky.commands.subcommands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

@@ -1,10 +1,6 @@
 name: Nicky
 main: me.nonit.nicky.Nicky
-<<<<<<< HEAD:plugin.yml
 version: ${project.version}
-=======
-version: 0.6.8-CAKE
->>>>>>> origin/master:src/main/resources/plugin.yml
 description: Simple SQL nickname plugin.
 author: Melonking
 softdepend: [TagAPI]

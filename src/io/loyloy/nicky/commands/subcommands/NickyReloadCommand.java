@@ -1,4 +1,4 @@
-package me.nonit.nicky.commands.subcommands;
+package io.loyloy.nicky.commands.subcommands;
 
 import io.loyloy.nicky.Nicky;
 import org.bukkit.command.Command;

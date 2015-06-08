@@ -1,12 +1,12 @@
 package io.loyloy.nicky;
 
-import me.nonit.nicky.commands.DelNickCommand;
-import me.nonit.nicky.commands.NickCommand;
-import me.nonit.nicky.commands.NickyCommand;
-import me.nonit.nicky.commands.RealNameCommand;
-import me.nonit.nicky.databases.MySQL;
-import me.nonit.nicky.databases.SQL;
-import me.nonit.nicky.databases.SQLite;
+import io.loyloy.nicky.commands.DelNickCommand;
+import io.loyloy.nicky.commands.NickCommand;
+import io.loyloy.nicky.commands.NickyCommand;
+import io.loyloy.nicky.commands.RealNameCommand;
+import io.loyloy.nicky.databases.MySQL;
+import io.loyloy.nicky.databases.SQL;
+import io.loyloy.nicky.databases.SQLite;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;

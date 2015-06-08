@@ -1,4 +1,4 @@
-package me.nonit.nicky.commands;
+package io.loyloy.nicky.commands;
 
 import io.loyloy.nicky.Nick;
 import io.loyloy.nicky.Nicky;
