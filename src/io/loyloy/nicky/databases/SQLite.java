@@ -1,6 +1,6 @@
 package me.nonit.nicky.databases;
 
-import me.nonit.nicky.Nicky;
+import io.loyloy.nicky.Nicky;
 
 import java.io.File;
 import java.sql.Connection;

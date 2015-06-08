@@ -1,8 +1,7 @@
 package me.nonit.nicky.databases;
 
-import me.nonit.nicky.Nicky;
+import io.loyloy.nicky.Nicky;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

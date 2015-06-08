@@ -1,4 +1,4 @@
-package me.nonit.nicky;
+package io.loyloy.nicky;
 
 import me.nonit.nicky.databases.SQL;
 import org.bukkit.ChatColor;

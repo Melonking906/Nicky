@@ -1,6 +1,6 @@
 package me.nonit.nicky.commands.subcommands;
 
-import me.nonit.nicky.Nicky;
+import io.loyloy.nicky.Nicky;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 

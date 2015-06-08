@@ -1,6 +1,6 @@
 package me.nonit.nicky.commands;
 
-import me.nonit.nicky.Nicky;
+import io.loyloy.nicky.Nicky;
 import me.nonit.nicky.commands.subcommands.NickyHelpCommand;
 import me.nonit.nicky.commands.subcommands.NickyReloadCommand;
 import me.nonit.nicky.commands.subcommands.NickySubCommand;

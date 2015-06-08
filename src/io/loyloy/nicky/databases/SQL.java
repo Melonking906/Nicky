@@ -1,6 +1,6 @@
 package me.nonit.nicky.databases;
 
-import me.nonit.nicky.Nicky;
+import io.loyloy.nicky.Nicky;
 
 import java.sql.*;
 import java.util.*;
@@ -186,7 +186,7 @@ public abstract class SQL
 
         nick = data.get( 0 ).get( "nick" );
 
-        cache.put( uuid, nick );
+        cache.put(uuid, nick);
 
         return nick;
     }
@@ -199,11 +199,12 @@ public abstract class SQL
         String sqlSearch = "";
         for( String character : characters )
         {
-            sqlSearch = "%" + character;
+            sqlSearch = sqlSearch + "(&[0-9A-FK-OR]){0,5}" + character;
         }
-        sqlSearch = sqlSearch + "%";
+        sqlSearch = "(.*)?" + sqlSearch + "(.*)?";
+        plugin.getLogger().info("Regex: " + sqlSearch);
+        ArrayList<HashMap<String,String>> data = query( "SELECT uuid, nick, name FROM nicky WHERE nick REGEXP '" + sqlSearch +"';", true );
 
-        ArrayList<HashMap<String,String>> data = query( "SELECT uuid, nick, name FROM nicky WHERE nick LIKE '" + sqlSearch + "';", true );
         if( data == null )
         {
             return null;

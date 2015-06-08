@@ -1,7 +1,7 @@
 package me.nonit.nicky.commands;
 
-import me.nonit.nicky.Nick;
-import me.nonit.nicky.Nicky;
+import io.loyloy.nicky.Nick;
+import io.loyloy.nicky.Nicky;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

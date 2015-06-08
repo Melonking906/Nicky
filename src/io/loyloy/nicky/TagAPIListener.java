@@ -1,4 +1,4 @@
-package me.nonit.nicky;
+package io.loyloy.nicky;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
