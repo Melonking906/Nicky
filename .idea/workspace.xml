@@ -2,25 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2b2ab9fa-7b55-491d-918f-407f9e897823" name="Default" comment="Merge fixes and compile updates.">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/loyloy/nicky/commands/DelNickCommand.java" afterPath="$PROJECT_DIR$/src/io/loyloy/nicky/commands/DelNickCommand.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/loyloy/nicky/databases/MySQL.java" afterPath="$PROJECT_DIR$/src/io/loyloy/nicky/databases/MySQL.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/loyloy/nicky/Nick.java" afterPath="$PROJECT_DIR$/src/io/loyloy/nicky/Nick.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/loyloy/nicky/commands/NickCommand.java" afterPath="$PROJECT_DIR$/src/io/loyloy/nicky/commands/NickCommand.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Nicky.iml" afterPath="$PROJECT_DIR$/Nicky.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/loyloy/nicky/Nicky.java" afterPath="$PROJECT_DIR$/src/io/loyloy/nicky/Nicky.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/loyloy/nicky/commands/NickyCommand.java" afterPath="$PROJECT_DIR$/src/io/loyloy/nicky/commands/NickyCommand.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/loyloy/nicky/commands/subcommands/NickyHelpCommand.java" afterPath="$PROJECT_DIR$/src/io/loyloy/nicky/commands/subcommands/NickyHelpCommand.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/loyloy/nicky/commands/subcommands/NickyReloadCommand.java" afterPath="$PROJECT_DIR$/src/io/loyloy/nicky/commands/subcommands/NickyReloadCommand.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/loyloy/nicky/commands/subcommands/NickySubCommand.java" afterPath="$PROJECT_DIR$/src/io/loyloy/nicky/commands/subcommands/NickySubCommand.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/loyloy/nicky/commands/RealNameCommand.java" afterPath="$PROJECT_DIR$/src/io/loyloy/nicky/commands/RealNameCommand.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/loyloy/nicky/databases/SQL.java" afterPath="$PROJECT_DIR$/src/io/loyloy/nicky/databases/SQL.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/loyloy/nicky/databases/SQLite.java" afterPath="$PROJECT_DIR$/src/io/loyloy/nicky/databases/SQLite.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/loyloy/nicky/TagAPIListener.java" afterPath="$PROJECT_DIR$/src/io/loyloy/nicky/TagAPIListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugin.yml" afterPath="$PROJECT_DIR$/plugin.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/plugin.yml" afterPath="$PROJECT_DIR$/target/classes/plugin.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Nicky.iws" />
@@ -47,7 +31,7 @@
         <entry file="file://$PROJECT_DIR$/src/io/loyloy/nicky/commands/RealNameCommand.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="97" column="9" selection-start-line="97" selection-start-column="9" selection-end-line="97" selection-end-column="9" />
+              <caret line="95" column="0" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -65,10 +49,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.8113208">
+            <state vertical-scroll-proportion="0.0">
               <caret line="64" column="21" selection-start-line="64" selection-start-column="21" selection-end-line="64" selection-end-column="21" />
               <folding />
             </state>
@@ -78,18 +62,18 @@
       <file leaf-file-name="plugin.yml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/plugin.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-13.75">
-              <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+            <state vertical-scroll-proportion="-0.625">
+              <caret line="1" column="27" selection-start-line="1" selection-start-column="27" selection-end-line="1" selection-end-column="27" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SQL.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="SQL.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/io/loyloy/nicky/databases/SQL.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="221" column="0" selection-start-line="221" selection-start-column="0" selection-end-line="221" selection-end-column="0" />
+            <state vertical-scroll-proportion="4.711321">
+              <caret line="205" column="8" selection-start-line="205" selection-start-column="8" selection-end-line="205" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -139,16 +123,16 @@
         <option value="$PROJECT_DIR$/src/io/loyloy/nicky/commands/subcommands/NickyReloadCommand.java" />
         <option value="$PROJECT_DIR$/src/io/loyloy/nicky/commands/subcommands/NickySubCommand.java" />
         <option value="$PROJECT_DIR$/src/io/loyloy/nicky/databases/MySQL.java" />
-        <option value="$PROJECT_DIR$/src/io/loyloy/nicky/databases/SQL.java" />
         <option value="$PROJECT_DIR$/src/io/loyloy/nicky/databases/SQLite.java" />
         <option value="$PROJECT_DIR$/src/io/loyloy/nicky/commands/DelNickCommand.java" />
         <option value="$PROJECT_DIR$/src/io/loyloy/nicky/commands/NickCommand.java" />
         <option value="$PROJECT_DIR$/src/io/loyloy/nicky/Nicky.java" />
         <option value="$PROJECT_DIR$/src/io/loyloy/nicky/Nick.java" />
-        <option value="$PROJECT_DIR$/src/io/loyloy/nicky/commands/RealNameCommand.java" />
         <option value="$PROJECT_DIR$/src/io/loyloy/nicky/TagAPIListener.java" />
-        <option value="$PROJECT_DIR$/plugin.yml" />
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/plugin.yml" />
+        <option value="$PROJECT_DIR$/src/io/loyloy/nicky/databases/SQL.java" />
+        <option value="$PROJECT_DIR$/src/io/loyloy/nicky/commands/RealNameCommand.java" />
       </list>
     </option>
   </component>
@@ -537,7 +521,13 @@
       <option name="project" value="LOCAL" />
       <updated>1428791361563</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Merge fixes and compile updates.">
+      <created>1433790968226</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1433790968227</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -759,10 +749,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/io/loyloy/nicky/commands/RealNameCommand.java">
+    <entry file="file://$PROJECT_DIR$/plugin.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.625">
+          <caret line="1" column="27" selection-start-line="1" selection-start-column="27" selection-end-line="1" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="97" column="9" selection-start-line="97" selection-start-column="9" selection-end-line="97" selection-end-column="9" />
+          <caret line="64" column="21" selection-start-line="64" selection-start-column="21" selection-end-line="64" selection-end-column="21" />
           <folding />
         </state>
       </provider>
@@ -777,26 +775,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugin.yml">
+    <entry file="file://$PROJECT_DIR$/src/io/loyloy/nicky/commands/RealNameCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-13.75">
-          <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="95" column="0" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/io/loyloy/nicky/databases/SQL.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="221" column="0" selection-start-line="221" selection-start-column="0" selection-end-line="221" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.8113208">
-          <caret line="64" column="21" selection-start-line="64" selection-start-column="21" selection-end-line="64" selection-end-column="21" />
+        <state vertical-scroll-proportion="4.711321">
+          <caret line="205" column="8" selection-start-line="205" selection-start-column="8" selection-end-line="205" selection-end-column="8" />
           <folding />
         </state>
       </provider>

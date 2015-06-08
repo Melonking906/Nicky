@@ -197,15 +197,14 @@ public abstract class SQL
     {
         List<SearchedPlayer> results = new ArrayList<SearchedPlayer>();
 
-        String[] characters = search.split( "(?!^)" );
-        String sqlSearch = "";
-        for( String character : characters )
+        String sqlSearch = "%";
+
+        for( char c : search.toCharArray() )
         {
-            sqlSearch = sqlSearch + "(&[0-9A-FK-OR]){0,5}" + character;
+            sqlSearch += c + "%";
         }
-        sqlSearch = "(.*)?" + sqlSearch + "(.*)?";
-        plugin.getLogger().info( "Regex: " + sqlSearch );
-        ArrayList<HashMap<String, String>> data = query( "SELECT uuid, nick, name FROM nicky WHERE nick REGEXP '" + sqlSearch + "';", true );
+
+        ArrayList<HashMap<String, String>> data = query( "SELECT uuid, nick, name FROM nicky WHERE nick LIKE '" + sqlSearch + "';", true );
 
         if( data == null )
         {

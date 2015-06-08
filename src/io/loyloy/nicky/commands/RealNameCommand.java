@@ -100,27 +100,22 @@ public class RealNameCommand implements CommandExecutor
         }
         for( SQL.SearchedPlayer searchedPlayer : searchedPlayers )
         {
-
             OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer( UUID.fromString( searchedPlayer.getUuid() ) );
 
             String playersNick = searchedPlayer.getNick();
-            String searchString = playersNick.replaceAll( "(&[0-9aA-fFkK-oOrR])", "" );
 
-            if( searchString.toLowerCase().contains( searchWord.toLowerCase() ) )
+            if( offlinePlayer.isOnline() )
             {
-                if( offlinePlayer.isOnline() )
-                {
-                    Nick nick = new Nick( offlinePlayer.getPlayer() );
-                    playersNick = nick.format( playersNick );
+                Nick nick = new Nick( offlinePlayer.getPlayer() );
+                playersNick = nick.format( playersNick );
 
-                    onlinePlayers.put( playersNick, searchedPlayer.getName() );
-                }
-                else
-                {
-                    playersNick = ChatColor.translateAlternateColorCodes( '&', playersNick );
+                onlinePlayers.put( playersNick, searchedPlayer.getName() );
+            }
+            else
+            {
+                playersNick = ChatColor.translateAlternateColorCodes( '&', playersNick );
 
-                    offlinePlayers.put( playersNick, searchedPlayer.getName() ) ;
-                }
+                offlinePlayers.put( playersNick, searchedPlayer.getName() );
             }
         }
 
