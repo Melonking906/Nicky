@@ -184,7 +184,7 @@ public class Nicky extends JavaPlugin
         }
         if( ! config.isSet( "characters" ) )
         {
-            config.set( "characters", "[^a-zA-Z0-9§]" );
+            config.set( "characters", "[^a-zA-Z0-9_§]" );
         }
         if( ! config.isSet( "blacklist" ) )
         {
@@ -292,7 +292,7 @@ public class Nicky extends JavaPlugin
 
         for( ChatColor color : ChatColor.values() )
         {
-            if( player.hasPermission( "nicky.colour."+color.toString() ) )
+            if( player.hasPermission( "nicky.color." + color.toString().substring( 1 ) ) )
             {
                 colorsToTranslate += color.getChar();
             }

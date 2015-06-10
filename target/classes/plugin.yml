@@ -1,6 +1,6 @@
 name: Nicky
-main: me.nonit.nicky.Nicky
-version: 0.6.7
+main: io.loyloy.nicky.Nicky
+version: 0.6.8
 description: Simple SQL nickname plugin.
 author: Melonking
 softdepend: [TagAPI]
@@ -37,7 +37,34 @@ permissions:
     nicky.color:
         default: op
         children:
-              "nicky.color.normal": true
-              "nicky.color.extra": true
+            "nicky.color.normal": true
+            "nicky.color.extra": true
+    nicky.color.normal:
+        default: op
+        children:
+            "nicky.color.0": true
+            "nicky.color.1": true
+            "nicky.color.2": true
+            "nicky.color.3": true
+            "nicky.color.4": true
+            "nicky.color.5": true
+            "nicky.color.6": true
+            "nicky.color.7": true
+            "nicky.color.8": true
+            "nicky.color.a": true
+            "nicky.color.b": true
+            "nicky.color.c": true
+            "nicky.color.d": true
+            "nicky.color.e": true
+            "nicky.color.f": true
+    nicky.color.extra:
+        default: op
+        children:
+            "nicky.color.l": true
+            "nicky.color.n": true
+            "nicky.color.o": true
+            "nicky.color.k": true
+            "nicky.color.m": true
+            "nicky.color.r": true
     nicky.reload:
         default: op

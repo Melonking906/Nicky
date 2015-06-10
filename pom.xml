@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>me.nonit.nicky</groupId>
+    <groupId>io.loyloy.nicky</groupId>
     <artifactId>Nicky</artifactId>
-    <version>0.6.7</version>
+    <version>0.6.8</version>
     <name>Nicky</name>
 
     <repositories>
@@ -83,7 +83,7 @@
                     <relocations>
                         <relocation>
                             <pattern>org.mcstats</pattern>
-                            <shadedPattern>me.nonit.nicky</shadedPattern>
+                            <shadedPattern>io.loyloy.nicky</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
