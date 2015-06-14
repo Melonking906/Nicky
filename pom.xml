@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.loyloy.nicky</groupId>
     <artifactId>Nicky</artifactId>
-    <version>0.6.8</version>
+    <version>0.6.9</version>
     <name>Nicky</name>
 
     <repositories>
