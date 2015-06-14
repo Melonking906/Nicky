@@ -292,7 +292,7 @@ public class Nicky extends JavaPlugin
 
         for( ChatColor color : ChatColor.values() )
         {
-            if( player.hasPermission( "nicky.color." + color.toString().substring( 1 ) ) )
+            if( player.hasPermission( "nicky.color." + color.toString().substring( 1 ) ) || color.toString().substring( 1 ).equals( "r" ) )
             {
                 colorsToTranslate += color.getChar();
             }
