@@ -20,7 +20,6 @@ public abstract class SQL
 
         plugin.getServer().getScheduler().runTaskTimerAsynchronously( plugin, new Runnable()
         {
-            @Override
             public void run()
             {
                 try

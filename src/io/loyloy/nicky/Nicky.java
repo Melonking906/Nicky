@@ -13,9 +13,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.mcstats.Metrics;
 
-import java.io.IOException;
 import java.util.*;
 
 public class Nicky extends JavaPlugin
@@ -72,8 +70,6 @@ public class Nicky extends JavaPlugin
             log( "Error with DATABASE" );
             pm.disablePlugin( this );
         }
-
-        loadMetrics();
     }
 
     @Override
@@ -193,44 +189,6 @@ public class Nicky extends JavaPlugin
         }
 
         saveConfig();
-    }
-
-    private void loadMetrics()
-    {
-        try
-        {
-            Metrics metrics = new Metrics(this);
-
-            Metrics.Graph graphDatabaseType = metrics.createGraph( "Database Type" );
-
-            graphDatabaseType.addPlotter( new Metrics.Plotter( DATABASE.getConfigName() ) {
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            } );
-
-            Metrics.Graph graphTagAPI = metrics.createGraph( "TagAPI" );
-
-            String graphTagAPIValue = "No";
-            if( TAGAPI )
-            {
-                graphTagAPIValue = "Yes";
-            }
-
-            graphTagAPI.addPlotter( new Metrics.Plotter( graphTagAPIValue ) {
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            } );
-
-            metrics.start();
-        }
-        catch (IOException e)
-        {
-            // Failed to submit the stats :-(
-        }
     }
 
     private boolean setupDatabase()

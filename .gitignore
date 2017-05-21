@@ -1,0 +1,7 @@
+*.iml
+META-INF/
+out/
+output/
+target/
+.idea/
+.DS_Store
