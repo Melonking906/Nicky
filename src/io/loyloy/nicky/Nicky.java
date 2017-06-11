@@ -7,6 +7,7 @@ import io.loyloy.nicky.commands.RealNameCommand;
 import io.loyloy.nicky.databases.MySQL;
 import io.loyloy.nicky.databases.SQL;
 import io.loyloy.nicky.databases.SQLite;
+import io.loyloy.nicky.hook.PAPIHook;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -34,7 +35,7 @@ public class Nicky extends JavaPlugin
 
     public Nicky()
     {
-        databases = new HashSet<SQL>();
+        databases = new HashSet<>();
     }
 
     @Override
@@ -50,14 +51,12 @@ public class Nicky extends JavaPlugin
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents( new PlayerListener(), this );
 
-        if( pm.isPluginEnabled( "TagAPI" ) && getConfig().getBoolean( "tagapi" ) )
-        {
-            pm.registerEvents( new TagAPIListener(), this );
-            log( "TagAPI link enabled." );
-            TAGAPI = true;
+        if (pm.isPluginEnabled("PlaceholderAPI")) {
+            new PAPIHook(this).hook();
+            log("PlaceholderAPI hook has been enabled.");
         }
 
-        BLACKLIST = new ArrayList<String>();
+        BLACKLIST = new ArrayList<>();
         reloadNickyConfig();
 
         getCommand( "nick" ).setExecutor( new NickCommand( this ) );
