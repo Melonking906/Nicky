@@ -3,37 +3,65 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.loyloy.nicky</groupId>
     <artifactId>Nicky</artifactId>
-    <version>0.6.9</version>
+    <version>0.7.0</version>
     <name>Nicky</name>
 
-    <repositories>
+    <build>
+        <sourceDirectory>src</sourceDirectory>
+        <finalName>${project.artifactId}</finalName>
+        <resources>
+            <resource>
+                <directory>src</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <version>3.1</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
+    <repositories>
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
-
         <repository>
             <id>dmulloy2-repo</id>
             <url>http://repo.dmulloy2.net/nexus/repository/public/</url>
         </repository>
 
+        <repository>
+            <id>placeholderapi</id>
+            <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
     </repositories>
 
     <dependencies>
-
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.8.7-R0.1-SNAPSHOT</version>
         </dependency>
-
         <dependency>
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib-API</artifactId>
             <version>4.2.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>2.0.8</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
-
 </project>

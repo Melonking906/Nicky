@@ -3,7 +3,6 @@ package io.loyloy.nicky;
 import io.loyloy.nicky.databases.SQL;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.kitteh.tag.TagAPI;
 
 import java.util.List;
 
@@ -145,10 +144,5 @@ public class Nick
     {
         unLoad();
         load();
-
-        if( Nicky.isTagAPIUsed() )
-        {
-            TagAPI.refreshPlayer( player );
-        }
     }
 }
