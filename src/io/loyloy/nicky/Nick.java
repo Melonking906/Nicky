@@ -56,7 +56,7 @@ public class Nick
 
         if( nickname != null )
         {
-            if( isBlacklisted( nickname ) )
+            if( isBlacklisted( nickname ) && !player.hasPermission( "nicky.noblacklist" ) )
             {
                 unSet();
                 return null;

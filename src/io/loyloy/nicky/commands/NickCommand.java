@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class NickCommand implements CommandExecutor
 {
-    Nicky plugin;
+    private Nicky plugin;
 
     public NickCommand( Nicky plugin )
     {
@@ -35,7 +35,6 @@ public class NickCommand implements CommandExecutor
         return true;
     }
 
-    @SuppressWarnings("deprecation")
     private void runAsConsole( String[] args )
     {
         if( args.length >= 2  )
@@ -63,11 +62,11 @@ public class NickCommand implements CommandExecutor
                 return;
             }
 
-            if( Nick.isBlacklisted( nickname ) )
-            {
-                plugin.log( "Sorry but " + nickname + " contains a blacklisted word :(" );
-                return;
-            }
+//            if( Nick.isBlacklisted( nickname ) )
+//            {
+//                plugin.log( "Sorry but " + nickname + " contains a blacklisted word :(" );
+//                return;
+//            }
 
             Nick nick = new Nick( receiver );
 
@@ -89,7 +88,6 @@ public class NickCommand implements CommandExecutor
         }
     }
 
-    @SuppressWarnings("deprecation")
     private void runAsAdmin( CommandSender sender, String[] args )
     {
         Player receiver = plugin.getServer().getPlayer( args[0] );
@@ -119,7 +117,7 @@ public class NickCommand implements CommandExecutor
 
             Nick nick = new Nick( receiver );
 
-            if( Nick.isBlacklisted( nickname ) )
+            if( Nick.isBlacklisted( nickname ) && !sender.hasPermission( "nicky.noblacklist" ) )
             {
                 sender.sendMessage( Nicky.getPrefix() + "Sorry but " + ChatColor.YELLOW + nick.format( nickname ) + ChatColor.GREEN + " contains a blacklisted word :(" );
                 return;

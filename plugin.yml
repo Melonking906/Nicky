@@ -32,6 +32,8 @@ permissions:
         default: op
     nicky.del.other:
         default: op
+    nicky.noblacklist:
+        default: op
     nicky.realname:
         default: op
     nicky.color:
