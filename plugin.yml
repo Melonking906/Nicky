@@ -68,5 +68,6 @@ permissions:
             "nicky.color.o": true
             "nicky.color.k": true
             "nicky.color.m": true
+            "nicky.color.r": true
     nicky.reload:
         default: op

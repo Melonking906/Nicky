@@ -3,7 +3,6 @@ package io.loyloy.nicky;
 import io.loyloy.nicky.databases.SQL;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.kitteh.tag.TagAPI;
 
 import java.util.List;
 
@@ -94,15 +93,15 @@ public class Nick
 
         nickname = Nicky.translateColors( nickname, player );
 
-        if( !Nicky.getCharacters().equals( "" ) )
-        {
-            nickname = nickname.replaceAll( Nicky.getCharacters(), "" );
-        }
-
         if( !Nicky.getNickPrefix().equals( "" ) )
         {
             String prefix = ChatColor.translateAlternateColorCodes( '&', Nicky.getNickPrefix() );
             nickname = prefix + nickname;
+        }
+
+        if( !Nicky.getCharacters().equals( "" ) )
+        {
+            nickname = nickname.replaceAll( Nicky.getCharacters(), "" );
         }
 
         return nickname + ChatColor.RESET;
@@ -145,10 +144,5 @@ public class Nick
     {
         unLoad();
         load();
-
-        if( Nicky.isTagAPIUsed() )
-        {
-            TagAPI.refreshPlayer( player );
-        }
     }
 }

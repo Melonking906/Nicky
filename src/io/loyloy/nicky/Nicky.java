@@ -23,7 +23,6 @@ public class Nicky extends JavaPlugin
     private final Set<SQL> databases;
     private static SQL DATABASE;
 
-    private static boolean TAGAPI = false;
     private static boolean TABS;
     private static boolean UNIQUE;
     private static String NICK_PREFIX;
@@ -49,13 +48,6 @@ public class Nicky extends JavaPlugin
 
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents( new PlayerListener(), this );
-
-        if( pm.isPluginEnabled( "TagAPI" ) && getConfig().getBoolean( "tagapi" ) )
-        {
-            pm.registerEvents( new TagAPIListener(), this );
-            log( "TagAPI link enabled." );
-            TAGAPI = true;
-        }
 
         BLACKLIST = new ArrayList<String>();
         reloadNickyConfig();
@@ -154,10 +146,6 @@ public class Nicky extends JavaPlugin
         }
 
         // Settings
-        if( ! config.isSet( "tagapi" ) )
-        {
-            config.set( "tagapi", true );
-        }
         if( ! config.isSet( "tab" ) )
         {
             config.set( "tab", true );
@@ -227,8 +215,6 @@ public class Nicky extends JavaPlugin
     public static SQL getNickDatabase() { return DATABASE; }
 
     public static String getPrefix() { return PREFIX; }
-
-    public static boolean isTagAPIUsed() { return TAGAPI; }
 
     public static boolean isTabsUsed() { return TABS; }
 
