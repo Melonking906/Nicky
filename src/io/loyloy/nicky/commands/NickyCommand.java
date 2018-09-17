@@ -18,7 +18,7 @@ public class NickyCommand implements CommandExecutor
 
     public NickyCommand( Nicky plugin )
     {
-        commands = new ArrayList<NickySubCommand>();
+        commands = new ArrayList<>();
 
         commands.add( new NickyHelpCommand() );
         commands.add( new NickyReloadCommand( plugin ) );

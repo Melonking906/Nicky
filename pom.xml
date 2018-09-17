@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.loyloy.nicky</groupId>
     <artifactId>Nicky</artifactId>
-    <version>0.6.9</version>
+    <version>0.6.10</version>
     <name>Nicky</name>
 
     <repositories>
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.12.2-R0.1-SNAPSHOT</version>
+            <version>1.13.1-R0.1-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

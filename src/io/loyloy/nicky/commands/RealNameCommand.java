@@ -17,9 +17,9 @@ import java.util.UUID;
 
 public class RealNameCommand implements CommandExecutor
 {
-    private HashMap<String, HashMap<String, String>> foundPlayers = new HashMap<String,HashMap<String,String>>();
-    private HashMap<String, String> onlinePlayers = new HashMap<String, String>();
-    private HashMap<String, String> offlinePlayers = new HashMap<String, String>();
+    private HashMap<String, HashMap<String, String>> foundPlayers = new HashMap<>();
+    private HashMap<String, String> onlinePlayers = new HashMap<>();
+    private HashMap<String, String> offlinePlayers = new HashMap<>();
 
     private static final int DEFAULT_MIN_SEARCH_LENGTH = 3;
 
@@ -119,7 +119,7 @@ public class RealNameCommand implements CommandExecutor
             }
         }
 
-        foundPlayers = new HashMap<String, HashMap<String, String>>();
+        foundPlayers = new HashMap<>();
 
         if( !onlinePlayers.isEmpty() || !offlinePlayers.isEmpty() )
         {

@@ -33,7 +33,7 @@ public class Nicky extends JavaPlugin
 
     public Nicky()
     {
-        databases = new HashSet<SQL>();
+        databases = new HashSet<>();
     }
 
     @Override
@@ -44,12 +44,10 @@ public class Nicky extends JavaPlugin
 
         setupConfig();
 
-        setupDatabase();
-
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents( new PlayerListener(), this );
 
-        BLACKLIST = new ArrayList<String>();
+        BLACKLIST = new ArrayList<>();
         reloadNickyConfig();
 
         getCommand( "nick" ).setExecutor( new NickCommand( this ) );
@@ -57,11 +55,7 @@ public class Nicky extends JavaPlugin
         getCommand( "realname" ).setExecutor( new RealNameCommand() );
         getCommand( "nicky" ).setExecutor( new NickyCommand( this ) );
 
-        if( ! DATABASE.checkConnection() )
-        {
-            log( "Error with DATABASE" );
-            pm.disablePlugin( this );
-        }
+        setupDatabase( pm );
     }
 
     @Override
@@ -179,7 +173,7 @@ public class Nicky extends JavaPlugin
         saveConfig();
     }
 
-    private boolean setupDatabase()
+    private void setupDatabase( PluginManager pm )
     {
         String type = getConfig().getString("type");
 
@@ -200,11 +194,13 @@ public class Nicky extends JavaPlugin
         if ( DATABASE == null)
         {
             log( "Database type does not exist!" );
-
-            return false;
         }
 
-        return true;
+        if( ! DATABASE.checkConnection() )
+        {
+            log( "Error with DATABASE" );
+            pm.disablePlugin( this );
+        }
     }
 
     public void log( String message )
@@ -232,13 +228,13 @@ public class Nicky extends JavaPlugin
 
     public static String translateColors( String text, Player player )
     {
-        String colorsToTranslate = "";
+        StringBuilder colorsToTranslate = new StringBuilder();
 
         for( ChatColor color : ChatColor.values() )
         {
             if( player.hasPermission( "nicky.color." + color.toString().substring( 1 ) ) || color.toString().substring( 1 ).equals( "r" ) )
             {
-                colorsToTranslate += color.getChar();
+                colorsToTranslate.append( color.getChar() );
             }
         }
 
@@ -247,7 +243,7 @@ public class Nicky extends JavaPlugin
         char[] b = text.toCharArray();
         for( int i = 0; i < b.length - 1; i++ )
         {
-            if( b[i] == '&' && colorsToTranslate.indexOf( b[i + 1] ) > -1 )
+            if( b[i] == '&' && colorsToTranslate.toString().indexOf( b[i + 1] ) > -1 )
             {
                 b[i] = ChatColor.COLOR_CHAR;
                 b[i + 1] = Character.toLowerCase( b[i + 1] );

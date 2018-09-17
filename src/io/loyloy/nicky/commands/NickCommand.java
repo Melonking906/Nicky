@@ -133,7 +133,7 @@ public class NickCommand implements CommandExecutor
             nickname = nick.get();
 
             receiver.sendMessage( Nicky.getPrefix() + "Your nickname has been set to " + ChatColor.YELLOW + nickname + ChatColor.GREEN + " by " + ChatColor.YELLOW + sender.getName() + ChatColor.GREEN + "!" );
-            sender.sendMessage( Nicky.getPrefix() + "You have set " + ChatColor.YELLOW + sender.getName() + ChatColor.GREEN + "'s nickname to " + ChatColor.YELLOW + nickname + ChatColor.GREEN + "." );
+            sender.sendMessage( Nicky.getPrefix() + "You have set " + ChatColor.YELLOW + receiver.getName() + ChatColor.GREEN + "'s nickname to " + ChatColor.YELLOW + nickname + ChatColor.GREEN + "." );
         }
         else
         {

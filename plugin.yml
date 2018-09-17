@@ -1,9 +1,8 @@
 name: Nicky
 main: io.loyloy.nicky.Nicky
-version: 0.6.9
+version: 0.6.10
 description: Simple SQL nickname plugin.
 author: Melonking
-softdepend: [TagAPI]
 
 commands:
    nicky:

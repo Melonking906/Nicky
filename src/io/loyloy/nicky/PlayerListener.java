@@ -7,10 +7,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerListener implements Listener
 {
-    public PlayerListener()
-    {
-    }
-
     @EventHandler
     public void onJoin( PlayerJoinEvent event )
     {

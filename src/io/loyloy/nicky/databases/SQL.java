@@ -10,32 +10,13 @@ import java.util.List;
 public abstract class SQL
 {
     private Connection connection;
-    private HashMap<String, String> cache = new HashMap<String, String>();
+    private HashMap<String, String> cache = new HashMap<>();
 
     protected Nicky plugin;
 
     public SQL( Nicky plugin )
     {
         this.plugin = plugin;
-
-        plugin.getServer().getScheduler().runTaskTimerAsynchronously( plugin, new Runnable()
-        {
-            public void run()
-            {
-                try
-                {
-                    if( connection != null && ! connection.isClosed() )
-                    {
-                        connection.createStatement().execute( "/* ping */ SELECT 1" );
-                        updateTables();
-                    }
-                }
-                catch( SQLException e )
-                {
-                    connection = getNewConnection();
-                }
-            }
-        }, 60 * 20, 60 * 20 );
     }
 
     protected abstract Connection getNewConnection();
@@ -71,7 +52,7 @@ public abstract class SQL
             ResultSetMetaData md = set.getMetaData();
             int columns = md.getColumnCount();
 
-            ArrayList<HashMap<String,String>> list = new ArrayList<HashMap<String,String>>( 50 );
+            ArrayList<HashMap<String,String>> list = new ArrayList<>( 50 );
 
             while( set.next() )
             {
@@ -110,6 +91,8 @@ public abstract class SQL
                 {
                     return false;
                 }
+
+                updateTables();
             }
         }
         catch( SQLException e )
@@ -194,7 +177,7 @@ public abstract class SQL
 
     public List<SearchedPlayer> searchNicks( String search )
     {
-        List<SearchedPlayer> results = new ArrayList<SearchedPlayer>();
+        List<SearchedPlayer> results = new ArrayList<>();
 
         String sqlSearch = "%";
 

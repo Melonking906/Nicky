@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class DelNickCommand implements CommandExecutor
 {
-    Nicky plugin;
+    private Nicky plugin;
 
     public DelNickCommand( Nicky plugin )
     {
