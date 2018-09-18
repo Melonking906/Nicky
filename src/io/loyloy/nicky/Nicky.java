@@ -7,11 +7,13 @@ import io.loyloy.nicky.commands.RealNameCommand;
 import io.loyloy.nicky.databases.MySQL;
 import io.loyloy.nicky.databases.SQL;
 import io.loyloy.nicky.databases.SQLite;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
@@ -34,6 +36,8 @@ public class Nicky extends JavaPlugin
     private static boolean USE_JOIN_LEAVE;
     private static String JOIN_MESSAGE;
     private static String LEAVE_MESSAGE;
+
+    private static Permission VAULT_PERMS = null;
 
     public Nicky()
     {
@@ -59,7 +63,18 @@ public class Nicky extends JavaPlugin
         getCommand( "realname" ).setExecutor( new RealNameCommand() );
         getCommand( "nicky" ).setExecutor( new NickyCommand( this ) );
 
-        setupDatabase( pm );
+        if( !setupPermissions() )
+        {
+            log( "Error connecting to Vault, make sure its installed!" );
+            pm.disablePlugin( this );
+            return;
+        }
+        if( !setupDatabase() )
+        {
+            log( "Error with database, are your details correct?" );
+            pm.disablePlugin( this );
+            return;
+        }
     }
 
     @Override
@@ -195,7 +210,7 @@ public class Nicky extends JavaPlugin
         saveConfig();
     }
 
-    private void setupDatabase( PluginManager pm )
+    private boolean setupDatabase()
     {
         String type = getConfig().getString("type");
 
@@ -218,17 +233,20 @@ public class Nicky extends JavaPlugin
             log( "Database type does not exist!" );
         }
 
-        if( ! DATABASE.checkConnection() )
-        {
-            log( "Error with DATABASE" );
-            pm.disablePlugin( this );
-        }
+        return DATABASE.checkConnection();
     }
 
-    public void log( String message )
+    private boolean setupPermissions()
     {
-        getLogger().info( message );
+        RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+        if (permissionProvider != null)
+        {
+            VAULT_PERMS = permissionProvider.getProvider();
+        }
+        return (VAULT_PERMS != null);
     }
+
+    public static Permission getVaultPerms() { return VAULT_PERMS; }
 
     public static SQL getNickDatabase() { return DATABASE; }
 
@@ -254,29 +272,8 @@ public class Nicky extends JavaPlugin
 
     public static String getLeaveMessage() { return LEAVE_MESSAGE; }
 
-    public static String translateColors( String text, Player player )
+    public void log( String message )
     {
-        StringBuilder colorsToTranslate = new StringBuilder();
-
-        for( ChatColor color : ChatColor.values() )
-        {
-            if( player.hasPermission( "nicky.color." + color.toString().substring( 1 ) ) || color.toString().substring( 1 ).equals( "r" ) )
-            {
-                colorsToTranslate.append( color.getChar() );
-            }
-        }
-
-        text = text.replace( ChatColor.COLOR_CHAR, '&' ); // Remove player added hard codes;
-
-        char[] b = text.toCharArray();
-        for( int i = 0; i < b.length - 1; i++ )
-        {
-            if( b[i] == '&' && colorsToTranslate.toString().indexOf( b[i + 1] ) > -1 )
-            {
-                b[i] = ChatColor.COLOR_CHAR;
-                b[i + 1] = Character.toLowerCase( b[i + 1] );
-            }
-        }
-        return new String( b );
+        getLogger().info( message );
     }
 }

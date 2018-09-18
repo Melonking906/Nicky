@@ -1,6 +1,7 @@
 package io.loyloy.nicky;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -11,7 +12,8 @@ public class PlayerListener implements Listener
     @EventHandler
     public void onJoin( PlayerJoinEvent event )
     {
-        Nick nick = new Nick( event.getPlayer() );
+        final Player player = event.getPlayer();
+        final Nick nick = new Nick( player );
 
         if( Nicky.useJoinLeave() )
         {
@@ -21,13 +23,15 @@ public class PlayerListener implements Listener
         }
 
         nick.load();
-        nick.updatePlayerName();
+
+        Nicky.getNickDatabase().updatePlayerName( player.getUniqueId().toString(), player.getName() );
     }
 
     @EventHandler
     public void onExit( PlayerQuitEvent event )
     {
-        Nick nick = new Nick( event.getPlayer() );
+        final Player player = event.getPlayer();
+        final Nick nick = new Nick( player );
 
         if( Nicky.useJoinLeave() )
         {
@@ -42,13 +46,9 @@ public class PlayerListener implements Listener
     private String getNicknameOrName( Nick nick )
     {
         String name = nick.get();
-        if( name != null )
+        if( name == null )
         {
-            name = nick.format( name );
-        }
-        else
-        {
-            name = nick.getPlayer().getDisplayName();
+            name = nick.getOfflinePlayer().getName();
         }
         return name;
     }

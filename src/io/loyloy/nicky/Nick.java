@@ -10,37 +10,43 @@ import java.util.List;
 
 public class Nick
 {
-    private Player player;
+    private static final SQL database = Nicky.getNickDatabase();
+
     private OfflinePlayer offlinePlayer;
-    private static SQL database = Nicky.getNickDatabase();
     private String uuid;
 
     public Nick( Player player )
     {
-        this.player = player;
         this.offlinePlayer = Bukkit.getOfflinePlayer( player.getUniqueId() );
-        this.uuid = player.getUniqueId().toString();
+        this.uuid = offlinePlayer.getUniqueId().toString();
     }
 
     public Nick( OfflinePlayer offlinePlayer )
     {
-        this.player = null;
         this.offlinePlayer = offlinePlayer;
         this.uuid = offlinePlayer.getUniqueId().toString();
-        if( offlinePlayer.isOnline() )
-        {
-            player = offlinePlayer.getPlayer();
-        }
     }
 
+    //Requires player to be online
     public boolean load()
     {
-        if( player == null ) { return false; }
+        if( !offlinePlayer.isOnline() )
+        {
+            return false;
+        }
 
+        Player player = offlinePlayer.getPlayer();
         String nickname = get();
 
         if( nickname != null )
         {
+            //Strip blacklisted nicknames on load
+            if( isBlacklisted( nickname ) && !player.hasPermission( "nicky.noblacklist" ) )
+            {
+                unSet();
+                return false;
+            }
+
             player.setDisplayName( nickname );
 
             if( Nicky.isTabsUsed() )
@@ -60,50 +66,37 @@ public class Nick
         return false;
     }
 
-    public void unLoad()
+    //Requires player to be online
+    public boolean unLoad()
     {
-        if( player == null ) { return; }
+        if( !offlinePlayer.isOnline() )
+        {
+            return false;
+        }
+
+        Player player = offlinePlayer.getPlayer();
 
         database.removeFromCache( uuid );
         player.setDisplayName( player.getName() );
+
+        return true;
     }
 
     public String get()
     {
-        String nickname = database.downloadNick( uuid );
-
-        if( nickname != null )
-        {
-            if( player != null && isBlacklisted( nickname ) && !player.hasPermission( "nicky.noblacklist" ) )
-            {
-                unSet();
-                return null;
-            }
-
-            nickname = format( nickname );
-        }
-
-        return nickname;
+        return database.downloadNick( uuid );
     }
 
-    public void set( String nick )
+    public void set( String nickname )
     {
         if( get() != null )
         {
             unSet();
         }
 
-        //Strip unwanted chars here to avoid DB issues
-        if( nick.length() > Nicky.getLength() )
-        {
-            nick = nick.substring( 0, Nicky.getLength() + 1 );
-        }
-        if( !Nicky.getCharacters().equals( "" ) )
-        {
-            nick = nick.replaceAll( Nicky.getCharacters(), "" );
-        }
+        nickname = format( nickname );
 
-        database.uploadNick( uuid, nick, offlinePlayer.getName() );
+        database.uploadNick( uuid, nickname, offlinePlayer.getName() );
         refresh();
     }
 
@@ -115,14 +108,12 @@ public class Nick
 
     public String format( String nickname )
     {
-        if( player == null ) { return null; }
-
         if( nickname.length() > Nicky.getLength() )
         {
             nickname = nickname.substring( 0, Nicky.getLength() + 1 );
         }
 
-        nickname = Nicky.translateColors( nickname, player );
+        nickname = Utils.translateColors( nickname, offlinePlayer );
 
         if( !Nicky.getNickPrefix().equals( "" ) )
         {
@@ -136,13 +127,6 @@ public class Nick
         }
 
         return nickname + ChatColor.RESET;
-    }
-
-    public void updatePlayerName()
-    {
-        if( player == null ) { return; }
-
-        database.updatePlayerName( uuid, player.getName() );
     }
 
     public static boolean isUsed( String nick )
@@ -179,5 +163,8 @@ public class Nick
         load();
     }
 
-    public Player getPlayer() { return player; }
+    public OfflinePlayer getOfflinePlayer()
+    {
+        return offlinePlayer;
+    }
 }
