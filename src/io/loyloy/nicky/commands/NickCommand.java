@@ -3,6 +3,7 @@ package io.loyloy.nicky.commands;
 import io.loyloy.nicky.Nick;
 import io.loyloy.nicky.Nicky;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -39,11 +40,11 @@ public class NickCommand implements CommandExecutor
     {
         if( args.length >= 2  )
         {
-            Player receiver = plugin.getServer().getPlayer( args[0] );
+            OfflinePlayer receiver = plugin.getServer().getOfflinePlayer( args[0] );
 
-            if( receiver == null )
+            if( !receiver.hasPlayedBefore() )
             {
-                plugin.log( "Could not find '" + args[0] + "', are you sure they are online?");
+                plugin.log( "Could not find '" + args[0] + "', did you get the name right?");
                 return;
             }
 
@@ -62,12 +63,6 @@ public class NickCommand implements CommandExecutor
                 return;
             }
 
-//            if( Nick.isBlacklisted( nickname ) )
-//            {
-//                plugin.log( "Sorry but " + nickname + " contains a blacklisted word :(" );
-//                return;
-//            }
-
             Nick nick = new Nick( receiver );
 
             if( Nick.isUsed( nickname ) )
@@ -79,7 +74,10 @@ public class NickCommand implements CommandExecutor
             nick.set( nickname );
             nickname = nick.get();
 
-            receiver.sendMessage( Nicky.getPrefix() + "Your nickname has been set to " + ChatColor.YELLOW + nickname + ChatColor.GREEN + " by console!" );
+            if( receiver.isOnline() )
+            {
+                receiver.getPlayer().sendMessage( Nicky.getPrefix() + "Your nickname has been set to " + ChatColor.YELLOW + nickname + ChatColor.GREEN + " by console!" );
+            }
             plugin.log( receiver.getName() + "'s nick has been set to " + nickname );
         }
         else
@@ -90,11 +88,11 @@ public class NickCommand implements CommandExecutor
 
     private void runAsAdmin( CommandSender sender, String[] args )
     {
-        Player receiver = plugin.getServer().getPlayer( args[0] );
+        OfflinePlayer receiver = plugin.getServer().getOfflinePlayer( args[0] );
 
-        if( receiver == null )
+        if( !receiver.hasPlayedBefore() )
         {
-            sender.sendMessage( Nicky.getPrefix() + "Could not find " + ChatColor.YELLOW + args[0] + ChatColor.GREEN + ", are you sure they are online?");
+            sender.sendMessage( Nicky.getPrefix() + "Could not find " + ChatColor.YELLOW + args[0] + ChatColor.GREEN + ", did you get the name right?");
             return;
         }
 
@@ -104,7 +102,7 @@ public class NickCommand implements CommandExecutor
         {
             if( nickname.equals( receiver.getName() ) )
             {
-                new DelNickCommand( plugin ).runAsAdmin( receiver, args );
+                new DelNickCommand( plugin ).runAsAdmin( sender, args );
                 return;
             }
 
@@ -132,7 +130,11 @@ public class NickCommand implements CommandExecutor
             nick.set( nickname );
             nickname = nick.get();
 
-            receiver.sendMessage( Nicky.getPrefix() + "Your nickname has been set to " + ChatColor.YELLOW + nickname + ChatColor.GREEN + " by " + ChatColor.YELLOW + sender.getName() + ChatColor.GREEN + "!" );
+            if( receiver.isOnline() )
+            {
+                receiver.getPlayer().sendMessage( Nicky.getPrefix() + "Your nickname has been set to " + ChatColor.YELLOW + nickname + ChatColor.GREEN + " by " + ChatColor.YELLOW + sender.getName() + ChatColor.GREEN + "!" );
+            }
+
             sender.sendMessage( Nicky.getPrefix() + "You have set " + ChatColor.YELLOW + receiver.getName() + ChatColor.GREEN + "'s nickname to " + ChatColor.YELLOW + nickname + ChatColor.GREEN + "." );
         }
         else

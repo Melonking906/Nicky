@@ -31,6 +31,10 @@ public class Nicky extends JavaPlugin
     private static String CHARACTERS;
     private static List<String> BLACKLIST;
 
+    private static boolean USE_JOIN_LEAVE;
+    private static String JOIN_MESSAGE;
+    private static String LEAVE_MESSAGE;
+
     public Nicky()
     {
         databases = new HashSet<>();
@@ -85,6 +89,10 @@ public class Nicky extends JavaPlugin
 
             BLACKLIST.clear();
             BLACKLIST = config.getStringList( "blacklist" );
+
+            USE_JOIN_LEAVE = config.getBoolean( "enable_join_leave" );
+            JOIN_MESSAGE = ChatColor.translateAlternateColorCodes( '&', config.getString( "join_message" ));
+            LEAVE_MESSAGE = ChatColor.translateAlternateColorCodes( '&',config.getString( "leave_message" ));
         }
         catch( Exception e )
         {
@@ -170,6 +178,20 @@ public class Nicky extends JavaPlugin
             config.set( "blacklist", listOfStrings );
         }
 
+        // Join Leave
+        if( ! config.isSet( "enable_join_leave" ) )
+        {
+            config.set( "enable_join_leave", true );
+        }
+        if( ! config.isSet( "join_message" ) )
+        {
+            config.set( "join_message", "&e{nickname} &ahas connected!" );
+        }
+        if( ! config.isSet( "leave_message" ) )
+        {
+            config.set( "leave_message", "&e{nickname} &chas disconnected!" );
+        }
+
         saveConfig();
     }
 
@@ -225,6 +247,12 @@ public class Nicky extends JavaPlugin
     public static int getMinLength() { return MIN_LENGTH; }
 
     public static String getCharacters() { return CHARACTERS; }
+
+    public static boolean useJoinLeave() { return USE_JOIN_LEAVE; }
+
+    public static String getJoinMessage() { return JOIN_MESSAGE; }
+
+    public static String getLeaveMessage() { return LEAVE_MESSAGE; }
 
     public static String translateColors( String text, Player player )
     {

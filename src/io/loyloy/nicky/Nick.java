@@ -1,7 +1,9 @@
 package io.loyloy.nicky;
 
 import io.loyloy.nicky.databases.SQL;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -9,17 +11,32 @@ import java.util.List;
 public class Nick
 {
     private Player player;
+    private OfflinePlayer offlinePlayer;
     private static SQL database = Nicky.getNickDatabase();
     private String uuid;
 
     public Nick( Player player )
     {
         this.player = player;
+        this.offlinePlayer = Bukkit.getOfflinePlayer( player.getUniqueId() );
         this.uuid = player.getUniqueId().toString();
+    }
+
+    public Nick( OfflinePlayer offlinePlayer )
+    {
+        this.player = null;
+        this.offlinePlayer = offlinePlayer;
+        this.uuid = offlinePlayer.getUniqueId().toString();
+        if( offlinePlayer.isOnline() )
+        {
+            player = offlinePlayer.getPlayer();
+        }
     }
 
     public boolean load()
     {
+        if( player == null ) { return false; }
+
         String nickname = get();
 
         if( nickname != null )
@@ -45,6 +62,8 @@ public class Nick
 
     public void unLoad()
     {
+        if( player == null ) { return; }
+
         database.removeFromCache( uuid );
         player.setDisplayName( player.getName() );
     }
@@ -55,7 +74,7 @@ public class Nick
 
         if( nickname != null )
         {
-            if( isBlacklisted( nickname ) && !player.hasPermission( "nicky.noblacklist" ) )
+            if( player != null && isBlacklisted( nickname ) && !player.hasPermission( "nicky.noblacklist" ) )
             {
                 unSet();
                 return null;
@@ -74,7 +93,7 @@ public class Nick
             unSet();
         }
 
-        database.uploadNick( uuid, nick, player.getName() );
+        database.uploadNick( uuid, nick, offlinePlayer.getName() );
         refresh();
     }
 
@@ -86,6 +105,8 @@ public class Nick
 
     public String format( String nickname )
     {
+        if( player == null ) { return null; }
+
         if( nickname.length() > Nicky.getLength() )
         {
             nickname = nickname.substring( 0, Nicky.getLength() + 1 );
@@ -109,6 +130,8 @@ public class Nick
 
     public void updatePlayerName()
     {
+        if( player == null ) { return; }
+
         database.updatePlayerName( uuid, player.getName() );
     }
 
@@ -145,4 +168,6 @@ public class Nick
         unLoad();
         load();
     }
+
+    public Player getPlayer() { return player; }
 }

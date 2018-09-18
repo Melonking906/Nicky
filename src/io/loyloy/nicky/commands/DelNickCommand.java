@@ -3,6 +3,7 @@ package io.loyloy.nicky.commands;
 import io.loyloy.nicky.Nick;
 import io.loyloy.nicky.Nicky;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -40,11 +41,11 @@ public class DelNickCommand implements CommandExecutor
     {
         if( args.length >= 1 )
         {
-            Player receiver = plugin.getServer().getPlayer( args[0] );
+            OfflinePlayer receiver = plugin.getServer().getOfflinePlayer( args[0] );
 
-            if( receiver == null )
+            if( !receiver.hasPlayedBefore() )
             {
-                plugin.log( "Could not find '" + args[0] + "', are you sure they are online?");
+                plugin.log( "Could not find '" + args[0] + "', did you get the name right?");
                 return;
             }
 
@@ -52,7 +53,11 @@ public class DelNickCommand implements CommandExecutor
 
             nick.unSet();
 
-            receiver.sendMessage( Nicky.getPrefix() + "Your nickname has been deleted by console." );
+            if( receiver.isOnline() )
+            {
+                receiver.getPlayer().sendMessage( Nicky.getPrefix() + "Your nickname has been deleted by console." );
+            }
+
             plugin.log( receiver.getName() + "'s nickname has been deleted!" );
         }
         else
@@ -64,11 +69,11 @@ public class DelNickCommand implements CommandExecutor
     @SuppressWarnings("deprecation")
     public void runAsAdmin( CommandSender sender, String[] args )
     {
-        Player receiver = plugin.getServer().getPlayer( args[0] );
+        OfflinePlayer receiver = plugin.getServer().getOfflinePlayer( args[0] );
 
-        if( receiver == null )
+        if( !receiver.hasPlayedBefore() )
         {
-            sender.sendMessage( Nicky.getPrefix() + "Could not find " + ChatColor.YELLOW + args[0] + ChatColor.GREEN + ", are you sure they are online?");
+            sender.sendMessage( Nicky.getPrefix() + "Could not find " + ChatColor.YELLOW + args[0] + ChatColor.GREEN + ", did you get the name right?");
             return;
         }
 
@@ -78,7 +83,11 @@ public class DelNickCommand implements CommandExecutor
 
             nick.unSet();
 
-            receiver.sendMessage( Nicky.getPrefix() + "Your nickname has been deleted by " + ChatColor.YELLOW + sender.getName() );
+            if( receiver.isOnline() )
+            {
+                receiver.getPlayer().sendMessage( Nicky.getPrefix() + "Your nickname has been deleted by " + ChatColor.YELLOW + sender.getName() );
+            }
+
             sender.sendMessage( Nicky.getPrefix() + ChatColor.YELLOW + receiver.getName() + ChatColor.GREEN + "'s nickname has been deleted!" );
         }
         else
