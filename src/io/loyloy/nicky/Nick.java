@@ -84,7 +84,15 @@ public class Nick
 
     public String get()
     {
-        return database.downloadNick( uuid );
+        String nickname = database.downloadNick( uuid );
+
+        //FORMAT EXISTING NICKNAMES, LEGACY SUPPORT - WILL BE REMOVED EVENTUALLY. 18/9/2018
+        if( nickname != null )
+        {
+            nickname = format( nickname );
+        }
+
+        return nickname;
     }
 
     public void set( String nickname )
@@ -94,7 +102,7 @@ public class Nick
             unSet();
         }
 
-        nickname = format( nickname );
+        nickname = formatWithFlags( nickname, false );
 
         database.uploadNick( uuid, nickname, offlinePlayer.getName() );
         refresh();
@@ -108,6 +116,11 @@ public class Nick
 
     public String format( String nickname )
     {
+        return formatWithFlags( nickname, true );
+    }
+
+    public String formatWithFlags( String nickname, boolean addPrefix )
+    {
         if( nickname.length() > Nicky.getLength() )
         {
             nickname = nickname.substring( 0, Nicky.getLength() + 1 );
@@ -115,7 +128,7 @@ public class Nick
 
         nickname = Utils.translateColors( nickname, offlinePlayer );
 
-        if( !Nicky.getNickPrefix().equals( "" ) )
+        if( addPrefix && !Nicky.getNickPrefix().equals( "" ) )
         {
             String prefix = ChatColor.translateAlternateColorCodes( '&', Nicky.getNickPrefix() );
             nickname = prefix + nickname;
