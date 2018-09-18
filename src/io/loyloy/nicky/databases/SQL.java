@@ -107,30 +107,7 @@ public abstract class SQL
 
     private void updateTables()
     {
-        int version;
-
         query( "CREATE TABLE IF NOT EXISTS nicky (uuid varchar(36) NOT NULL, nick varchar(64) NOT NULL, name varchar(32) NOT NULL, PRIMARY KEY (uuid))", false );
-        query( "CREATE TABLE IF NOT EXISTS nicky_version (version int(2) NOT NULL)", false );
-
-        ArrayList<HashMap<String,String>> results;
-        results = query( "SELECT version FROM nicky_version", true );
-        if( results == null )
-        {
-            query( "INSERT INTO nicky_version (version) VALUES (1);", false );
-            version = 1;
-        }
-        else
-        {
-            version = Integer.parseInt( results.get( 0 ).get( "version" ) );
-        }
-
-        if( version < 2 )
-        {
-            query( "ALTER TABLE nicky ADD name varchar(32) NOT NULL", false );
-            query( "DELETE FROM nicky_version", false );
-            query( "INSERT INTO nicky_version (version) VALUES (2);", false );
-            version = 2;
-        }
     }
 
     public void disconnect()
