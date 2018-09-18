@@ -93,6 +93,16 @@ public class Nick
             unSet();
         }
 
+        //Strip unwanted chars here to avoid DB issues
+        if( nick.length() > Nicky.getLength() )
+        {
+            nick = nick.substring( 0, Nicky.getLength() + 1 );
+        }
+        if( !Nicky.getCharacters().equals( "" ) )
+        {
+            nick = nick.replaceAll( Nicky.getCharacters(), "" );
+        }
+
         database.uploadNick( uuid, nick, offlinePlayer.getName() );
         refresh();
     }
