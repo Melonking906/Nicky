@@ -7,6 +7,7 @@ import io.loyloy.nicky.commands.RealNameCommand;
 import io.loyloy.nicky.databases.MySQL;
 import io.loyloy.nicky.databases.SQL;
 import io.loyloy.nicky.databases.SQLite;
+import io.loyloy.nicky.papi.NickyExpansion;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -38,10 +39,11 @@ public class Nicky extends JavaPlugin
     private static String LEAVE_MESSAGE;
 
     private static Permission VAULT_PERMS = null;
+    private static HashMap<UUID, String> nicknames = new HashMap();
 
     public Nicky()
     {
-        databases = new HashSet<>();
+        databases = new HashSet();
     }
 
     @Override
@@ -55,7 +57,7 @@ public class Nicky extends JavaPlugin
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents( new PlayerListener(), this );
 
-        BLACKLIST = new ArrayList<>();
+        BLACKLIST = new ArrayList();
         reloadNickyConfig();
 
         getCommand( "nick" ).setExecutor( new NickCommand( this ) );
@@ -74,6 +76,9 @@ public class Nicky extends JavaPlugin
             log( "Error with database, are your details correct?" );
             pm.disablePlugin( this );
             return;
+        }
+        if( Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new NickyExpansion(this).register();
         }
     }
 
@@ -236,9 +241,28 @@ public class Nicky extends JavaPlugin
         return DATABASE.checkConnection();
     }
 
+    public static boolean removeNickname(UUID uuid) {
+        if (!nicknames.containsKey(uuid)) {
+            return false;
+        }
+        nicknames.remove(uuid);
+        return true;
+    }
+
+    public static void setNickname(UUID uuid, String nickname) {
+        nicknames.put(uuid, nickname);
+    }
+
+    public static String getNickname(UUID uuid) {
+        if (nicknames.containsKey(uuid)) {
+            return nicknames.get(uuid);
+        }
+        return null;
+    }
+
     private boolean setupPermissions()
     {
-        RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+        RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(Permission.class);
         if (permissionProvider != null)
         {
             VAULT_PERMS = permissionProvider.getProvider();
