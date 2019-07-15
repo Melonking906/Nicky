@@ -47,19 +47,7 @@ public class Nick
                 return false;
             }
 
-            player.setDisplayName( nickname );
-
-            if( Nicky.isTabsUsed() )
-            {
-                if( nickname.length() > 16 )
-                {
-                    player.setPlayerListName( nickname.substring( 0, 15 ) );
-                }
-                else
-                {
-                    player.setPlayerListName( nickname );
-                }
-            }
+            Nicky.setNickname(player.getUniqueId(), nickname);
 
             return true;
         }
@@ -77,7 +65,7 @@ public class Nick
         Player player = offlinePlayer.getPlayer();
 
         database.removeFromCache( uuid );
-        player.setDisplayName( player.getName() );
+        Nicky.removeNickname(player.getUniqueId());
 
         return true;
     }
