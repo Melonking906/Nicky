@@ -1,6 +1,10 @@
 Nicky
 =====
-Simple SQL Nickname Plugin for Bukkit.
+Simple SQL Nickname Plugin for Bukkit, Spigot, and Paper.
+
+PlaceholderAPI
+
+    {nicky_nickname}
 
 Commands
 
