@@ -1,6 +1,7 @@
 name: Nicky
 main: io.loyloy.nicky.Nicky
-version: 0.7
+version: 0.8
+api-version: 1.16
 description: Simple SQL nickname plugin.
 author: Melonking
 depend: [Vault]

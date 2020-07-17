@@ -22,6 +22,7 @@ import java.util.*;
 public class Nicky extends JavaPlugin
 {
     private static String PREFIX;
+    private static JavaPlugin plugin;
 
     private final Set<SQL> databases;
     private static SQL DATABASE;
@@ -256,8 +257,9 @@ public class Nicky extends JavaPlugin
     public static String getNickname(UUID uuid) {
         if (nicknames.containsKey(uuid)) {
             return nicknames.get(uuid);
+        } else {
+            return plugin.getServer().getPlayer(uuid).getDisplayName();
         }
-        return null;
     }
 
     private boolean setupPermissions()

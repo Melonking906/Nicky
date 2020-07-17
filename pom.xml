@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.loyloy.nicky</groupId>
     <artifactId>Nicky</artifactId>
-    <version>0.6.10</version>
+    <version>0.8</version>
     <name>Nicky</name>
 
     <build>
@@ -43,7 +43,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.13.1-R0.1-SNAPSHOT</version>
+            <version>1.16.1-R0.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -55,7 +55,7 @@
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
-            <version>2.9.1</version>
+            <version>2.10.6</version>
             <scope>provided</scope>
         </dependency>
 
