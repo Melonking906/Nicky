@@ -50,6 +50,8 @@ public class Nicky extends JavaPlugin
     @Override
     public void onEnable()
     {
+        plugin = this;
+
         databases.add( new MySQL( this ) );
         databases.add( new SQLite( this ) );
 
