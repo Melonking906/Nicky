@@ -83,6 +83,8 @@ public class Nicky extends JavaPlugin
         if( Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new NickyExpansion(this).register();
         }
+        
+        reloadNicknames();
     }
 
     @Override
@@ -122,10 +124,17 @@ public class Nicky extends JavaPlugin
             log( "Warning - You have an error in your config." );
         }
 
+        if (DATABASE != null)
+        {
+            reloadNicknames();
+        }
+    }
+    
+    private void reloadNicknames()
+    {
         for( Player player : Bukkit.getServer().getOnlinePlayers() )
         {
             Nick nick = new Nick( player );
-
             nick.load();
         }
     }
