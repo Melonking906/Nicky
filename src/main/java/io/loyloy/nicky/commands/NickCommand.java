@@ -155,7 +155,16 @@ public class NickCommand implements CommandExecutor
                 );
                 return;
             }
-            // TODO: Max length warning.
+            if( strippedNickname.length() > Nicky.getMaxLength() )
+            {
+                sender.sendMessage(
+                        messages.PREFIX +
+                        messages.ERROR_NICKNAME_TOO_LONG
+                                .replace( "{min}", String.valueOf( Nicky.getMinLength() ) )
+                                .replace( "{max}", String.valueOf( Nicky.getMaxLength() ) )
+                );
+                return;
+            }
 
             Nick nick = new Nick( receiver );
 
@@ -238,7 +247,16 @@ public class NickCommand implements CommandExecutor
                     );
                     return;
                 }
-                // TODO: Max length warning
+                if( strippedNickname.length() > Nicky.getMaxLength() )
+                {
+                    player.sendMessage(
+                            messages.PREFIX +
+                            messages.ERROR_NICKNAME_TOO_LONG
+                                    .replace( "{min}", String.valueOf( Nicky.getMinLength() ) )
+                                    .replace( "{max}", String.valueOf( Nicky.getMaxLength() ) )
+                    );
+                    return;
+                }
 
                 Nick nick = new Nick( player );
 
