@@ -12,16 +12,19 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.*;
 import java.util.*;
 
 public class Nicky extends JavaPlugin
 {
-    private static String PREFIX;
+    private static NickyMessages MESSAGES;
+    
     private static JavaPlugin plugin;
 
     private final Set<SQL> databases;
@@ -93,17 +96,42 @@ public class Nicky extends JavaPlugin
         DATABASE.disconnect();
     }
 
+    private void copyFile(File destination, String source) throws IOException
+    {
+        if ( !destination.exists() )
+        {
+            BufferedInputStream reader = new BufferedInputStream( Objects.requireNonNull( this.getResource( source ) ) );
+            BufferedOutputStream writer = new BufferedOutputStream( new FileOutputStream( destination ) );
+            
+            byte[] buffer = new byte[4096];
+            int read;
+            while ( ( read = reader.read( buffer, 0, buffer.length ) ) != -1 ) {
+                writer.write( buffer, 0, read );
+            }
+            
+            reader.close();
+            writer.close();
+        }
+    }
+    
+    private void copyFiles() throws IOException
+    {
+        copyFile(  new File( this.getDataFolder(), "messages.yml" ), "messages.yml" );
+    }
+    
     public void reloadNickyConfig()
     {
         super.reloadConfig();
-
+        try {
+            copyFiles();
+        } catch (IOException ex) {
+            throw new RuntimeException( "Failed to copy config files", ex );
+        }
+        
         FileConfiguration config = getConfig();
 
         try
         {
-            String config_prefix = config.get( "nicky_prefix" ).toString();
-            PREFIX = config_prefix.isEmpty() ? "" : ChatColor.YELLOW + ChatColor.translateAlternateColorCodes( '&', config_prefix) + ChatColor.GREEN + " ";
-
             // Database info not set in this class.
 
             TABS = config.getBoolean( "tab" );
@@ -119,6 +147,14 @@ public class Nicky extends JavaPlugin
             USE_JOIN_LEAVE = config.getBoolean( "enable_join_leave" );
             JOIN_MESSAGE = ChatColor.translateAlternateColorCodes( '&', config.getString( "join_message" ));
             LEAVE_MESSAGE = ChatColor.translateAlternateColorCodes( '&',config.getString( "leave_message" ));
+
+            // Load messages.
+            FileConfiguration messagesDefault = new YamlConfiguration();
+            FileConfiguration messagesFile = new YamlConfiguration();
+            messagesDefault.load( Objects.requireNonNull( this.getTextResource( "messages.yml" ) ) );
+            messagesFile.load( new File( this.getDataFolder(), "messages.yml" ) );
+            messagesFile.setDefaults( messagesDefault );
+            MESSAGES = new NickyMessages( messagesFile, config );
         }
         catch( Exception e )
         {
@@ -148,11 +184,6 @@ public class Nicky extends JavaPlugin
 
         // Update header.
         config.options().copyHeader();
-
-        if( ! config.isSet( "nicky_prefix" ) )
-        {
-            config.set( "nicky_prefix", "[Nicky]" );
-        }
 
         // Database config
         if( ! config.isSet( "type" ) )
@@ -215,14 +246,6 @@ public class Nicky extends JavaPlugin
         if( ! config.isSet( "enable_join_leave" ) )
         {
             config.set( "enable_join_leave", true );
-        }
-        if( ! config.isSet( "join_message" ) )
-        {
-            config.set( "join_message", "&e{nickname} &ahas connected!" );
-        }
-        if( ! config.isSet( "leave_message" ) )
-        {
-            config.set( "leave_message", "&e{nickname} &chas disconnected!" );
         }
 
         saveConfig();
@@ -288,8 +311,6 @@ public class Nicky extends JavaPlugin
 
     public static SQL getNickDatabase() { return DATABASE; }
 
-    public static String getPrefix() { return PREFIX; }
-
     public static boolean isTabsUsed() { return TABS; }
 
     public static boolean isUnique() { return UNIQUE; }
@@ -298,7 +319,7 @@ public class Nicky extends JavaPlugin
 
     public static List<String> getBlacklist() { return BLACKLIST; }
 
-    public static int getLength() { return LENGTH; }
+    public static int getMaxLength() { return LENGTH; }
 
     public static int getMinLength() { return MIN_LENGTH; }
 
@@ -306,10 +327,8 @@ public class Nicky extends JavaPlugin
 
     public static boolean useJoinLeave() { return USE_JOIN_LEAVE; }
 
-    public static String getJoinMessage() { return JOIN_MESSAGE; }
-
-    public static String getLeaveMessage() { return LEAVE_MESSAGE; }
-
+    public static NickyMessages getMessages() { return MESSAGES; }
+    
     public void log( String message )
     {
         getLogger().info( message );

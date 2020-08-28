@@ -1,6 +1,7 @@
 package io.loyloy.nicky.commands;
 
 import io.loyloy.nicky.Nicky;
+import io.loyloy.nicky.NickyMessages;
 import io.loyloy.nicky.commands.subcommands.NickyHelpCommand;
 import io.loyloy.nicky.commands.subcommands.NickyReloadCommand;
 import io.loyloy.nicky.commands.subcommands.NickySubCommand;
@@ -26,6 +27,7 @@ public class NickyCommand implements CommandExecutor
 
     public boolean onCommand( CommandSender sender, Command arg1, String arg2, String args[] )
     {
+        final NickyMessages messages = Nicky.getMessages();
         String subCommand = "help";
 
         if( args.length > 0 )
@@ -39,7 +41,10 @@ public class NickyCommand implements CommandExecutor
             {
                 if( ! sender.hasPermission( command.getPermission() ) )
                 {
-                    sender.sendMessage( Nicky.getPrefix() + ChatColor.RED + "Sorry you don't have permission to do that!" );
+                    sender.sendMessage(
+                            messages.PREFIX +
+                            messages.ERROR_GENERIC_PERMISSION
+                    );
                     return true;
                 }
 

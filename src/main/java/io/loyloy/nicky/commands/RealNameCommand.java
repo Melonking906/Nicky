@@ -2,6 +2,7 @@ package io.loyloy.nicky.commands;
 
 import io.loyloy.nicky.Nick;
 import io.loyloy.nicky.Nicky;
+import io.loyloy.nicky.NickyMessages;
 import io.loyloy.nicky.databases.SQL;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -36,11 +37,12 @@ public class RealNameCommand implements CommandExecutor
 
     private void runAsPlayer( CommandSender sender, String[] args )
     {
+        final NickyMessages messages = Nicky.getMessages();
         if( sender.hasPermission( "nicky.realname" ) )
         {
             if( args.length < 1 )
             {
-                sender.sendMessage( Nicky.getPrefix() + "To check a nickname do " + ChatColor.YELLOW + "/realname <search>" );
+                sender.sendMessage( messages.HELP_COMMAND_REALNAME );
                 return;
             }
 
@@ -53,7 +55,12 @@ public class RealNameCommand implements CommandExecutor
             }
             if( search.length() < minSearchLength )
             {
-                sender.sendMessage( Nicky.getPrefix() + ChatColor.RED + "Your search must be at least " + minSearchLength + " characters!" );
+                sender.sendMessage(
+                        messages.PREFIX +
+                        messages.ERROR_SEARCH_TOO_SHORT
+                                .replace( "{min}", String.valueOf( Nicky.getMinLength() ) )
+                                .replace( "{max}", String.valueOf( Nicky.getMaxLength() ) )
+                );
                 return;
             }
 
@@ -61,29 +68,51 @@ public class RealNameCommand implements CommandExecutor
 
             if( foundPlayers.isEmpty() )
             {
-                sender.sendMessage( ChatColor.GREEN + "No one has a nickname containing: " + ChatColor.YELLOW + args[0] );
+                sender.sendMessage( 
+                        messages.PREFIX +
+                        messages.REALNAME_NOBODY
+                            .replace( "{query}", search )
+                );
             }
             else
             {
-                sender.sendMessage( ChatColor.GREEN + "Players with a nickname containing: " + ChatColor.YELLOW + args[0] );
+                sender.sendMessage(
+                        messages.PREFIX +
+                        messages.REALNAME_FOUND
+                                .replace( "{query}", search )
+                );
 
                 for( Map.Entry<String, String> player : foundPlayers.get( "online" ).entrySet() )
                 {
-                    sender.sendMessage( ChatColor.YELLOW + player.getKey() + ChatColor.GRAY + " -> " + ChatColor.YELLOW + player.getValue() );
+                    sender.sendMessage( 
+                            messages.PREFIX +
+                            messages.REALNAME_FOUND_ENTRY
+                                    .replace("{nickname}", player.getKey())
+                                    .replace("{username}", player.getValue())
+                    );
                 }
                 if( ! foundPlayers.get( "offline" ).isEmpty() )
                 {
-                    sender.sendMessage( ChatColor.GRAY + "Players not on your server or offline:" );
+                    sender.sendMessage(
+                            messages.PREFIX +
+                            messages.REALNAME_FOUND_OFFLINE
+                            .replace( "{query}", search )
+                    );
                     for( Map.Entry<String, String> player : foundPlayers.get( "offline" ).entrySet() )
                     {
-                        sender.sendMessage( ChatColor.YELLOW + player.getKey() + ChatColor.GRAY + " -> " + ChatColor.YELLOW + player.getValue() );
+                        sender.sendMessage(
+                                messages.PREFIX +
+                                        messages.REALNAME_FOUND_ENTRY
+                                                .replace("{nickname}", player.getKey())
+                                                .replace("{username}", player.getValue())
+                        );
                     }
                 }
             }
         }
         else
         {
-            sender.sendMessage( Nicky.getPrefix() + ChatColor.RED + "Sorry, you don't have permission to check real names." );
+            sender.sendMessage( messages.PREFIX + messages.ERROR_REALNAME_PERMISSION );
         }
     }
 

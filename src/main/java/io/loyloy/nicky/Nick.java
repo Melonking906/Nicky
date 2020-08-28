@@ -109,9 +109,9 @@ public class Nick
 
     public String formatWithFlags( String nickname, boolean addPrefix )
     {
-        if( nickname.length() > Nicky.getLength() )
+        if( nickname.length() > Nicky.getMaxLength() )
         {
-            nickname = nickname.substring( 0, Nicky.getLength() + 1 );
+            nickname = nickname.substring( 0, Nicky.getMaxLength() + 1 );
         }
 
         nickname = Utils.translateColors( nickname, offlinePlayer );

@@ -2,6 +2,7 @@ package io.loyloy.nicky.commands;
 
 import io.loyloy.nicky.Nick;
 import io.loyloy.nicky.Nicky;
+import io.loyloy.nicky.NickyMessages;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -39,76 +40,133 @@ public class DelNickCommand implements CommandExecutor
     @SuppressWarnings("deprecation")
     public void runAsConsole( String[] args )
     {
+        final NickyMessages messages = Nicky.getMessages();
         if( args.length >= 1 )
         {
             OfflinePlayer receiver = plugin.getServer().getOfflinePlayer( args[0] );
 
             if( !receiver.hasPlayedBefore() )
             {
-                plugin.log( "Could not find '" + args[0] + "', did you get the name right?");
+                plugin.log( ChatColor.stripColor( 
+                        messages.PREFIX +
+                        messages.ERROR_PLAYER_NOT_FOUND.replace( "{player}", args[0]) 
+                ) );
                 return;
             }
 
             Nick nick = new Nick( receiver );
-
+            String oldNick = nick.get();
+            if ( oldNick == null ) oldNick = receiver.getName();
+            
             nick.unSet();
 
             if( receiver.isOnline() )
             {
-                receiver.getPlayer().sendMessage( Nicky.getPrefix() + "Your nickname has been deleted by console." );
+                receiver.getPlayer().sendMessage(
+                        messages.PREFIX +
+                        messages.NICKNAME_WAS_DELETED
+                                .replace( "{player}", receiver.getName() )
+                                .replace( "{nickname}", oldNick )
+                                .replace( "{admin}", "console" )
+                                .replace( "{admin_nickname}", "console" )
+                );
             }
 
-            plugin.log( receiver.getName() + "'s nickname has been deleted!" );
+            plugin.log( ChatColor.stripColor(
+                    messages.PREFIX +
+                    messages.NICKNAME_DELETED_OTHER
+                        .replace( "{receiver}", receiver.getName() )
+                        .replace( "{receiver_nickname}", oldNick )
+            ) );
         }
         else
         {
-            plugin.log( "Usage: /delnick <name>" );
+            plugin.log( ChatColor.stripColor( messages.COMMAND_DELNICK_USAGE_ADMIN )  );
         }
     }
 
     @SuppressWarnings("deprecation")
     public void runAsAdmin( CommandSender sender, String[] args )
     {
+        final NickyMessages messages = Nicky.getMessages();
         OfflinePlayer receiver = plugin.getServer().getOfflinePlayer( args[0] );
 
+        String senderNickname = sender.getName();
+        if ( sender instanceof Player ) {
+            Nick nick = new Nick( (Player) sender );
+            String nickString = nick.get();
+            if ( nickString != null ) {
+                senderNickname = nickString;
+            }
+        }
+        
         if( !receiver.hasPlayedBefore() )
         {
-            sender.sendMessage( Nicky.getPrefix() + "Could not find " + ChatColor.YELLOW + args[0] + ChatColor.GREEN + ", did you get the name right?");
+            sender.sendMessage(
+                    messages.PREFIX +
+                    messages.ERROR_PLAYER_NOT_FOUND.replace( "{player}", args[0] )
+            );
             return;
         }
 
         if( sender.hasPermission( "nicky.del.other" ) )
         {
             Nick nick = new Nick( receiver );
+            String oldNick = nick.get();
+            if ( oldNick == null ) oldNick = receiver.getName();
 
             nick.unSet();
 
             if( receiver.isOnline() )
             {
-                receiver.getPlayer().sendMessage( Nicky.getPrefix() + "Your nickname has been deleted by " + ChatColor.YELLOW + sender.getName() );
+                receiver.getPlayer().sendMessage(
+                        messages.PREFIX +
+                        messages.NICKNAME_WAS_DELETED
+                            .replace("{username}", receiver.getName())
+                            .replace("{nickname}", oldNick)
+                            .replace("{admin}", sender.getName())
+                            .replace("{admin_nickname}", senderNickname)
+                );
             }
 
-            sender.sendMessage( Nicky.getPrefix() + ChatColor.YELLOW + receiver.getName() + ChatColor.GREEN + "'s nickname has been deleted!" );
+            sender.sendMessage(
+                    messages.PREFIX +
+                    messages.NICKNAME_CHANGED_OTHER
+                            .replace( "{receiver}", receiver.getName() )
+                            .replace( "{receiver_nickname}", oldNick )
+            );
         }
         else
         {
-            sender.sendMessage( Nicky.getPrefix() + ChatColor.RED + "Sorry, you don't have permission to delete other players nicks." );
+            sender.sendMessage(
+                    messages.PREFIX +
+                    messages.ERROR_DELETE_OTHER_PERMISSION
+                            .replace( "{receiver}", receiver.getName() )
+            );
         }
     }
 
     public void runAsPlayer( CommandSender sender )
     {
+        final NickyMessages messages = Nicky.getMessages();
         if( sender.hasPermission( "nicky.del" ) )
         {
             Nick nick = new Nick( (Player) sender );
+            String oldNick = nick.get();
+            if ( oldNick == null ) oldNick = sender.getName();
 
             nick.unSet();
 
-            sender.sendMessage( Nicky.getPrefix() + "Your nickname has been deleted." );
+            sender.sendMessage(
+                    messages.PREFIX +
+                    messages.NICKNAME_DELETED_OWN
+                        .replace("{username}", sender.getName())
+                        .replace("{nickname}", oldNick)
+            );
         }
         else
         {
-            sender.sendMessage( Nicky.getPrefix() + ChatColor.RED + "Sorry, you don't have permission to delete a nick." );
+            sender.sendMessage( messages.PREFIX + messages.ERROR_DELETE_OWN_PERMISSION );
         }
     }
 }

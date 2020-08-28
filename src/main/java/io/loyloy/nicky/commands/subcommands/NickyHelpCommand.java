@@ -1,5 +1,7 @@
 package io.loyloy.nicky.commands.subcommands;
 
+import io.loyloy.nicky.Nicky;
+import io.loyloy.nicky.NickyMessages;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -13,28 +15,30 @@ public class NickyHelpCommand extends NickySubCommand
 
     public boolean onCommand( CommandSender sender, Command cmd, String commandLabel, String[] args )
     {
-        sender.sendMessage( ChatColor.YELLOW + "---------- [Nicky Help] ----------" );
+        final NickyMessages messages = Nicky.getMessages();
+        
+        sender.sendMessage( messages.HELP_HEADER );
         if( sender.hasPermission( "nicky.set" ) )
         {
-            sender.sendMessage( ChatColor.GREEN + "/nick <nick> " + ChatColor.GRAY + "- Sets your nickname." );
+            sender.sendMessage( messages.HELP_COMMAND_NICK );
         }
         if( sender.hasPermission( "nicky.del" ) )
         {
-            sender.sendMessage( ChatColor.GREEN + "/delnick" + ChatColor.GRAY + "- Deletes your nickname." );
+            sender.sendMessage( messages.HELP_COMMAND_DELNICK );
         }
         if( sender.hasPermission( "nicky.realname" ) )
         {
-            sender.sendMessage( ChatColor.GREEN + "/realname <search> " + ChatColor.GRAY + "- Lookup who owns a nick." );
+            sender.sendMessage( messages.HELP_COMMAND_REALNAME );
         }
         if( sender.hasPermission( "nicky.help" ) )
         {
-            sender.sendMessage( ChatColor.GREEN + "/nicky help " + ChatColor.GRAY + "- Loads this page." );
+            sender.sendMessage( messages.HELP_COMMAND_HELP );
         }
         if( sender.hasPermission( "nicky.reload" ) )
         {
-            sender.sendMessage( ChatColor.GREEN + "/nicky reload " + ChatColor.GRAY + "- Reloads nicky config." );
+            sender.sendMessage( messages.HELP_COMMAND_RELOAD );
         }
-        sender.sendMessage( ChatColor.YELLOW + "-------------------------------" );
+        sender.sendMessage( messages.HELP_FOOTER );
 
         return true;
     }
