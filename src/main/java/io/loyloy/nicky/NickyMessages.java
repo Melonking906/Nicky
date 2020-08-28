@@ -21,6 +21,7 @@ public class NickyMessages
     public final String ERROR_NICKNAME_TOO_LONG;
     public final String ERROR_NICKNAME_TAKEN;
     public final String ERROR_NICKNAME_BLACKLISTED;
+    public final String ERROR_NICKNAME_INVALID;
     public final String ERROR_CHANGE_OWN_PERMISSION;
     public final String ERROR_CHANGE_OTHER_PERMISSION;
     public final String ERROR_REALNAME_PERMISSION;
@@ -65,6 +66,7 @@ public class NickyMessages
         ERROR_NICKNAME_TOO_LONG = message (messages, "error_nickname_too_long" );
         ERROR_NICKNAME_TAKEN = message (messages, "error_nickname_taken" );
         ERROR_NICKNAME_BLACKLISTED = message (messages, "error_nickname_blacklisted" );
+        ERROR_NICKNAME_INVALID = message (messages, "error_nickname_invalid" );
         ERROR_CHANGE_OWN_PERMISSION = message (messages, "error_change_own_permission" );
         ERROR_CHANGE_OTHER_PERMISSION = message (messages, "error_change_other_permission" );
         ERROR_DELETE_OWN_PERMISSION = message (messages, "error_delete_own_permission" );

@@ -3,6 +3,7 @@ package io.loyloy.nicky.commands;
 import io.loyloy.nicky.Nick;
 import io.loyloy.nicky.Nicky;
 import io.loyloy.nicky.NickyMessages;
+import io.loyloy.nicky.databases.SQL;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -17,6 +18,38 @@ public class NickCommand implements CommandExecutor
     public NickCommand( Nicky plugin )
     {
         this.plugin = plugin;
+    }
+
+    /**
+     * Checks a nickname to see if its valid.
+     * @param nickname The nickname to check.
+     * @return null on valid nickname, or a string if there's a problem.
+     */
+    private String nicknameProblems(String nickname) {
+        final NickyMessages messages = Nicky.getMessages();
+        String strippedNickname = ChatColor.stripColor( ChatColor.translateAlternateColorCodes( '&', nickname ) );
+        
+        if( strippedNickname.length() < Nicky.getMinLength() )
+        {
+            return messages.PREFIX +
+                    messages.ERROR_NICKNAME_TOO_SHORT
+                            .replace("{min}", String.valueOf( Nicky.getMinLength() ) )
+                            .replace( "{max}", String.valueOf( Nicky.getMaxLength() ) );
+        }
+        
+        if( strippedNickname.length() > Nicky.getMaxLength() || nickname.length() > SQL.NICKNAME_COLUMN_MAX )
+        {
+            return messages.PREFIX +
+                    messages.ERROR_NICKNAME_TOO_LONG
+                            .replace( "{min}", String.valueOf( Nicky.getMinLength() ) )
+                            .replace( "{max}", String.valueOf( Math.min( Nicky.getMaxLength(), SQL.NICKNAME_COLUMN_MAX ) ) );
+        }
+        
+        if ( !Nick.isValid( strippedNickname ) ) {
+            return messages.PREFIX + messages.ERROR_NICKNAME_INVALID;
+        }
+        
+        return null;
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
@@ -61,18 +94,12 @@ public class NickCommand implements CommandExecutor
                 return;
             }
 
-            String strippedNickname = ChatColor.stripColor( ChatColor.translateAlternateColorCodes( '&', nickname ) );
-            if( strippedNickname.length() < Nicky.getMinLength() )
-            {
-                plugin.log( ChatColor.stripColor(
-                    messages.PREFIX +
-                        messages.ERROR_NICKNAME_TOO_SHORT
-                                .replace( "{min}", String.valueOf( Nicky.getMinLength() ) )
-                                .replace( "{max}", String.valueOf( Nicky.getMaxLength() ) )
-                ) );
+            String problems = nicknameProblems( nickname );
+            if ( problems != null ) {
+                plugin.log( ChatColor.stripColor( problems ) );
                 return;
             }
-
+            
             Nick nick = new Nick( receiver );
 
             if( Nick.isUsed( nickname ) )
@@ -129,7 +156,7 @@ public class NickCommand implements CommandExecutor
         {
             sender.sendMessage(
                     messages.PREFIX +
-                            messages.ERROR_PLAYER_NOT_FOUND.replace( "{player}", args[0] )
+                    messages.ERROR_PLAYER_NOT_FOUND.replace( "{player}", args[0] )
             );
             return;
         }
@@ -144,25 +171,9 @@ public class NickCommand implements CommandExecutor
                 return;
             }
 
-            String strippedNickname = ChatColor.stripColor( ChatColor.translateAlternateColorCodes( '&', nickname ) );
-            if( strippedNickname.length() < Nicky.getMinLength() )
-            {
-                sender.sendMessage(
-                        messages.PREFIX +
-                        messages.ERROR_NICKNAME_TOO_SHORT
-                            .replace( "{min}", String.valueOf( Nicky.getMinLength() ) ) 
-                            .replace( "{max}", String.valueOf( Nicky.getMaxLength() ) )
-                );
-                return;
-            }
-            if( strippedNickname.length() > Nicky.getMaxLength() )
-            {
-                sender.sendMessage(
-                        messages.PREFIX +
-                        messages.ERROR_NICKNAME_TOO_LONG
-                                .replace( "{min}", String.valueOf( Nicky.getMinLength() ) )
-                                .replace( "{max}", String.valueOf( Nicky.getMaxLength() ) )
-                );
+            String problems = nicknameProblems( nickname );
+            if ( problems != null ) {
+                sender.sendMessage( problems );
                 return;
             }
 
@@ -235,29 +246,13 @@ public class NickCommand implements CommandExecutor
                     new DelNickCommand( plugin ).runAsPlayer( sender );
                     return;
                 }
-
-                String strippedNickname = ChatColor.stripColor( ChatColor.translateAlternateColorCodes( '&', nickname ) );
-                if( strippedNickname.length() < Nicky.getMinLength() )
-                {
-                    player.sendMessage(
-                            messages.PREFIX +
-                            messages.ERROR_NICKNAME_TOO_SHORT
-                                    .replace( "{min}", String.valueOf( Nicky.getMinLength() ) )
-                                    .replace( "{max}", String.valueOf( Nicky.getMaxLength() ) )
-                    );
+                
+                String problems = nicknameProblems( nickname );
+                if ( problems != null ) {
+                    sender.sendMessage( problems );
                     return;
                 }
-                if( strippedNickname.length() > Nicky.getMaxLength() )
-                {
-                    player.sendMessage(
-                            messages.PREFIX +
-                            messages.ERROR_NICKNAME_TOO_LONG
-                                    .replace( "{min}", String.valueOf( Nicky.getMinLength() ) )
-                                    .replace( "{max}", String.valueOf( Nicky.getMaxLength() ) )
-                    );
-                    return;
-                }
-
+                
                 Nick nick = new Nick( player );
 
                 if( Nick.isBlacklisted( nickname ) && !player.hasPermission( "nicky.noblacklist" ) )

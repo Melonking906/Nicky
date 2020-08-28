@@ -9,6 +9,8 @@ import java.util.List;
 
 public abstract class SQL
 {
+    static public final int NICKNAME_COLUMN_MAX = 64;
+    
     private Connection connection;
     private HashMap<String, String> cache = new HashMap<>();
 
@@ -112,8 +114,8 @@ public abstract class SQL
     private void updateTables()
     {
         query( 
-                "CREATE TABLE IF NOT EXISTS nicky (uuid varchar(36) NOT NULL, nick varchar(64) NOT NULL, name varchar(32) NOT NULL, PRIMARY KEY (uuid))",
-                statemnet -> {},
+                "CREATE TABLE IF NOT EXISTS nicky (uuid varchar(36) NOT NULL, nick varchar(?) NOT NULL, name varchar(32) NOT NULL, PRIMARY KEY (uuid))",
+                statement -> statement.setInt(1, NICKNAME_COLUMN_MAX),
                 false
         );
     }

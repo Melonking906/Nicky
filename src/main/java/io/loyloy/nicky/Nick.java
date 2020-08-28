@@ -7,6 +7,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class Nick
 {
@@ -90,8 +91,14 @@ public class Nick
             unSet();
         }
 
+        // Safeguard against invalid nicknames.
+        if ( !isValid( nickname ) )
+        {
+            throw new AssertionError( "Invalid nickname passed through checks" );
+        }
+        
+        // Set nickname.
         nickname = formatWithFlags( nickname, false );
-
         database.uploadNick( uuid, nickname, offlinePlayer.getName() );
         refresh();
     }
@@ -151,6 +158,31 @@ public class Nick
             }
         }
         return false;
+    }
+
+    /**
+     * Checks if the nickname is valid.
+     * This checks for valid characters and length.
+     * 
+     * @param nick The nickname to check.
+     * @return True if valid, false otherwise.
+     */
+    public static boolean isValid( String nick )
+    {
+        if ( nick.length() < Nicky.getMinLength() || nick.length() > Nicky.getMaxLength() || nick.length() > SQL.NICKNAME_COLUMN_MAX ) {
+            return false;
+        }
+        
+        String invalidCharacters = Nicky.getCharacters();
+        if ( !invalidCharacters.isEmpty() )
+        {
+            Pattern invalidRegex = Pattern.compile(invalidCharacters);
+            if ( invalidRegex.matcher(nick).find() ) {
+                return false;
+            }
+        }
+        
+        return true;
     }
 
     public static List<SQL.SearchedPlayer> searchGet( String search )

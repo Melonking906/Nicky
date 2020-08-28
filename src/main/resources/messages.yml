@@ -44,5 +44,7 @@ error_player_not_found: '&cCould not find {username}, did you get the name right
 error_search_too_short: '&eYour search must be at least {min} characters!'
 error_nickname_too_short: '&cNicks must be at least &e{min}&c characters.'
 error_nickname_too_long: '&cNicks must be at most &e{max}&c characters.'
+error_nickname_invalid: '&cYour nickname contains invalid characters.'
 error_nickname_taken: '&cSorry the nick &e{nickname}&c is already in use :('
 error_nickname_blacklisted: '&cSorry but &e{nickname}&c contains a blacklisted word :('
+
