@@ -101,7 +101,8 @@ public class Nicky extends JavaPlugin
 
         try
         {
-            PREFIX = ChatColor.YELLOW + ChatColor.translateAlternateColorCodes( '&', config.get( "nicky_prefix" ).toString() ) + ChatColor.GREEN + " ";
+            String config_prefix = config.get( "nicky_prefix" ).toString();
+            PREFIX = config_prefix.isEmpty() ? "" : ChatColor.YELLOW + ChatColor.translateAlternateColorCodes( '&', config_prefix) + ChatColor.GREEN + " ";
 
             // Database info not set in this class.
 
