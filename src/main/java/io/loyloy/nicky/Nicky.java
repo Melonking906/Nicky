@@ -155,6 +155,7 @@ public class Nicky extends JavaPlugin
         catch( Exception e )
         {
             log( "Warning - You have an error in your config." );
+            e.printStackTrace();
         }
 
         if (DATABASE != null)

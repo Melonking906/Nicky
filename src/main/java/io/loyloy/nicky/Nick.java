@@ -75,7 +75,6 @@ public class Nick
     {
         String nickname = database.downloadNick( uuid );
 
-        //FORMAT EXISTING NICKNAMES, LEGACY SUPPORT - WILL BE REMOVED EVENTUALLY. 18/9/2018
         if( nickname != null )
         {
             nickname = format( nickname );
@@ -96,7 +95,7 @@ public class Nick
         {
             throw new AssertionError( "Invalid nickname passed through checks" );
         }
-        
+
         // Set nickname.
         nickname = formatWithFlags( nickname, false );
         database.uploadNick( uuid, nickname, offlinePlayer.getName() );
@@ -123,15 +122,15 @@ public class Nick
 
         nickname = Utils.translateColors( nickname, offlinePlayer );
 
+        if( !Nicky.getCharacters().equals( "" ) )
+        {
+            nickname = nickname.replaceAll( Nicky.getCharacters(), "" );
+        }
+
         if( addPrefix && !Nicky.getNickPrefix().equals( "" ) )
         {
             String prefix = ChatColor.translateAlternateColorCodes( '&', Nicky.getNickPrefix() );
             nickname = prefix + nickname;
-        }
-
-        if( !Nicky.getCharacters().equals( "" ) )
-        {
-            nickname = nickname.replaceAll( Nicky.getCharacters(), "" );
         }
 
         return nickname + ChatColor.RESET;
