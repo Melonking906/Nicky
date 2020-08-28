@@ -28,19 +28,23 @@ public abstract class SQL
         return getName().toLowerCase().replace(" ", "");
     }
 
-    private ArrayList<HashMap<String,String>> query( String sql, boolean hasReturn )
+    protected static interface StatementInitializer {
+        void initialize(PreparedStatement statement) throws SQLException;
+    }
+    
+    private ArrayList<HashMap<String,String>> query( String sql, StatementInitializer initializer, boolean hasReturn )
     {
         if( ! checkConnection() )
         {
             plugin.getLogger().info( "Error with database" );
             return null;
         }
-
-        PreparedStatement statement;
+        
         try
         {
-            statement = connection.prepareStatement( sql );
-
+            PreparedStatement statement = connection.prepareStatement( sql );
+            initializer.initialize(statement);
+            
             if( ! hasReturn )
             {
                 statement.execute();
@@ -107,7 +111,11 @@ public abstract class SQL
 
     private void updateTables()
     {
-        query( "CREATE TABLE IF NOT EXISTS nicky (uuid varchar(36) NOT NULL, nick varchar(64) NOT NULL, name varchar(32) NOT NULL, PRIMARY KEY (uuid))", false );
+        query( 
+                "CREATE TABLE IF NOT EXISTS nicky (uuid varchar(36) NOT NULL, nick varchar(64) NOT NULL, name varchar(32) NOT NULL, PRIMARY KEY (uuid))",
+                statemnet -> {},
+                false
+        );
     }
 
     public void disconnect()
@@ -136,7 +144,11 @@ public abstract class SQL
             return cache.get( uuid );
         }
 
-        ArrayList<HashMap<String,String>> data = query( "SELECT nick FROM nicky WHERE uuid = '" + uuid + "';", true );
+        ArrayList<HashMap<String,String>> data = query("SELECT nick FROM nicky WHERE uuid = ?;", 
+                statement -> statement.setString(  1, uuid ), 
+                true
+        );
+        
         if( data == null )
         {
             // Store null to avoid spammy queries.
@@ -163,7 +175,12 @@ public abstract class SQL
             sqlSearch += c + "%";
         }
 
-        ArrayList<HashMap<String, String>> data = query( "SELECT uuid, nick, name FROM nicky WHERE nick LIKE '" + sqlSearch + "';", true );
+        final String querySearch = sqlSearch;
+        ArrayList<HashMap<String, String>> data = query( 
+                "SELECT uuid, nick, name FROM nicky WHERE nick LIKE ?;",
+                statement -> statement.setString(1, querySearch),
+                true
+        );
 
         if( data == null )
         {
@@ -209,7 +226,10 @@ public abstract class SQL
 
     public boolean isUsed( String nick )
     {
-        ArrayList<HashMap<String,String>> data = query( "SELECT nick FROM nicky WHERE nick = '" + nick + "';", true );
+        ArrayList<HashMap<String,String>> data = query( "SELECT nick FROM nicky WHERE nick = ?;",
+                statement -> statement.setString( 1, nick ),
+                true
+        );
 
         return data != null;
     }
@@ -226,18 +246,34 @@ public abstract class SQL
     {
         cache.put( uuid, nick );
 
-        query( "INSERT INTO nicky (uuid, nick, name) VALUES ('" + uuid + "','" + nick + "','" + name + "');", false );
+        query( "INSERT INTO nicky (uuid, nick, name) VALUES (?, ?, ?);", 
+                statement -> {
+                    statement.setString( 1, uuid );
+                    statement.setString( 2, nick );
+                    statement.setString( 3, name );
+                },
+                false
+        );
     }
 
     public void deleteNick( String uuid )
     {
         cache.put( uuid, null );
 
-        query( "DELETE FROM nicky WHERE uuid = '" + uuid + "';", false );
+        query( "DELETE FROM nicky WHERE uuid = ?;", 
+                statement -> statement.setString( 1, uuid ),
+                false
+        );
     }
 
     public void updatePlayerName( String uuid, String name )
     {
-        query( "UPDATE nicky SET name = '" + name + "' WHERE uuid = '" + uuid + "';", false );
+        query( "UPDATE nicky SET name = ? WHERE uuid = ?;", 
+                statement -> {
+                    statement.setString( 1, name );
+                    statement.setString( 2, uuid );
+                },
+                false
+        );
     }
 }
