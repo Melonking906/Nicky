@@ -39,8 +39,6 @@ public class Nicky extends JavaPlugin
     private static List<String> BLACKLIST;
 
     private static boolean USE_JOIN_LEAVE;
-    private static String JOIN_MESSAGE;
-    private static String LEAVE_MESSAGE;
 
     private static Permission VAULT_PERMS = null;
     private static HashMap<UUID, String> nicknames = new HashMap();
@@ -145,8 +143,6 @@ public class Nicky extends JavaPlugin
             BLACKLIST = config.getStringList( "blacklist" );
 
             USE_JOIN_LEAVE = config.getBoolean( "enable_join_leave" );
-            JOIN_MESSAGE = ChatColor.translateAlternateColorCodes( '&', config.getString( "join_message" ));
-            LEAVE_MESSAGE = ChatColor.translateAlternateColorCodes( '&',config.getString( "leave_message" ));
 
             // Load messages.
             FileConfiguration messagesDefault = new YamlConfiguration();
