@@ -77,7 +77,7 @@ public class Nick
 
         if( nickname != null )
         {
-            nickname = format( nickname );
+            nickname = formatForServer( nickname );
         }
 
         return nickname;
@@ -97,7 +97,7 @@ public class Nick
         }
 
         // Set nickname.
-        nickname = formatWithFlags( nickname, false );
+        nickname = formatForDatabase( nickname );
         database.uploadNick( uuid, nickname, offlinePlayer.getName() );
         refresh();
     }
@@ -108,11 +108,43 @@ public class Nick
         refresh();
     }
 
+    /**
+     * @deprecated Use {@link #formatForDatabase(String)} or {@link #formatForServer(String)}
+     */
+    @Deprecated
     public String format( String nickname )
     {
         return formatWithFlags( nickname, true );
     }
 
+    /**
+     * Formats a nickname for database lookup/storage.
+     * Use this when compare nicknames to the stored one.
+     * 
+     * @param nickname The nickname to format.
+     * @return The formatted nickname.
+     */
+    public String formatForDatabase( String nickname )
+    {
+        return formatWithFlags( nickname, false );
+    }
+
+    public String formatForServer( String nickname )
+    {
+        if( !Nicky.getNickPrefix().equals( "" ) )
+        {
+            String prefix = ChatColor.translateAlternateColorCodes( '&', Nicky.getNickPrefix() );
+            nickname = prefix + nickname;
+        }
+        
+        nickname += ChatColor.RESET;
+        return nickname;
+    }
+
+    /**
+     * @deprecated Use {@link #formatForDatabase(String)} or {@link #formatForServer(String)}
+     */
+    @Deprecated
     public String formatWithFlags( String nickname, boolean addPrefix )
     {
         if( nickname.length() > Nicky.getMaxLength() )
@@ -127,15 +159,20 @@ public class Nick
             nickname = nickname.replaceAll( Nicky.getCharacters(), "" );
         }
 
-        if( addPrefix && !Nicky.getNickPrefix().equals( "" ) )
+        // ADDED TO KEEP API COMPATIBLE. DO NOT ACTUALLY USE THIS METHOD
+        if( addPrefix )
         {
-            String prefix = ChatColor.translateAlternateColorCodes( '&', Nicky.getNickPrefix() );
-            nickname = prefix + nickname;
+            nickname = formatForServer( nickname );
         }
-
-        return nickname + ChatColor.RESET;
+        
+        return nickname;
     }
 
+    /**
+     * @see #formatForDatabase(String) 
+     * @param nick The preformatted nickname.
+     * @return True if the nickname is used AND the unique configuration value is true.
+     */
     public static boolean isUsed( String nick )
     {
         if( Nicky.isUnique() )

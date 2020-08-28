@@ -102,7 +102,7 @@ public class NickCommand implements CommandExecutor
             
             Nick nick = new Nick( receiver );
 
-            if( Nick.isUsed( nickname ) )
+            if( Nick.isUsed( nick.formatForDatabase( nickname ) ) )
             {
                 plugin.log( ChatColor.stripColor(
                         messages.PREFIX +
@@ -189,7 +189,7 @@ public class NickCommand implements CommandExecutor
                 return;
             }
 
-            if( Nick.isUsed( nickname ) )
+            if( Nick.isUsed( nick.formatForDatabase( nickname ) ) )
             {
                 sender.sendMessage(
                         messages.PREFIX +
@@ -265,7 +265,7 @@ public class NickCommand implements CommandExecutor
                     return;
                 }
 
-                if( Nick.isUsed( nickname ) )
+                if( Nick.isUsed( nick.formatForDatabase( nickname ) ) )
                 {
                     player.sendMessage(
                             messages.PREFIX +

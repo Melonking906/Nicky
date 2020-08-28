@@ -136,7 +136,7 @@ public class RealNameCommand implements CommandExecutor
             if( offlinePlayer.isOnline() )
             {
                 Nick nick = new Nick( offlinePlayer.getPlayer() );
-                playersNick = nick.format( playersNick );
+                playersNick = nick.formatForServer( playersNick );
 
                 onlinePlayers.put( playersNick, searchedPlayer.getName() );
             }
