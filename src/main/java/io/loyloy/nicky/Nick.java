@@ -7,6 +7,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Nick
@@ -212,8 +213,13 @@ public class Nick
         String invalidCharacters = Nicky.getCharacters();
         if ( !invalidCharacters.isEmpty() )
         {
-            Pattern invalidRegex = Pattern.compile(invalidCharacters);
-            if ( invalidRegex.matcher(nick).find() ) {
+            Pattern invalidRegex = Pattern.compile( invalidCharacters );
+            Matcher matcher = invalidRegex.matcher( nick );
+            while ( matcher.find() ) {
+                if ( nick.charAt(matcher.start()) == '&' ) {
+                    continue;
+                }
+                
                 return false;
             }
         }
