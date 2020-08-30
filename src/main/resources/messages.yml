@@ -40,7 +40,7 @@ error_delete_other_permission: "&cSorry, you don't have permission to delete oth
 error_delete_own_permission: "&cSorry, you don't have permission to delete a nick."
 error_realname_permission: "&cSorry, you don't have permission to check real names."
 error_generic_permission: "&cSorry, you don't have permission to do that!"
-error_player_not_found: '&cCould not find {username}, did you get the name right?'
+error_player_not_found: '&cCould not find {player}, did you get the name right?'
 error_search_too_short: '&eYour search must be at least {min} characters!'
 error_nickname_too_short: '&cNicks must be at least &e{min}&c characters.'
 error_nickname_too_long: '&cNicks must be at most &e{max}&c characters.'
