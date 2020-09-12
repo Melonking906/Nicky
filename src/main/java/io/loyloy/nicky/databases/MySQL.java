@@ -35,4 +35,11 @@ public class MySQL extends SQL
     {
         return "MySQL";
     }
+
+    @Override
+    protected String getTable()
+    {
+        return plugin.getConfig().getString( "table_name" );
+    }
+    
 }

@@ -24,13 +24,15 @@ public abstract class SQL
     protected abstract Connection getNewConnection();
 
     protected abstract String getName();
+    
+    protected abstract String getTable();
 
     public String getConfigName()
     {
         return getName().toLowerCase().replace(" ", "");
     }
 
-    protected static interface StatementInitializer {
+    protected interface StatementInitializer {
         void initialize(PreparedStatement statement) throws SQLException;
     }
     
@@ -44,7 +46,7 @@ public abstract class SQL
         
         try
         {
-            PreparedStatement statement = connection.prepareStatement( sql );
+            PreparedStatement statement = connection.prepareStatement( sql.replace( "$table", this.getTable() ) );
             initializer.initialize(statement);
             
             if( ! hasReturn )
@@ -114,7 +116,7 @@ public abstract class SQL
     private void updateTables()
     {
         query( 
-                "CREATE TABLE IF NOT EXISTS nicky (uuid varchar(36) NOT NULL, nick varchar(?) NOT NULL, name varchar(32) NOT NULL, PRIMARY KEY (uuid))",
+                "CREATE TABLE IF NOT EXISTS $table (uuid varchar(36) NOT NULL, nick varchar(?) NOT NULL, name varchar(32) NOT NULL, PRIMARY KEY (uuid))",
                 statement -> statement.setInt(1, NICKNAME_COLUMN_MAX),
                 false
         );
@@ -146,7 +148,7 @@ public abstract class SQL
             return cache.get( uuid );
         }
 
-        ArrayList<HashMap<String,String>> data = query("SELECT nick FROM nicky WHERE uuid = ?;", 
+        ArrayList<HashMap<String,String>> data = query("SELECT nick FROM $table WHERE uuid = ?;", 
                 statement -> statement.setString(  1, uuid ), 
                 true
         );
@@ -179,7 +181,7 @@ public abstract class SQL
 
         final String querySearch = sqlSearch;
         ArrayList<HashMap<String, String>> data = query( 
-                "SELECT uuid, nick, name FROM nicky WHERE nick LIKE ?;",
+                "SELECT uuid, nick, name FROM $table WHERE nick LIKE ?;",
                 statement -> statement.setString(1, querySearch),
                 true
         );
@@ -191,13 +193,13 @@ public abstract class SQL
 
         for( HashMap<String,String> row : data )
         {
-            results.add( new SearchedPlayer( row.get( "uuid" ), row.get( "nick" ), row.get( "name" ) ) );
+            results.add(new SearchedPlayer(row.get("uuid"), row.get("nick"), row.get("name")));
         }
 
         return results;
     }
 
-    public class SearchedPlayer
+    public static class SearchedPlayer
     {
         private String uuid;
         private String nick;
@@ -228,7 +230,7 @@ public abstract class SQL
 
     public boolean isUsed( String nick )
     {
-        ArrayList<HashMap<String,String>> data = query( "SELECT nick FROM nicky WHERE nick = ?;",
+        ArrayList<HashMap<String,String>> data = query( "SELECT nick FROM $table WHERE nick = ?;",
                 statement -> statement.setString( 1, nick ),
                 true
         );
@@ -248,7 +250,7 @@ public abstract class SQL
     {
         cache.put( uuid, nick );
 
-        query( "INSERT INTO nicky (uuid, nick, name) VALUES (?, ?, ?);", 
+        query( "INSERT INTO $table (uuid, nick, name) VALUES (?, ?, ?);", 
                 statement -> {
                     statement.setString( 1, uuid );
                     statement.setString( 2, nick );
@@ -262,7 +264,7 @@ public abstract class SQL
     {
         cache.put( uuid, null );
 
-        query( "DELETE FROM nicky WHERE uuid = ?;", 
+        query( "DELETE FROM $table WHERE uuid = ?;", 
                 statement -> statement.setString( 1, uuid ),
                 false
         );
@@ -270,7 +272,7 @@ public abstract class SQL
 
     public void updatePlayerName( String uuid, String name )
     {
-        query( "UPDATE nicky SET name = ? WHERE uuid = ?;", 
+        query( "UPDATE $table SET name = ? WHERE uuid = ?;", 
                 statement -> {
                     statement.setString( 1, name );
                     statement.setString( 2, uuid );

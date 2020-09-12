@@ -35,4 +35,9 @@ public class SQLite extends SQL
     {
         return "SQLite";
     }
+
+    @Override
+    protected String getTable() {
+        return "nicky";
+    }
 }

@@ -1,7 +1,7 @@
 # Nicky Config - melonking.net
 # -
 # type - Storage type "sqlite" or "mysql"
-# host/port/user/password/database - MySQL settings, not needed for SQLite
+# host/port/user/password/database/table_name - MySQL settings, not needed for SQLite
 # tab - Should names in the tablist be updated?
 # unique - Should all nicknames be unique?
 # prefix - Add a prefix before nicknames? (Set to '' to disable)
