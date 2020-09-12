@@ -185,11 +185,12 @@ public class Nick
 
     public static boolean isBlacklisted( String nick )
     {
-        nick = ChatColor.translateAlternateColorCodes( '&', nick );
+        String strippedNick = ChatColor.stripColor( ChatColor.translateAlternateColorCodes( '&', nick ) )
+            .toLowerCase();
 
         for( String word : Nicky.getBlacklist() )
         {
-            if( ChatColor.stripColor( nick.toLowerCase() ).contains( word.toLowerCase() ) )
+            if( strippedNick.contains( word.toLowerCase() ) )
             {
                 return true;
             }
