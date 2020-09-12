@@ -36,7 +36,7 @@ public abstract class SQL
         void initialize(PreparedStatement statement) throws SQLException;
     }
     
-    private ArrayList<HashMap<String,String>> query( String sql, StatementInitializer initializer, boolean hasReturn )
+    private synchronized ArrayList<HashMap<String,String>> query( String sql, StatementInitializer initializer, boolean hasReturn )
     {
         if( ! checkConnection() )
         {

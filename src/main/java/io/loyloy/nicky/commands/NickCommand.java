@@ -1,7 +1,11 @@
 package io.loyloy.nicky.commands;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import io.loyloy.nicky.Nick;
 import io.loyloy.nicky.Nicky;
+import io.loyloy.nicky.NickyCommandExecutor;
 import io.loyloy.nicky.NickyMessages;
 import io.loyloy.nicky.databases.SQL;
 import org.bukkit.ChatColor;
@@ -11,21 +15,22 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class NickCommand implements CommandExecutor
+public class NickCommand extends NickyCommandExecutor
 {
-    private Nicky plugin;
 
     public NickCommand( Nicky plugin )
     {
-        this.plugin = plugin;
+        super( plugin );
     }
 
     /**
      * Checks a nickname to see if its valid.
      * @param nickname The nickname to check.
+     * @param player The player trying to set the nickname.
      * @return null on valid nickname, or a string if there's a problem.
      */
-    private String nicknameProblems(String nickname) {
+    private String nicknameProblems( String nickname, CommandSender player )
+    {
         final NickyMessages messages = Nicky.getMessages();
         String strippedNickname = ChatColor.stripColor( ChatColor.translateAlternateColorCodes( '&', nickname ) );
         
@@ -45,20 +50,50 @@ public class NickCommand implements CommandExecutor
                             .replace( "{max}", String.valueOf( Math.min( Nicky.getMaxLength(), SQL.NICKNAME_COLUMN_MAX ) ) );
         }
         
-        if ( !Nick.isValid( strippedNickname ) ) {
+        // Check for disallowed colors.
+        Set<Character> colors = new HashSet<>();
+        int index = -1;
+        while ((index = nickname.indexOf('&', index + 1)) != -1)
+        {
+            if (index == nickname.length() - 1) break;
+            char code = nickname.charAt(index + 1);
+            if ( colors.contains(code) ) continue;
+            
+            // Check for an invalid color.
+            // I'm not sure if Bukkit will throw or return null, so we cover both bases here.
+            try {
+                if ( ChatColor.getByChar(code) == null ) throw new ClassCastException();
+            } catch ( ClassCastException ex ) {
+                return messages.PREFIX +
+                        messages.ERROR_NICKNAME_COLOR_INVALID
+                                .replace( "{code}", String.valueOf( code ) );
+            }
+            
+            // Check if the color is allowed. 
+            if ( player != null && !player.hasPermission("nicky.color." + code) )
+            {
+                return messages.PREFIX + 
+                        messages.ERROR_NICKNAME_COLOR_NO_PERMISSION
+                                .replace( "{code}", String.valueOf( code ) );
+            }
+
+            // Add the color to skip checks for next time.
+            colors.add( code );
+        }
+        
+        // Check for invalid characters.
+        if ( !Nick.isValid( strippedNickname ) )
+        {
             return messages.PREFIX + messages.ERROR_NICKNAME_INVALID;
         }
         
         return null;
     }
 
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
+    @Override
+    public void execute( Player sender, Command cmd, String commandLabel, String[] args )
     {
-        if( ! (sender instanceof Player) )
-        {
-            runAsConsole( args );
-        }
-        else if( args.length >= 2 )
+        if( sender.hasPermission( "nicky.set.other" ) && args.length >= 2 )
         {
             runAsAdmin( sender, args );
         }
@@ -66,92 +101,126 @@ public class NickCommand implements CommandExecutor
         {
             runAsPlayer( sender, args );
         }
-
-        return true;
     }
 
-    private void runAsConsole( String[] args )
+    @Override
+    protected void executeFromConsole( CommandSender sender, Command cmd, String commandLabel, String[] args )
+    {
+        runAsAdmin( sender, args );
+    }
+    
+    private void setNickname( CommandSender sender, OfflinePlayer target, String nickname )
     {
         final NickyMessages messages = Nicky.getMessages();
-        if( args.length >= 2  )
+        final String nicknamePlain = ChatColor.stripColor( ChatColor.translateAlternateColorCodes( '&', nickname ) );
+        
+        // If the nickname is the same as the player name, run /delnick.
+        if( nickname.equals( target.getName() ) )
         {
-            OfflinePlayer receiver = plugin.getServer().getOfflinePlayer( args[0] );
+            (new DelNickCommand( plugin )).delNickname( sender, target );
+            return;
+        }
 
-            if( !receiver.hasPlayedBefore() )
-            {
-                plugin.log( ChatColor.stripColor(
-                        messages.PREFIX + 
-                        messages.ERROR_PLAYER_NOT_FOUND.replace( "{player}", args[0] )
-                ) );
-                return;
-            }
+        // If there's problems using that nickname, let the player know.
+        String problems = nicknameProblems( nickname, sender );
+        if ( problems != null ) {
+            sender.sendMessage( problems );
+            return;
+        }
 
-            String nickname = args[1].trim();
+        // Check if the nick is blacklisted.
+        Nick nick = new Nick( target );
+        if( Nick.isBlacklisted( nickname ) && !sender.hasPermission( "nicky.noblacklist" ) )
+        {
+            sender.sendMessage(
+                    messages.PREFIX +
+                    messages.ERROR_NICKNAME_BLACKLISTED
+                            .replace( "{nickname}", nicknamePlain )
+            );
+            return;
+        }
 
-            if( nickname.equals( receiver.getName() ) )
-            {
-                new DelNickCommand( plugin ).runAsConsole( args );
-                return;
-            }
+        // Check if the nick is used.
+        if( Nick.isUsed( nickname ) )
+        {
+            sender.sendMessage(
+                    messages.PREFIX +
+                    messages.ERROR_NICKNAME_TAKEN
+                            .replace( "{nickname}", nicknamePlain )
+            );
+            return;
+        }
 
-            String problems = nicknameProblems( nickname );
-            if ( problems != null ) {
-                plugin.log( ChatColor.stripColor( problems ) );
-                return;
+        // Set the nickname.
+        nick.set( nickname );
+        nickname = nick.get();
+
+        // Notify the player(s).
+        if( target == sender )
+        {
+            sender.sendMessage(
+                    messages.PREFIX +
+                    messages.NICKNAME_CHANGED_OWN
+                            .replace( "{username}", sender.getName() )
+                            .replace( "{nickname}", nickname )
+            );
+        } else {
+            String senderNickname = sender.getName();
+            if ( sender instanceof Player ) {
+                Nick senderNick = new Nick( (Player) sender );
+                String senderNickString = senderNick.get();
+                if ( senderNickString != null ) {
+                    senderNickname = senderNickString;
+                }
             }
             
-            Nick nick = new Nick( receiver );
-
-            if( Nick.isUsed( nick.formatForDatabase( nickname ) ) )
+            if( target.isOnline() )
             {
-                plugin.log( ChatColor.stripColor(
+                target.getPlayer().sendMessage(
                         messages.PREFIX +
-                        messages.ERROR_NICKNAME_TAKEN
-                                .replace( "{nickname}", nickname )
-                ) );
-                return;
-            }
-
-            nick.set( nickname );
-            nickname = nick.get();
-
-            if( receiver.isOnline() )
-            {
-                receiver.getPlayer().sendMessage(
-                        messages.PREFIX +
-                        messages.NICKNAME_WAS_CHANGED
-                                .replace( "{nickname}", nickname )
-                                .replace( "{admin}", "console" )
-                                .replace( "{admin_nickname}", "console" )
+                                messages.NICKNAME_WAS_CHANGED
+                                        .replace("{nickname}", nickname)
+                                        .replace("{admin}", sender.getName())
+                                        .replace("{admin_nickname}", senderNickname)
                 );
             }
-            plugin.log( ChatColor.stripColor(
+
+            sender.sendMessage(
                     messages.PREFIX +
-                    messages.NICKNAME_CHANGED_OTHER
-                            .replace( "{receiver}", receiver.getName() )
-                            .replace( "{receiver_nickname}", nickname )
-            ) );
-        }
-        else
-        {
-            plugin.log( ChatColor.stripColor( messages.COMMAND_NICK_USAGE_PLAYER ) );
+                        messages.NICKNAME_CHANGED_OTHER
+                                .replace( "{receiver}", target.getName() )
+                                .replace( "{receiver_nickname}", nickname )
+            );
         }
     }
 
+    @SuppressWarnings("deprecation")
     private void runAsAdmin( CommandSender sender, String[] args )
     {
         final NickyMessages messages = Nicky.getMessages();
-        OfflinePlayer receiver = plugin.getServer().getOfflinePlayer( args[0] );
         
-        String senderNickname = sender.getName();
-        if ( sender instanceof Player ) {
-            Nick nick = new Nick( (Player) sender );
-            String nickString = nick.get();
-            if ( nickString != null ) {
-                senderNickname = nickString;
-            }
+        OfflinePlayer receiver = plugin.getServer().getOfflinePlayer( args[0] );
+        String nickname = args[1];
+
+        // Show no permission message if no perms.
+        if( !sender.hasPermission( "nicky.set.other" ) )
+        {
+            sender.sendMessage(
+                    messages.PREFIX +
+                    messages.ERROR_CHANGE_OTHER_PERMISSION
+                        .replace( "{receiver}", args[0] )
+            );
+            return;
         }
         
+        // Show usage message if invalid usage.
+        if( args.length > 2 )
+        {
+            sender.sendMessage( messages.COMMAND_NICK_USAGE_ADMIN );
+            return;
+        }
+
+        // Make sure the target player has played at least once before.
         if( !receiver.hasPlayedBefore() )
         {
             sender.sendMessage(
@@ -160,139 +229,28 @@ public class NickCommand implements CommandExecutor
             );
             return;
         }
-
-        String nickname = args[1];
-
-        if( sender.hasPermission( "nicky.set.other" ) )
-        {
-            if( nickname.equals( receiver.getName() ) )
-            {
-                new DelNickCommand( plugin ).runAsAdmin( sender, args );
-                return;
-            }
-
-            String problems = nicknameProblems( nickname );
-            if ( problems != null ) {
-                sender.sendMessage( problems );
-                return;
-            }
-
-            Nick nick = new Nick( receiver );
-
-            if( Nick.isBlacklisted( nickname ) && !sender.hasPermission( "nicky.noblacklist" ) )
-            {
-                sender.sendMessage(
-                        messages.PREFIX +
-                        messages.ERROR_NICKNAME_BLACKLISTED
-                                .replace( "{nickname}", nickname )
-                );
-                return;
-            }
-
-            if( Nick.isUsed( nick.formatForDatabase( nickname ) ) )
-            {
-                sender.sendMessage(
-                        messages.PREFIX +
-                        messages.ERROR_NICKNAME_TAKEN
-                                .replace( "{nickname}", nickname )
-                );
-                return;
-            }
-
-            nick.set( nickname );
-            nickname = nick.get();
-
-            if( receiver.isOnline() )
-            {
-                receiver.getPlayer().sendMessage(
-                        messages.PREFIX +
-                        messages.NICKNAME_WAS_CHANGED
-                            .replace("{nickname}", nickname)
-                            .replace("{admin}", sender.getName())
-                            .replace("{admin_nickname}", senderNickname)
-                );
-            }
-
-            sender.sendMessage(
-                    messages.PREFIX +
-                    messages.NICKNAME_CHANGED_OTHER
-                            .replace( "{receiver}", receiver.getName() )
-                            .replace( "{receiver_nickname}", nickname )
-            );
-        }
-        else
-        {
-            sender.sendMessage(
-                    messages.PREFIX +
-                    messages.ERROR_CHANGE_OTHER_PERMISSION
-                            .replace( "{receiver}", receiver.getName() )
-            );
-        }
+        
+        setNickname( sender, receiver, nickname );
     }
 
-    private void runAsPlayer( CommandSender sender, String[] args )
+    private void runAsPlayer( Player sender, String[] args )
     {
         final NickyMessages messages = Nicky.getMessages();
-        Player player = (Player) sender;
 
-        if( sender.hasPermission( "nicky.set" ) )
+        // Show no permission message if no perms.
+        if( !sender.hasPermission( "nicky.set" ) )
         {
-            if( args.length >= 1 )
-            {
-                String nickname = args[0];
-
-                if( nickname.equals( sender.getName() ) )
-                {
-                    new DelNickCommand( plugin ).runAsPlayer( sender );
-                    return;
-                }
-                
-                String problems = nicknameProblems( nickname );
-                if ( problems != null ) {
-                    sender.sendMessage( problems );
-                    return;
-                }
-                
-                Nick nick = new Nick( player );
-
-                if( Nick.isBlacklisted( nickname ) && !player.hasPermission( "nicky.noblacklist" ) )
-                {
-                    player.sendMessage(
-                            messages.PREFIX +
-                            messages.ERROR_NICKNAME_BLACKLISTED
-                                    .replace( "{nickname}", nickname )
-                    );
-                    return;
-                }
-
-                if( Nick.isUsed( nick.formatForDatabase( nickname ) ) )
-                {
-                    player.sendMessage(
-                            messages.PREFIX +
-                            messages.ERROR_NICKNAME_TAKEN
-                                    .replace( "{nickname}", nickname )
-                    );
-                    return;
-                }
-
-                nick.set( nickname );
-                nickname = nick.get();
-
-                player.sendMessage(
-                        messages.PREFIX +
-                        messages.NICKNAME_CHANGED_OWN
-                                .replace( "{username}", player.getName() )
-                                .replace( "{nickname}", nickname )
-                );
-            }
-            else
-            {
-                player.sendMessage( messages.PREFIX + messages.COMMAND_NICK_USAGE_PLAYER );
-            }
+            sender.sendMessage( messages.PREFIX + messages.ERROR_CHANGE_OWN_PERMISSION );
+            return;
         }
-        else
+
+        // Show usage message if invalid usage.
+        if( args.length != 1 )
         {
-            player.sendMessage( messages.PREFIX + messages.ERROR_CHANGE_OWN_PERMISSION );
+            sender.sendMessage( messages.COMMAND_NICK_USAGE_PLAYER );
+            return;
         }
+
+        setNickname( sender, sender, args[0] );
     }
 }

@@ -90,6 +90,9 @@ public class Nick
         {
             unSet();
         }
+        
+        // Replace chat color codes with ampersand.
+        nickname = nickname.replace( ChatColor.COLOR_CHAR, '&' );
 
         // Safeguard against invalid nicknames.
         if ( !isValid( nickname ) )
@@ -110,67 +113,50 @@ public class Nick
     }
 
     /**
-     * @deprecated Use {@link #formatForDatabase(String)} or {@link #formatForServer(String)}
-     */
-    @Deprecated
-    public String format( String nickname )
-    {
-        return formatWithFlags( nickname, true );
-    }
-
-    /**
      * Formats a nickname for database lookup/storage.
-     * Use this when compare nicknames to the stored one.
+     * Use this when comparing nicknames to the stored one.
      * 
      * @param nickname The nickname to format.
      * @return The formatted nickname.
      */
-    public String formatForDatabase( String nickname )
-    {
-        return formatWithFlags( nickname, false );
-    }
-
-    public String formatForServer( String nickname )
-    {
-        if( !Nicky.getNickPrefix().equals( "" ) )
-        {
-            String prefix = ChatColor.translateAlternateColorCodes( '&', Nicky.getNickPrefix() );
-            nickname = prefix + nickname;
-        }
-        
-        nickname += ChatColor.RESET;
-        return nickname;
-    }
-
-    /**
-     * @deprecated Use {@link #formatForDatabase(String)} or {@link #formatForServer(String)}
-     */
-    @Deprecated
-    public String formatWithFlags( String nickname, boolean addPrefix )
+    public static String formatForDatabase( String nickname )
     {
         if( nickname.length() > Nicky.getMaxLength() )
         {
             nickname = nickname.substring( 0, Nicky.getMaxLength() + 1 );
         }
-
-        nickname = Utils.translateColors( nickname, offlinePlayer );
-
-        if( !Nicky.getCharacters().equals( "" ) )
-        {
-            nickname = nickname.replaceAll( Nicky.getCharacters(), "" );
-        }
-
-        // ADDED TO KEEP API COMPATIBLE. DO NOT ACTUALLY USE THIS METHOD
-        if( addPrefix )
-        {
-            nickname = formatForServer( nickname );
-        }
         
-        return nickname;
+        return stripInvalid(nickname);
     }
 
     /**
-     * @see #formatForDatabase(String) 
+     * Formats a nickname for server usage.
+     * Use this when setting a player's displayname.
+     *
+     * @param nickname The nickname to format.
+     * @return The formatted nickname.
+     */
+    public static String formatForServer( String nickname )
+    {
+        StringBuilder builder = new StringBuilder();
+
+        
+        // Add prefix.
+        if( !Nicky.getNickPrefix().isEmpty() )
+        {
+            String prefix = ChatColor.translateAlternateColorCodes( '&', Nicky.getNickPrefix() );
+            builder.append(prefix);
+        }
+        
+        // Add nickname.
+        builder.append( ChatColor.translateAlternateColorCodes( '&', stripInvalid( nickname ) ) );
+        
+        // Add reset character.
+        builder.append( ChatColor.RESET.toString() );
+        return builder.toString();
+    }
+
+    /**
      * @param nick The preformatted nickname.
      * @return True if the nickname is used AND the unique configuration value is true.
      */
@@ -178,7 +164,7 @@ public class Nick
     {
         if( Nicky.isUnique() )
         {
-            return database.isUsed( nick );
+            return database.isUsed( formatForDatabase( nick ) );
         }
         return false;
     }
@@ -228,9 +214,35 @@ public class Nick
         return true;
     }
 
+    /**
+     * @deprecated Use {@link io.loyloy.nicky.NickQuery} instead. 
+     */
+    @Deprecated
     public static List<SQL.SearchedPlayer> searchGet( String search )
     {
         return database.searchNicks( search );
+    }
+
+    /**
+     * Strips invalid characters from a player's nickname.
+     * @param nickname The nickname.
+     * @return The stripped nickname.
+     */
+    private static String stripInvalid( String nickname )
+    {
+        String allowedRegex = Nicky.getCharacters();
+        if( allowedRegex.isEmpty() ) return nickname;
+        
+        StringBuilder sb = new StringBuilder();
+        Pattern pattern = Pattern.compile( Nicky.getCharacters() );
+        for ( char c : nickname.toCharArray() )
+        {
+            if ( c == '&' || !pattern.matcher( String.valueOf( c ) ).matches() ) {
+                sb.append( c );
+            }
+        }
+
+        return sb.toString();
     }
 
     private void refresh()

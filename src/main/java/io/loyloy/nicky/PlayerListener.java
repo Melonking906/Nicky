@@ -24,7 +24,9 @@ public class PlayerListener implements Listener
 
         nick.load();
 
-        Nicky.getNickDatabase().updatePlayerName( player.getUniqueId().toString(), player.getName() );
+        Nicky.plugin.getServer().getScheduler().runTaskAsynchronously( Nicky.plugin, () -> {
+            Nicky.getNickDatabase().updatePlayerName( player.getUniqueId().toString(), player.getName() );
+        } );
     }
 
     @EventHandler

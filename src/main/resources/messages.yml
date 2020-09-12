@@ -10,6 +10,7 @@ leave: '&e{nickname} &chas disconnected!'
 command_nick_usage_admin: '&aUsage: /nick <player> <nickname>'
 command_nick_usage_player: '&aTo set a nick do &e/nick <nickname>'
 command_delnick_usage_admin: '&aUsage: /delnick <player>'
+command_delnick_usage_player: '&aUsage: /delnick'
 command_realname_usage: '&aTo check a nickname do &e"/realname <search>"'
 
 # Command messages:
@@ -21,7 +22,6 @@ nickname_deleted_other: "&a{receiver}'s nickname has been deleted!"
 nickname_was_deleted: '&aYour nickname has been deleted by {admin_nickname}.'
 realname_nobody: '&aNo one has a nickname containing: &e{query}'
 realname_found: '&aPlayers with a nickname containing: &e{query}'
-realname_found_offline: '&7Players not on your server or offline:'
 realname_found_entry: '&e{nickname}&7 -> &e{username}'
 
 # Help messages:
@@ -45,6 +45,8 @@ error_search_too_short: '&eYour search must be at least {min} characters!'
 error_nickname_too_short: '&cNicks must be at least &e{min}&c characters.'
 error_nickname_too_long: '&cNicks must be at most &e{max}&c characters.'
 error_nickname_invalid: '&cYour nickname contains invalid characters.'
+error_nickname_color_invalid: '&cYour nickname contains an invalid color code.'
+error_nickname_color_no_permission: '&cYou cannot use &{code} in your nickname.'
 error_nickname_taken: '&cSorry the nick &e{nickname}&c is already in use :('
 error_nickname_blacklisted: '&cSorry but &e{nickname}&c contains a blacklisted word :('
 

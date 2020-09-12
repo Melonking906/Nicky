@@ -25,7 +25,7 @@ public class Nicky extends JavaPlugin
 {
     private static NickyMessages MESSAGES;
     
-    private static JavaPlugin plugin;
+    static JavaPlugin plugin;
 
     private final Set<SQL> databases;
     private static SQL DATABASE;
@@ -41,11 +41,11 @@ public class Nicky extends JavaPlugin
     private static boolean USE_JOIN_LEAVE;
 
     private static Permission VAULT_PERMS = null;
-    private static HashMap<UUID, String> nicknames = new HashMap();
+    private static HashMap<UUID, String> nicknames = new HashMap<>();
 
     public Nicky()
     {
-        databases = new HashSet();
+        databases = new HashSet<>();
     }
 
     @Override
@@ -61,12 +61,12 @@ public class Nicky extends JavaPlugin
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents( new PlayerListener(), this );
 
-        BLACKLIST = new ArrayList();
+        BLACKLIST = new ArrayList<>();
         reloadNickyConfig();
 
         getCommand( "nick" ).setExecutor( new NickCommand( this ) );
         getCommand( "delnick" ).setExecutor( new DelNickCommand( this ) );
-        getCommand( "realname" ).setExecutor( new RealNameCommand() );
+        getCommand( "realname" ).setExecutor( new RealNameCommand( this ) );
         getCommand( "nicky" ).setExecutor( new NickyCommand( this ) );
 
         if( !setupPermissions() )

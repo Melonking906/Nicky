@@ -22,6 +22,8 @@ public class NickyMessages
     public final String ERROR_NICKNAME_TAKEN;
     public final String ERROR_NICKNAME_BLACKLISTED;
     public final String ERROR_NICKNAME_INVALID;
+    public final String ERROR_NICKNAME_COLOR_INVALID;
+    public final String ERROR_NICKNAME_COLOR_NO_PERMISSION;
     public final String ERROR_CHANGE_OWN_PERMISSION;
     public final String ERROR_CHANGE_OTHER_PERMISSION;
     public final String ERROR_REALNAME_PERMISSION;
@@ -36,11 +38,11 @@ public class NickyMessages
     public final String NICKNAME_WAS_DELETED;
     public final String REALNAME_NOBODY;
     public final String REALNAME_FOUND;
-    public final String REALNAME_FOUND_OFFLINE;
     public final String REALNAME_FOUND_ENTRY;
     public final String COMMAND_NICK_USAGE_ADMIN;
     public final String COMMAND_NICK_USAGE_PLAYER;
     public final String COMMAND_DELNICK_USAGE_ADMIN;
+    public final String COMMAND_DELNICK_USAGE_PLAYER;
     public final String HELP_HEADER;
     public final String HELP_FOOTER;
     public final String HELP_COMMAND_NICK;
@@ -67,6 +69,8 @@ public class NickyMessages
         ERROR_NICKNAME_TAKEN = message (messages, "error_nickname_taken" );
         ERROR_NICKNAME_BLACKLISTED = message (messages, "error_nickname_blacklisted" );
         ERROR_NICKNAME_INVALID = message (messages, "error_nickname_invalid" );
+        ERROR_NICKNAME_COLOR_INVALID = message (messages, "error_nickname_color_invalid" );
+        ERROR_NICKNAME_COLOR_NO_PERMISSION = message (messages, "error_nickname_color_no_permission" );
         ERROR_CHANGE_OWN_PERMISSION = message (messages, "error_change_own_permission" );
         ERROR_CHANGE_OTHER_PERMISSION = message (messages, "error_change_other_permission" );
         ERROR_DELETE_OWN_PERMISSION = message (messages, "error_delete_own_permission" );
@@ -78,6 +82,7 @@ public class NickyMessages
         COMMAND_NICK_USAGE_ADMIN = message (messages, "command_nick_usage_admin" );
         COMMAND_NICK_USAGE_PLAYER = message (messages, "command_nick_usage_player" );
         COMMAND_DELNICK_USAGE_ADMIN = message (messages, "command_delnick_usage_admin" );
+        COMMAND_DELNICK_USAGE_PLAYER = message (messages, "command_delnick_usage_player" );
         NICKNAME_CHANGED_OWN = message (messages, "nickname_changed_own" );
         NICKNAME_CHANGED_OTHER = message (messages, "nickname_changed_other" );
         NICKNAME_WAS_CHANGED = message (messages, "nickname_was_changed" );
@@ -87,7 +92,6 @@ public class NickyMessages
         REALNAME_NOBODY = message (messages, "realname_nobody" );
         REALNAME_FOUND = message (messages, "realname_found" );
         REALNAME_FOUND_ENTRY = message (messages, "realname_found_entry" );
-        REALNAME_FOUND_OFFLINE = message (messages, "realname_found_offline" );
 
         // Help Messages
         HELP_HEADER = message (messages, "help_header" );

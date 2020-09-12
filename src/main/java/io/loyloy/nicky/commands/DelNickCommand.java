@@ -2,6 +2,7 @@ package io.loyloy.nicky.commands;
 
 import io.loyloy.nicky.Nick;
 import io.loyloy.nicky.Nicky;
+import io.loyloy.nicky.NickyCommandExecutor;
 import io.loyloy.nicky.NickyMessages;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -10,163 +11,143 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class DelNickCommand implements CommandExecutor
+public class DelNickCommand extends NickyCommandExecutor
 {
-    private Nicky plugin;
-
     public DelNickCommand( Nicky plugin )
     {
-        this.plugin = plugin;
+        super( plugin );
     }
 
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args)
+    protected void execute( Player sender, Command cmd, String commandLabel, String[] args )
     {
-        if( ! (sender instanceof Player) )
-        {
-            runAsConsole( args );
-        }
-        else if( args.length >= 1 )
+        final NickyMessages messages = Nicky.getMessages();
+        
+        // Run command as admin or player.
+        if( sender.hasPermission( "nicky.del.other" ) && args.length > 0 )
         {
             runAsAdmin( sender, args );
         }
         else
         {
-            runAsPlayer( sender );
+            runAsPlayer( sender, args );
         }
-
-        return true;
     }
 
-    @SuppressWarnings("deprecation")
-    public void runAsConsole( String[] args )
+    @Override
+    protected void executeFromConsole(CommandSender sender, Command cmd, String label, String[] args) {
+        runAsAdmin( sender, args );
+    }
+
+    void delNickname( CommandSender sender, OfflinePlayer target )
     {
         final NickyMessages messages = Nicky.getMessages();
-        if( args.length >= 1 )
-        {
-            OfflinePlayer receiver = plugin.getServer().getOfflinePlayer( args[0] );
+        
+        // Delete the target's nickname.
+        Nick nick = new Nick( target );
+        String oldNick = nick.get();
+        if ( oldNick == null ) oldNick = target.getName();
 
-            if( !receiver.hasPlayedBefore() )
-            {
-                plugin.log( ChatColor.stripColor( 
-                        messages.PREFIX +
-                        messages.ERROR_PLAYER_NOT_FOUND.replace( "{player}", args[0]) 
-                ) );
-                return;
+        nick.unSet();
+
+        // Notify the player(s).
+        if ( sender == target )
+        {
+            sender.sendMessage(
+                    messages.PREFIX +
+                    messages.NICKNAME_DELETED_OWN
+                            .replace("{username}", sender.getName())
+                            .replace("{nickname}", oldNick)
+            );
+        } else {
+            String senderNickname = sender.getName();
+            if ( sender instanceof Player ) {
+                Nick senderNick = new Nick( (Player) sender );
+                String senderNickString = senderNick.get();
+                if ( senderNickString != null ) {
+                    senderNickname = senderNickString;
+                }
             }
 
-            Nick nick = new Nick( receiver );
-            String oldNick = nick.get();
-            if ( oldNick == null ) oldNick = receiver.getName();
-            
-            nick.unSet();
-
-            if( receiver.isOnline() )
+            if( target.isOnline() )
             {
-                receiver.getPlayer().sendMessage(
+                target.getPlayer().sendMessage(
                         messages.PREFIX +
                         messages.NICKNAME_WAS_DELETED
-                                .replace( "{player}", receiver.getName() )
-                                .replace( "{nickname}", oldNick )
-                                .replace( "{admin}", "console" )
-                                .replace( "{admin_nickname}", "console" )
+                                .replace("{nickname}", oldNick)
+                                .replace("{admin}", sender.getName())
+                                .replace("{admin_nickname}", senderNickname)
                 );
             }
 
-            plugin.log( ChatColor.stripColor(
+            sender.sendMessage(
                     messages.PREFIX +
                     messages.NICKNAME_DELETED_OTHER
-                        .replace( "{receiver}", receiver.getName() )
-                        .replace( "{receiver_nickname}", oldNick )
-            ) );
-        }
-        else
-        {
-            plugin.log( ChatColor.stripColor( messages.COMMAND_DELNICK_USAGE_ADMIN )  );
+                            .replace( "{receiver}", target.getName() )
+                            .replace( "{receiver_nickname}", oldNick )
+            );
         }
     }
-
+    
     @SuppressWarnings("deprecation")
     public void runAsAdmin( CommandSender sender, String[] args )
     {
         final NickyMessages messages = Nicky.getMessages();
-        OfflinePlayer receiver = plugin.getServer().getOfflinePlayer( args[0] );
+        OfflinePlayer target = plugin.getServer().getOfflinePlayer( args[0] );
 
-        String senderNickname = sender.getName();
-        if ( sender instanceof Player ) {
-            Nick nick = new Nick( (Player) sender );
-            String nickString = nick.get();
-            if ( nickString != null ) {
-                senderNickname = nickString;
-            }
-        }
-        
-        if( !receiver.hasPlayedBefore() )
-        {
-            sender.sendMessage(
-                    messages.PREFIX +
-                    messages.ERROR_PLAYER_NOT_FOUND.replace( "{player}", args[0] )
-            );
-            return;
-        }
-
-        if( sender.hasPermission( "nicky.del.other" ) )
-        {
-            Nick nick = new Nick( receiver );
-            String oldNick = nick.get();
-            if ( oldNick == null ) oldNick = receiver.getName();
-
-            nick.unSet();
-
-            if( receiver.isOnline() )
-            {
-                receiver.getPlayer().sendMessage(
-                        messages.PREFIX +
-                        messages.NICKNAME_WAS_DELETED
-                            .replace("{username}", receiver.getName())
-                            .replace("{nickname}", oldNick)
-                            .replace("{admin}", sender.getName())
-                            .replace("{admin_nickname}", senderNickname)
-                );
-            }
-
-            sender.sendMessage(
-                    messages.PREFIX +
-                    messages.NICKNAME_CHANGED_OTHER
-                            .replace( "{receiver}", receiver.getName() )
-                            .replace( "{receiver_nickname}", oldNick )
-            );
-        }
-        else
+        // Show no permission message if no perms.
+        if( !(sender.hasPermission( "nicky.del.other" ) || sender.hasPermission("nicky.set.other")) )
         {
             sender.sendMessage(
                     messages.PREFIX +
                     messages.ERROR_DELETE_OTHER_PERMISSION
-                            .replace( "{receiver}", receiver.getName() )
+                            .replace( "{receiver}", args[0] )
             );
+            return;
         }
-    }
 
-    public void runAsPlayer( CommandSender sender )
-    {
-        final NickyMessages messages = Nicky.getMessages();
-        if( sender.hasPermission( "nicky.del" ) )
+        // Show usage message if invalid usage.
+        if( args.length > 1 )
         {
-            Nick nick = new Nick( (Player) sender );
-            String oldNick = nick.get();
-            if ( oldNick == null ) oldNick = sender.getName();
-
-            nick.unSet();
-
+            sender.sendMessage( messages.COMMAND_DELNICK_USAGE_ADMIN );
+            return;
+        }
+        
+        // Make sure the target player has played at least once before.
+        if( !target.hasPlayedBefore() && new Nick(target).get() == null )
+        {
             sender.sendMessage(
                     messages.PREFIX +
-                    messages.NICKNAME_DELETED_OWN
-                        .replace("{username}", sender.getName())
-                        .replace("{nickname}", oldNick)
+                    messages.ERROR_PLAYER_NOT_FOUND
+                            .replace( "{player}", args[0] )
             );
+            return;
         }
-        else
+
+        delNickname( sender, target );
+    }
+
+    public void runAsPlayer( Player sender, String[] args )
+    {
+        final NickyMessages messages = Nicky.getMessages();
+        
+        // Show no permission message if no perms.
+        if( !sender.hasPermission( "nicky.del" ) )
         {
-            sender.sendMessage( messages.PREFIX + messages.ERROR_DELETE_OWN_PERMISSION );
+            sender.sendMessage(
+                    messages.PREFIX +
+                    messages.ERROR_DELETE_OWN_PERMISSION
+                        .replace( "{receiver}", sender.getName() )
+            );
+            return;
         }
+
+        // Show usage message if invalid usage.
+        if( args.length != 0 )
+        {
+            sender.sendMessage( messages.COMMAND_DELNICK_USAGE_PLAYER );
+            return;
+        }
+        
+        delNickname( sender, sender );
     }
 }
