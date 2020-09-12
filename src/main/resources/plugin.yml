@@ -38,6 +38,18 @@ permissions:
         default: op
     nicky.realname:
         default: op
+    nicky.limit.color.*:
+        default: op
+    nicky.limit.color.1:
+        default: op
+    nicky.limit.color.2:
+        default: op
+    nicky.limit.color.3:
+        default: op
+    nicky.limit.color.4:
+        default: op
+    nicky.limit.color.5:
+        default: op
     nicky.color:
         default: op
         children:

@@ -82,6 +82,28 @@ public class NickCommand extends NickyCommandExecutor
             colors.add( code );
         }
         
+        // Check for color limit.
+        if ( Nicky.useColorLimit() )
+        {
+            int colorsUsed = colors.size();
+            int colorsMax = ChatColor.values().length;
+            boolean allowed = false;
+            for ( int i = colorsUsed; i <= colorsMax; i++ )
+            {
+                if ( player.hasPermission( "nicky.limit.color." + i ) )
+                {
+                    allowed = true;
+                    break;
+                }
+            }
+            
+            if ( !allowed )
+            {
+                return messages.PREFIX +
+                        messages.ERROR_NICKNAME_COLOR_TOO_MANY;
+            }
+        }
+        
         // Check for invalid characters.
         if ( !Nick.isValid( strippedNickname ) )
         {

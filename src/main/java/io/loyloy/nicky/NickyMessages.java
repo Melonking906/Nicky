@@ -24,6 +24,7 @@ public class NickyMessages
     public final String ERROR_NICKNAME_INVALID;
     public final String ERROR_NICKNAME_COLOR_INVALID;
     public final String ERROR_NICKNAME_COLOR_NO_PERMISSION;
+    public final String ERROR_NICKNAME_COLOR_TOO_MANY;
     public final String ERROR_CHANGE_OWN_PERMISSION;
     public final String ERROR_CHANGE_OTHER_PERMISSION;
     public final String ERROR_REALNAME_PERMISSION;
@@ -71,6 +72,7 @@ public class NickyMessages
         ERROR_NICKNAME_INVALID = message (messages, "error_nickname_invalid" );
         ERROR_NICKNAME_COLOR_INVALID = message (messages, "error_nickname_color_invalid" );
         ERROR_NICKNAME_COLOR_NO_PERMISSION = message (messages, "error_nickname_color_no_permission" );
+        ERROR_NICKNAME_COLOR_TOO_MANY = message (messages, "error_nickname_color_too_many" );
         ERROR_CHANGE_OWN_PERMISSION = message (messages, "error_change_own_permission" );
         ERROR_CHANGE_OTHER_PERMISSION = message (messages, "error_change_other_permission" );
         ERROR_DELETE_OWN_PERMISSION = message (messages, "error_delete_own_permission" );

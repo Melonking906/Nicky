@@ -39,6 +39,7 @@ public class Nicky extends JavaPlugin
     private static List<String> BLACKLIST;
 
     private static boolean USE_JOIN_LEAVE;
+    private static boolean USE_COLOR_LIMIT;
 
     private static Permission VAULT_PERMS = null;
     private static HashMap<UUID, String> nicknames = new HashMap<>();
@@ -142,6 +143,7 @@ public class Nicky extends JavaPlugin
             BLACKLIST.clear();
             BLACKLIST = config.getStringList( "blacklist" );
 
+            USE_COLOR_LIMIT = config.getBoolean( "enable_color_limit" );
             USE_JOIN_LEAVE = config.getBoolean( "enable_join_leave" );
 
             // Load messages.
@@ -242,7 +244,11 @@ public class Nicky extends JavaPlugin
             List<String> listOfStrings = Arrays.asList( "Melonking", "Admin" );
             config.set( "blacklist", listOfStrings );
         }
-
+        if( ! config.isSet( "enable_color_limit" ) )
+        {
+            config.set( "enable_color_limit", false );
+        }
+        
         // Join Leave
         if( ! config.isSet( "enable_join_leave" ) )
         {
@@ -327,6 +333,8 @@ public class Nicky extends JavaPlugin
     public static String getCharacters() { return CHARACTERS; }
 
     public static boolean useJoinLeave() { return USE_JOIN_LEAVE; }
+
+    public static boolean useColorLimit() { return USE_COLOR_LIMIT; }
 
     public static NickyMessages getMessages() { return MESSAGES; }
     
