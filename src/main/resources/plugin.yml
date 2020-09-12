@@ -5,6 +5,7 @@ api-version: 1.14
 description: Simple SQL nickname plugin.
 author: Melonking
 depend: [Vault]
+softdepend: [PlaceholderAPI]
 
 commands:
    nicky:

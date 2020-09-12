@@ -16,7 +16,7 @@ import java.util.concurrent.FutureTask;
 
 public class RealNameCommand extends NickyCommandExecutor
 {
-    private static final int DEFAULT_MIN_SEARCH_LENGTH = 3;
+    private static final int DEFAULT_MIN_SEARCH_LENGTH = 1;
 
     public RealNameCommand( Nicky plugin )
     {
@@ -103,7 +103,7 @@ public class RealNameCommand extends NickyCommandExecutor
                         sender.sendMessage(
                                 messages.PREFIX +
                                 messages.REALNAME_FOUND_ENTRY
-                                        .replace("{nickname}", result.getNickname())
+                                        .replace("{nickname}", result.getPlainNickname())
                                         .replace("{username}", result.getUsername())
                         );
                     }
@@ -115,7 +115,7 @@ public class RealNameCommand extends NickyCommandExecutor
                         sender.sendMessage(
                                 messages.PREFIX +
                                 messages.REALNAME_FOUND_ENTRY
-                                        .replace("{nickname}", result.getNickname())
+                                        .replace("{nickname}", result.getPlainNickname())
                                         .replace("{username}", result.getUsername())
                         );
                     }

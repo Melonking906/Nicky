@@ -177,17 +177,10 @@ public abstract class SQL
     public List<SearchedPlayer> searchNicks( String search )
     {
         List<SearchedPlayer> results = new ArrayList<>();
-
-        StringBuilder sqlSearch = new StringBuilder("%");
-        for( char c : search.toCharArray() )
-        {
-            sqlSearch.append(c).append("%");
-        }
-
-        final String querySearch = sqlSearch.toString();
+        
         ArrayList<HashMap<String, String>> data = query( 
                 "SELECT uuid, nick, name FROM $table WHERE nick LIKE ?;",
-                statement -> statement.setString(1, querySearch),
+                statement -> statement.setString(1, "%" + search + "%"),
                 true
         );
 
@@ -247,10 +240,7 @@ public abstract class SQL
 
     public void removeFromCache( String uuid )
     {
-        if( cache.containsKey( uuid ) )
-        {
-            cache.remove( uuid );
-        }
+        cache.remove( uuid );
     }
 
     public void uploadNick( String uuid, String nick, String name )
