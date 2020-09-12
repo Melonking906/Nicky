@@ -7,6 +7,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -157,16 +158,32 @@ public class Nick
     }
 
     /**
-     * @param nick The preformatted nickname.
+     * Checks if a nickname is in use by any player.
+     * This considers color codes to be equivalent.
+     * 
+     * @param nick The nickname.
      * @return True if the nickname is used AND the unique configuration value is true.
      */
     public static boolean isUsed( String nick )
     {
         if( Nicky.isUnique() )
         {
-            return database.isUsed( formatForDatabase( nick ) );
+            return getOwner( nick ) != null;
         }
         return false;
+    }
+
+    /**
+     * Gets the UUID of the player who is using a nickname.
+     * This considers color codes to be equivalent.
+     *
+     * @param nick The nickname.
+     * @return The player UUID, or null if nobody owns the nickname.
+     */
+    public static UUID getOwner( String nick )
+    {
+        String nickPlain = ChatColor.stripColor( ChatColor.translateAlternateColorCodes( '&', formatForDatabase( nick ) ) );
+        return database.getOwner( nickPlain );
     }
 
     public static boolean isBlacklisted( String nick )

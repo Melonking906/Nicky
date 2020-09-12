@@ -2,6 +2,7 @@ package io.loyloy.nicky.commands;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import io.loyloy.nicky.Nick;
 import io.loyloy.nicky.Nicky;
@@ -141,14 +142,18 @@ public class NickCommand extends NickyCommandExecutor
         }
 
         // Check if the nick is used.
-        if( Nick.isUsed( nickname ) )
+        if( Nicky.isUnique() )
         {
-            sender.sendMessage(
-                    messages.PREFIX +
-                    messages.ERROR_NICKNAME_TAKEN
-                            .replace( "{nickname}", nicknamePlain )
-            );
-            return;
+            UUID owner = Nick.getOwner( nickname );
+            if ( owner != null && !target.getUniqueId().equals(owner) )
+            {
+                sender.sendMessage(
+                        messages.PREFIX +
+                        messages.ERROR_NICKNAME_TAKEN
+                                .replace( "{nickname}", nicknamePlain )
+                );
+                return;
+            }
         }
 
         // Set the nickname.

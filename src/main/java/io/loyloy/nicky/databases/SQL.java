@@ -1,11 +1,14 @@
 package io.loyloy.nicky.databases;
 
 import io.loyloy.nicky.Nicky;
+import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class SQL
 {
@@ -116,8 +119,11 @@ public abstract class SQL
     private void updateTables()
     {
         query( 
-                "CREATE TABLE IF NOT EXISTS $table (uuid varchar(36) NOT NULL, nick varchar(?) NOT NULL, name varchar(32) NOT NULL, PRIMARY KEY (uuid))",
-                statement -> statement.setInt(1, NICKNAME_COLUMN_MAX),
+                "CREATE TABLE IF NOT EXISTS $table (uuid varchar(36) NOT NULL, nick varchar(?) NOT NULL, nick_plain varchar(?) NOT NULL, name varchar(32) NOT NULL, PRIMARY KEY (uuid))",
+                statement -> {
+                    statement.setInt(1, NICKNAME_COLUMN_MAX);
+                    statement.setInt(2, NICKNAME_COLUMN_MAX);
+                },
                 false
         );
     }
@@ -172,14 +178,13 @@ public abstract class SQL
     {
         List<SearchedPlayer> results = new ArrayList<>();
 
-        String sqlSearch = "%";
-
+        StringBuilder sqlSearch = new StringBuilder("%");
         for( char c : search.toCharArray() )
         {
-            sqlSearch += c + "%";
+            sqlSearch.append(c).append("%");
         }
 
-        final String querySearch = sqlSearch;
+        final String querySearch = sqlSearch.toString();
         ArrayList<HashMap<String, String>> data = query( 
                 "SELECT uuid, nick, name FROM $table WHERE nick LIKE ?;",
                 statement -> statement.setString(1, querySearch),
@@ -228,14 +233,16 @@ public abstract class SQL
         }
     }
 
-    public boolean isUsed( String nick )
+    public UUID getOwner( String nick )
     {
-        ArrayList<HashMap<String,String>> data = query( "SELECT nick FROM $table WHERE nick = ?;",
-                statement -> statement.setString( 1, nick ),
+
+        ArrayList<HashMap<String,String>> data = query( "SELECT uuid FROM $table WHERE nick_plain = ?;",
+                statement -> statement.setString( 1, ChatColor.stripColor( ChatColor.translateAlternateColorCodes( '&', nick ) ) ),
                 true
         );
 
-        return data != null;
+        if ( data == null ) return null;
+        return UUID.fromString( data.get( 0 ).get( "uuid" ) );
     }
 
     public void removeFromCache( String uuid )
@@ -250,11 +257,12 @@ public abstract class SQL
     {
         cache.put( uuid, nick );
 
-        query( "INSERT INTO $table (uuid, nick, name) VALUES (?, ?, ?);", 
+        query( "INSERT INTO $table (uuid, nick, nick_plain, name) VALUES (?, ?, ?, ?);", 
                 statement -> {
                     statement.setString( 1, uuid );
                     statement.setString( 2, nick );
-                    statement.setString( 3, name );
+                    statement.setString( 3, ChatColor.stripColor( ChatColor.translateAlternateColorCodes( '&', nick ) ) );
+                    statement.setString( 4, name );
                 },
                 false
         );
