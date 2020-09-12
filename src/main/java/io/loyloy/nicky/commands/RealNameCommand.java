@@ -69,59 +69,53 @@ public class RealNameCommand extends NickyCommandExecutor
             return;
         }
 
-        Executor executor = runnable -> this.plugin.getServer().getScheduler().runTaskAsynchronously(this.plugin, runnable );
-        NickQuery.find( search ).whenCompleteAsync(
-                (results, error) -> {
-                    if (error != null) {
-                        error.printStackTrace();
-                        sender.sendMessage(ChatColor.RED + "An error occurred while executing /realname.");
-                        return;
-                    }
-                    
-                    // Send a message if the result is empty.
-                    if( results.isEmpty() )
-                    {
-                        sender.sendMessage(
-                                messages.PREFIX +
-                                messages.REALNAME_NOBODY
-                                        .replace( "{query}", search )
-                        );
-                        return;
-                    }
-                    
-                    // Send a message with the results.
-                    sender.sendMessage(
-                            messages.PREFIX +
-                            messages.REALNAME_FOUND
-                                    .replace( "{query}", search )
-                    );
+        try {
+            Set<NickQuery.Result> results = NickQuery.find( search ).get();
+            
+            // Send a message if the result is empty.
+            if( results.isEmpty() )
+            {
+                sender.sendMessage(
+                        messages.PREFIX +
+                        messages.REALNAME_NOBODY
+                                .replace( "{query}", search )
+                );
+                return;
+            }
+            
+            // Send a message with the results.
+            sender.sendMessage(
+                    messages.PREFIX +
+                    messages.REALNAME_FOUND
+                            .replace( "{query}", search )
+            );
 
-                    // Online players first.
-                    for( NickQuery.Result result : results )
-                    {
-                        if ( !result.getPlayer().isOnline() ) continue;
-                        sender.sendMessage(
-                                messages.PREFIX +
-                                messages.REALNAME_FOUND_ENTRY
-                                        .replace("{nickname}", result.getPlainNickname())
-                                        .replace("{username}", result.getUsername())
-                        );
-                    }
-                    
-                    // Offline players next.
-                    for( NickQuery.Result result : results )
-                    {
-                        if ( result.getPlayer().isOnline() ) continue;
-                        sender.sendMessage(
-                                messages.PREFIX +
-                                messages.REALNAME_FOUND_ENTRY
-                                        .replace("{nickname}", result.getPlainNickname())
-                                        .replace("{username}", result.getUsername())
-                        );
-                    }
-                },
-                executor
-        );
+            // Online players first.
+            for( NickQuery.Result result : results )
+            {
+                if ( !result.getPlayer().isOnline() ) continue;
+                sender.sendMessage(
+                        messages.PREFIX +
+                        messages.REALNAME_FOUND_ENTRY
+                                .replace("{nickname}", result.getPlainNickname())
+                                .replace("{username}", result.getUsername())
+                );
+            }
+            
+            // Offline players next.
+            for( NickQuery.Result result : results )
+            {
+                if ( result.getPlayer().isOnline() ) continue;
+                sender.sendMessage(
+                        messages.PREFIX +
+                        messages.REALNAME_FOUND_ENTRY
+                                .replace("{nickname}", result.getPlainNickname())
+                                .replace("{username}", result.getUsername())
+                );
+            }
+        } catch ( Exception ex ) {
+            throw new RuntimeException( ex );
+        }
     }
     
 }
