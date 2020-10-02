@@ -83,7 +83,7 @@ public class NickCommand extends NickyCommandExecutor
         }
         
         // Check for color limit.
-        if ( Nicky.useColorLimit() )
+        if ( Nicky.useColorLimit() && colors.size() > 0 )
         {
             int colorsUsed = colors.size();
             int colorsMax = ChatColor.values().length;
