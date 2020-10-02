@@ -40,9 +40,10 @@ public class Nicky extends JavaPlugin
 
     private static boolean USE_JOIN_LEAVE;
     private static boolean USE_COLOR_LIMIT;
+    private static boolean USE_DISPLAY_NAME;
 
     private static Permission VAULT_PERMS = null;
-    private static HashMap<UUID, String> nicknames = new HashMap<>();
+    private static final HashMap<UUID, String> nicknames = new HashMap<>();
 
     public Nicky()
     {
@@ -145,6 +146,7 @@ public class Nicky extends JavaPlugin
 
             USE_COLOR_LIMIT = config.getBoolean( "enable_color_limit" );
             USE_JOIN_LEAVE = config.getBoolean( "enable_join_leave" );
+            USE_DISPLAY_NAME = config.getBoolean( "set_display_name" );
 
             // Load messages.
             FileConfiguration messagesDefault = new YamlConfiguration();
@@ -255,6 +257,12 @@ public class Nicky extends JavaPlugin
             config.set( "enable_join_leave", true );
         }
 
+        // Display name.
+        if( ! config.isSet( "set_display_name" ) )
+        {
+            config.set( "set_display_name", true );
+        }
+        
         saveConfig();
     }
 
@@ -294,6 +302,15 @@ public class Nicky extends JavaPlugin
 
     public static void setNickname(UUID uuid, String nickname) {
         nicknames.put(uuid, nickname);
+        
+        if ( useDisplayName() )
+        {
+            Player player = plugin.getServer().getPlayer(uuid);
+            if ( player != null )
+            {
+                player.setDisplayName(nickname);
+            }
+        }
     }
 
     public static String getNickname(UUID uuid) {
@@ -335,6 +352,8 @@ public class Nicky extends JavaPlugin
     public static boolean useJoinLeave() { return USE_JOIN_LEAVE; }
 
     public static boolean useColorLimit() { return USE_COLOR_LIMIT; }
+    
+    public static boolean useDisplayName() { return USE_DISPLAY_NAME; }
 
     public static NickyMessages getMessages() { return MESSAGES; }
     
