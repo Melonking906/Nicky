@@ -21,7 +21,7 @@ public class MySQL extends SQL
         {
             Class.forName("com.mysql.jdbc.Driver");
 
-            String url = "jdbc:mysql://" + config.getString("host") + ":" + config.getString("port") + "/" + config.getString("database");
+            String url = "jdbc:mysql://" + config.getString("host") + ":" + config.getString("port") + "/" + config.getString("database") + "?useSSL=" + config.getString("useSSL");
 
             return DriverManager.getConnection( url, config.getString( "user" ), config.getString( "password" ) );
         }
