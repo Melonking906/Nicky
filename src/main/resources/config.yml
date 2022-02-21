@@ -1,14 +1,14 @@
 # Nicky Config - melonking.net
 # -
-# nicky_prefix - Prefix for plugin messages.
 # type - Storage type "sqlite" or "mysql"
-# host/port/user/password/database - MySQL settings, not needed for SQLite
+# host/port/user/password/database/table_name - MySQL settings, not needed for SQLite
 # tab - Should names in the tablist be updated?
 # unique - Should all nicknames be unique?
 # prefix - Add a prefix before nicknames? (Set to '' to disable)
 # length - The max and min number of characters in a nickname, including color codes.
 # characters - RegEx for characters allowed in a nickname, set to '' for any, or leave default for only letters and numbers.
 # blacklist - Words that cannot appear in any nickname.
+# set_display_name - Changes the player's display name. (Must be enabled unless using Nicky for PlaceholderAPI only)
+# enable_color_limit - Enable perms-based maximum color limits.
 # enable_join_leave - Should nicky take over join leave messages?
-# join/leave_message - Messages to be displayed when the player joins or quits the server - {nickname} displays nick
 # -

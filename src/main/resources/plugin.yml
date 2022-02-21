@@ -1,9 +1,11 @@
 name: Nicky
 main: io.loyloy.nicky.Nicky
-version: 0.7
+version: 0.9
+api-version: 1.14
 description: Simple SQL nickname plugin.
 author: Melonking
 depend: [Vault]
+softdepend: [PlaceholderAPI]
 
 commands:
    nicky:
@@ -35,6 +37,18 @@ permissions:
     nicky.noblacklist:
         default: op
     nicky.realname:
+        default: op
+    nicky.limit.color.*:
+        default: op
+    nicky.limit.color.1:
+        default: op
+    nicky.limit.color.2:
+        default: op
+    nicky.limit.color.3:
+        default: op
+    nicky.limit.color.4:
+        default: op
+    nicky.limit.color.5:
         default: op
     nicky.color:
         default: op

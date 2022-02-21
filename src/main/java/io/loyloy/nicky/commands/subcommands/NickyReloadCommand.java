@@ -19,7 +19,7 @@ public class NickyReloadCommand extends NickySubCommand
     {
         plugin.reloadNickyConfig();
 
-        sender.sendMessage( Nicky.getPrefix() + "Configuration reloaded!" );
+        sender.sendMessage( Nicky.getMessages().PREFIX + "Configuration reloaded!" );
         return true;
     }
 }

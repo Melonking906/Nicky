@@ -18,13 +18,15 @@ public class PlayerListener implements Listener
         if( Nicky.useJoinLeave() )
         {
             event.setJoinMessage( null );
-            String message = Nicky.getJoinMessage().replace( "{nickname}", getNicknameOrName( nick ) );
+            String message = Nicky.getMessages().PLAYER_JOIN.replace( "{nickname}", getNicknameOrName( nick ) );
             Bukkit.broadcastMessage( message );
         }
 
         nick.load();
 
-        Nicky.getNickDatabase().updatePlayerName( player.getUniqueId().toString(), player.getName() );
+        Nicky.plugin.getServer().getScheduler().runTaskAsynchronously( Nicky.plugin, () -> {
+            Nicky.getNickDatabase().updatePlayerName( player.getUniqueId().toString(), player.getName() );
+        } );
     }
 
     @EventHandler
@@ -36,7 +38,7 @@ public class PlayerListener implements Listener
         if( Nicky.useJoinLeave() )
         {
             event.setQuitMessage( null );
-            String message = Nicky.getLeaveMessage().replace( "{nickname}", getNicknameOrName( nick ) );
+            String message = Nicky.getMessages().PLAYER_LEAVE.replace( "{nickname}", getNicknameOrName( nick ) );
             Bukkit.broadcastMessage( message );
         }
 

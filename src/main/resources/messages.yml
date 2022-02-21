@@ -1,0 +1,53 @@
+# The message added to the beginning of every message. Use '' to disable it.
+prefix: '&e[Nicky]'
+    
+# Player join and leave messages.
+# Placeholders: {nickname}
+join: '&e{nickname} &ahas connected!'
+leave: '&e{nickname} &chas disconnected!'
+
+# General messages:
+command_nick_usage_admin: '&aUsage: /nick <player> <nickname>'
+command_nick_usage_player: '&aTo set a nick do &e/nick <nickname>'
+command_delnick_usage_admin: '&aUsage: /delnick <player>'
+command_delnick_usage_player: '&aUsage: /delnick'
+command_realname_usage: '&aTo check a nickname do &e"/realname <search>"'
+
+# Command messages:
+nickname_changed_own: "&aYour nickname has been set to &e{nickname}&a!"
+nickname_changed_other: "&a{receiver}'s nick has been set to {receiver_nickname}"
+nickname_was_changed: '&aYour nickname has been set to &e{nickname}&a by &e{admin_nickname}&a!'
+nickname_deleted_own: "&aYour nickname has been deleted."
+nickname_deleted_other: "&a{receiver}'s nickname has been deleted!"
+nickname_was_deleted: '&aYour nickname has been deleted by {admin_nickname}.'
+realname_nobody: '&aNo one has a nickname containing: &e{query}'
+realname_found: '&aPlayers with a nickname containing: &e{query}'
+realname_found_entry: '&e{nickname}&7 -> &e{username}'
+
+# Help messages:
+help_header: '&e---------- [Nicky Help] ----------'
+help_footer: '&e-------------------------------'
+help_command_nick: '&a/nick <nick> &7- Sets your nickname.'
+help_command_delnick: '&a/delnick <nick> &7- Deletes your nickname.'
+help_command_realname: '&a/realname <search> &7- Lookup who owns a nick.'
+help_command_help: '&a/nicky help &7- Loads this page.'
+help_command_reload: '&a/nicky reload &7- Reloads nicky config.'
+
+# Error messages:
+error_change_other_permission: "&cSorry, you don't have permission to set other players nicks."
+error_change_own_permission: "&cSorry, you don't have permission to set a nick."
+error_delete_other_permission: "&cSorry, you don't have permission to delete other players nicks."
+error_delete_own_permission: "&cSorry, you don't have permission to delete a nick."
+error_realname_permission: "&cSorry, you don't have permission to check real names."
+error_generic_permission: "&cSorry, you don't have permission to do that!"
+error_player_not_found: '&cCould not find {player}, did you get the name right?'
+error_search_too_short: '&eYour search must be at least {min} characters!'
+error_nickname_too_short: '&cNicks must be at least &e{min}&c characters.'
+error_nickname_too_long: '&cNicks must be at most &e{max}&c characters.'
+error_nickname_invalid: '&cYour nickname contains invalid characters.'
+error_nickname_color_invalid: '&cYour nickname contains an invalid color code.'
+error_nickname_color_too_many: '&cYour nickname contains too many colors.'
+error_nickname_color_no_permission: '&cYou cannot use &{code} in your nickname.'
+error_nickname_taken: '&cSorry the nick &e{nickname}&c is already in use :('
+error_nickname_blacklisted: '&cSorry but &e{nickname}&c contains a blacklisted word :('
+
