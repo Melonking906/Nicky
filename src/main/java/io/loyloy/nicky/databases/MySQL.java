@@ -1,6 +1,7 @@
 package io.loyloy.nicky.databases;
 
 import io.loyloy.nicky.Nicky;
+
 import org.bukkit.configuration.Configuration;
 
 import java.sql.Connection;
@@ -11,15 +12,16 @@ public class MySQL extends SQL
     public MySQL( Nicky plugin )
     {
         super(plugin);
+        
     }
 
     protected Connection getNewConnection()
     {
         Configuration config = plugin.getConfig();
-
+        
         try
         {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
             String url = "jdbc:mysql://" + config.getString("host") + ":" + config.getString("port") + "/" + config.getString("database") + "?useSSL=" + config.getString("useSSL");
 

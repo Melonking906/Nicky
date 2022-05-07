@@ -1,9 +1,9 @@
 package io.loyloy.nicky.databases;
 
 import io.loyloy.nicky.Nicky;
-import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +22,7 @@ public abstract class SQL
     public SQL( Nicky plugin )
     {
         this.plugin = plugin;
+        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> keepAlive(), 20*60*60*7, 20*60*60*7);
     }
 
     protected abstract Connection getNewConnection();
@@ -115,7 +116,15 @@ public abstract class SQL
 
         return true;
     }
-
+    
+    private void keepAlive() {
+        try {
+            connection.isValid(0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }              
+    }
+    
     private void updateTables()
     {
         query( 
