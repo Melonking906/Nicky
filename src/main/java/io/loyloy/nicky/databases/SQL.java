@@ -2,7 +2,6 @@ package io.loyloy.nicky.databases;
 
 import io.loyloy.nicky.Nicky;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import java.sql.*;
 import java.util.ArrayList;
@@ -22,7 +21,6 @@ public abstract class SQL
     public SQL( Nicky plugin )
     {
         this.plugin = plugin;
-        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> keepAlive(), 20*60*60*7, 20*60*60*7);
     }
 
     protected abstract Connection getNewConnection();
@@ -50,7 +48,7 @@ public abstract class SQL
         
         try
         {
-            PreparedStatement statement = connection.prepareStatement( sql.replace( "$table", this.getTable() ) );
+            PreparedStatement statement = getConnection().prepareStatement( sql.replace( "$table", this.getTable() ) );
             initializer.initialize(statement);
             
             if( ! hasReturn )
@@ -95,11 +93,11 @@ public abstract class SQL
     {
         try
         {
-            if( connection == null || connection.isClosed() )
+            if( getConnection() == null || getConnection().isClosed() )
             {
                 connection = getNewConnection();
 
-                if( connection == null || connection.isClosed() )
+                if( getConnection() == null || getConnection().isClosed() )
                 {
                     return false;
                 }
@@ -115,14 +113,6 @@ public abstract class SQL
         }
 
         return true;
-    }
-    
-    private void keepAlive() {
-        try {
-            connection.isValid(0);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }              
     }
     
     private void updateTables()
@@ -143,9 +133,9 @@ public abstract class SQL
 
         try
         {
-            if (connection != null)
+            if (getConnection() != null)
             {
-                connection.close();
+                getConnection().close();
             }
         }
         catch (SQLException e)
@@ -287,4 +277,12 @@ public abstract class SQL
                 false
         );
     }
+
+	public Connection getConnection() {
+		return connection;
+	}
+	
+	public void setConnection(Connection conn) {
+		connection = conn;
+	}
 }
