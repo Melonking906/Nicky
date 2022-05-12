@@ -27,12 +27,7 @@
 
         <repository>
             <id>spigot-repo</id>
-            <url>https://minevolt.net/repo/</url>
-        </repository>
-
-        <repository>
-            <id>drkmatr-repo</id>
-            <url>http://nexus.hc.to/content/repositories/pub_releases</url>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
 
         <repository>
@@ -50,9 +45,10 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>Spigot-API</artifactId>
-            <version>1.18.2-R0.1-SNAPSHOT</version>
+           <groupId>org.spigotmc</groupId>
+           <artifactId>spigot-api</artifactId>
+           <version>1.18.2-R0.1-SNAPSHOT</version>
+           <scope>provided</scope>
         </dependency>
 
         <dependency>
