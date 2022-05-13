@@ -211,6 +211,10 @@ public class Nicky extends JavaPlugin
         {
             config.set( "database", "nicky" );
         }
+        if( ! config.isSet( "useSSL" ) )
+        {
+            config.set( "useSSL", "false" );
+        }
         if( ! config.isSet( "table_name" ) )
         {
             config.set( "table_name", "nicky" );

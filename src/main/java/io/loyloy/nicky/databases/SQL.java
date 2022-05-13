@@ -1,9 +1,8 @@
 package io.loyloy.nicky.databases;
 
 import io.loyloy.nicky.Nicky;
-import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 
+import org.bukkit.ChatColor;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +48,7 @@ public abstract class SQL
         
         try
         {
-            PreparedStatement statement = connection.prepareStatement( sql.replace( "$table", this.getTable() ) );
+            PreparedStatement statement = getConnection().prepareStatement( sql.replace( "$table", this.getTable() ) );
             initializer.initialize(statement);
             
             if( ! hasReturn )
@@ -94,11 +93,11 @@ public abstract class SQL
     {
         try
         {
-            if( connection == null || connection.isClosed() )
+            if( getConnection() == null || getConnection().isClosed() )
             {
                 connection = getNewConnection();
 
-                if( connection == null || connection.isClosed() )
+                if( getConnection() == null || getConnection().isClosed() )
                 {
                     return false;
                 }
@@ -115,7 +114,7 @@ public abstract class SQL
 
         return true;
     }
-
+    
     private void updateTables()
     {
         query( 
@@ -134,9 +133,9 @@ public abstract class SQL
 
         try
         {
-            if (connection != null)
+            if (getConnection() != null)
             {
-                connection.close();
+                getConnection().close();
             }
         }
         catch (SQLException e)
@@ -278,4 +277,12 @@ public abstract class SQL
                 false
         );
     }
+
+	public Connection getConnection() {
+		return connection;
+	}
+	
+	public void setConnection(Connection conn) {
+		connection = conn;
+	}
 }
